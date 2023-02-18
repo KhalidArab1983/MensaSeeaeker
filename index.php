@@ -17,35 +17,67 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 	<title>Mensa</title>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Navbar w/ text</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarText">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Features</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Pricing</a>
-        </li>
-      </ul>
-      <img src="./images/logo.png" alt="Seeäkerschule Logo" width=10%>
+    <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 nav-pills">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./admin/a_login.php">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./admin/a_register.php">Register</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./admin/a_logout.php">Logout</a>
+                    </li>
+                </ul>
+                <img src="./images/logo.png" alt="Seeäkerschule Logo" width=10%>
+            </div>
+        </div>
+    </nav> -->
+    
+    <div class="collapse" id="navbarToggleExternalContent">
+        <div class="bg-light p-4 w-100" style="display:inline-block;">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 nav-pills nav_besonder">
+                <li class="nav-item item_besonder">
+                    <a class="nav-link active" href="#"><h5>Home</h5></a>
+                </li>
+                <li class="nav-item item_besonder">
+                    <a class="nav-link" href="./admin/a_login.php"><h5>Login</h5></a>
+                </li>
+                <li class="nav-item item_besonder">
+                    <a class="nav-link" href="./admin/a_register.php"><h5>Register</h5></a>
+                </li>
+                <li class="nav-item item_besonder">
+                    <a class="nav-link" href="./admin/a_logout.php"><h5>Logout</h5></a>
+                </li>
+            </ul>
+        </div>
     </div>
-  </div>
-</nav>
-    <div>
-        <h1>Herzlichen Wilkommen <?php echo $_SESSION['userName']; ?></h1>
-        <a href="./admin/a_logout.php">Logout</a>
+
+    <img class="logo" src="./images/logo.png" alt="Seeäkerschule Logo" width=10% style="float:right;">
+    <nav class="navbar navbar-dark bg-light">
+        <div class="container-fluid">
+            <button class="navbar-toggler bg-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+
+    <hr style="height: 5px">
+    
+    <div class="container-fluid">
+        <h5>Herzlichen Wilkommen <?php echo $_SESSION['userName']; ?></h5>
     </div>
-    <div>
+    <div class="container-fluid">
         <h3>melde ein neue Benutzer</h3>
-        <a href="./create_user.php">Neu Benutzer melden</a>
+        <a href="./admin/create_user.php">Neu Benutzer melden</a>
+
+        <h3>Benutzern bearbeiten</h3>
+        <a href="./admin/a_user_page.php">Benutzer Seite</a>
     </div>
 
     <script src="./js/popper.min.js"></script>
