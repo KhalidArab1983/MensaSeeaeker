@@ -12,7 +12,6 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
 }
 
 if (isset($_POST['submit'])){
-    // $sql = "SELECT u.userName, u.password, k.schule, k.klasse FROM tbl_user AS u INNER JOIN tbl_klasse AS k ON u.Klasse_id = k.klasse_id;";
     $sql = "INSERT INTO tbl_admin (userName, email, password) VALUES ('$userName', '$email', '$password')";
     if(mysqli_query($conn, $sql)){
         header("Location: a_login.php");
@@ -55,6 +54,9 @@ if (isset($_POST['submit'])){
     <div class="collapse" id="navbarToggleExternalContent">
         <div class="bg-light p-4" style="display:inline-block;">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 nav-pills nav_besonder">
+                <li class="nav-item item_besonder">
+                    <a class="nav-link" href="../index.php"><h5>Home</h5></a>
+                </li>
                 <li class="nav-item item_besonder">
                     <a class="nav-link" href="./a_login.php"><h5>Login</h5></a>
                 </li>
