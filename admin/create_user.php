@@ -283,7 +283,17 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
             <div class="createUserForm">
                 <h4>Neu SchülerInnen hinzufügen </h4>
                 <span class="tooltips" onclick="showHint()">info?</span>
-                <div class="hint" id="hint">This is a hint flmösdölkf sdf skdn fnsdnf nsdfnsdnbfjkn sdlkf ksdlöf lsdkfk nsdb fsdbfb s,dnfsd kfmsdmfl sdmlfsldmf .</div>
+                <div class="hint" id="hint">
+                    1. Suchen Sie nach dem Benutzer, indem Sie seinen Namen in das erste Feld eingeben.(Sie können einen beliebigen Teil des Benutzernamentextes eingeben)<br>
+                    2. Wählen Sie dann den Benutzer aus der Dropdown-Liste im nächsten Feld aus.<br>
+                    2.1. Um den ausgewählten Benutzer und alle seine Daten zu löschen, klicken Sie auf die Schaltfläche „Löschen“.<br>
+                    2.2. Um die Benutzerdaten zu aktualisieren, füllen Sie die zu ändernden Felder aus und klicken Sie auf die Schaltfläche „Aktualisieren“.<br>
+                    3. Das dritte Feld zur Auswahl der Klasse aus der Dropdown-Liste.<br>
+                    4. Das vierte Feld zur Auswahl der Stadt aus der Dropdown-Liste.<br>
+                    5. Die Felder Benutzername und Passwort werden automatisch ausgefüllt.<br>
+                    6. Um einen neuen Benutzer hinzuzufügen, füllen Sie alle erforderlichen Felder aus und klicken Sie auf die Schaltfläche "Hinzufügen".<br>
+                    7. Um diesen Dialog wieder auszublenden, klicken Sie erneut auf das Wort „info?“.
+                </div>
                 <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
                     <div class="mb-1">
                         <input type="text" class="form-control" id="searchInput" onkeyup="filterOptions()" placeholder="nach einem Benutzer suchen...">
@@ -305,7 +315,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
                     <div class="mb-1">
                         <!-- <label for="klasse">Klasse:</label> -->
                         <select class="form-control" name="klasse" id="klasse">
-                            <option></option>
+                            <option>*</option>
                             <?php
                                 // Send query to database to get School Classes
                                 $sql = "SELECT * FROM tbl_klasse";
@@ -321,7 +331,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
                     <div class="mb-1">
                         <!-- <label for="plz">PLZ:</label> -->
                         <select class="form-control" name="plz" id="plz">
-                            <option></option>
+                            <option>*</option>
                             <?php 
                                 include ('../conn/db_conn.php');
                                 // Send query to database to get postal code and cities
@@ -337,40 +347,40 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
                     </div>
                     <div class="mb-1">
                         <!-- <label for="userName">Benutzername:</label> -->
-                        <input type="text" class="form-control" name="userName" id="userName" placeholder="Benutzername wird automatisch ausgefüllt" readonly>
+                        <input type="text" class="form-control" name="userName" id="userName" placeholder="* Benutzername wird automatisch ausgefüllt" readonly>
                     </div>
                     <div class="mb-1">
                         <!-- <label for="firstName">Vorname:</label> -->
-                        <input type="text" class="form-control" name="firstName" id="firstName" placeholder="Vorname" onkeyup="updateInputUser()">
+                        <input type="text" class="form-control" name="firstName" id="firstName" placeholder="* Vorname" onkeyup="updateInputUser()">
                     </div>
                     <div class="mb-1">
                         <!-- <label for="lastName">Nachname:</label> -->
-                        <input type="text" class="form-control" name="lastName" id="lastName"  placeholder="Nachname" onkeyup="updateInputUser()">
+                        <input type="text" class="form-control" name="lastName" id="lastName"  placeholder="* Nachname" onkeyup="updateInputUser()">
                     </div>
                     <div class="mb-1">
                         <!-- <label for="email">Email:</label> -->
-                        <input type="email" class="form-control" name="email" id="email" placeholder="Email Adresse">
+                        <input type="email" class="form-control" name="email" id="email" placeholder="* Email Adresse">
                     </div>
                     <div class="mb-1">
                         <!-- <label for="phone">Handy:</label> -->
-                        <input type="text" class="form-control" name="phone" id="phone" placeholder="Handynummer">
+                        <input type="text" class="form-control" name="phone" id="phone" placeholder="* Handynummer">
                     </div>
                     
                     <div class="mb-1">
                         <!-- <label for="adresse">Anschrift:</label> -->
-                        <input type="text" class="form-control" name="adresse" id="adresse" placeholder="Straße, Haus Nr.">
+                        <input type="text" class="form-control" name="adresse" id="adresse" placeholder="* Straße, Haus Nr.">
                     </div>
                     <div class="mb-1">
                         <!-- <label for="ortsteil">Ortsteil:</label> -->
-                        <input type="text" class="form-control" name="ortsteil" id="ortsteil" placeholder="Ortsteil">
+                        <input type="text" class="form-control" name="ortsteil" id="ortsteil" placeholder="* Ortsteil">
                     </div>
                     <div class="mb-1">
                         <!-- <label for="birthday">Geburtsdatum:</label> -->
-                        <input type="text" class="form-control" name="birthday" id="birthday"  placeholder="01.01.1999" onkeyup="updateInputUser()">
+                        <input type="text" class="form-control" name="birthday" id="birthday"  placeholder="* 01.01.1999" onkeyup="updateInputUser()">
                     </div>
                     <div class="mb-1">
                         <!-- <label for="password">Kennwort:</label> -->
-                        <input type="password" class="form-control" name="password" id="password" placeholder="Kennwort wird automatisch ausgefüllt" readonly>
+                        <input type="password" class="form-control" name="password" id="password" placeholder="* Kennwort wird automatisch ausgefüllt" readonly>
                     </div>
                     <button type="submit" class="btn btn-warning" name="button" value="insert">Hinzufügen</button>
                     <button type="submit" class="btn btn-warning" name="button" value="update">Aktualisieren</button>
