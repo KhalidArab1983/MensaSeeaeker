@@ -2,17 +2,17 @@
 include('../conn/db_conn.php');
 
 if ($_SERVER["REQUEST_METHOD"]=="POST"){
-    $userName = $_POST['userName'];
+    $adminName = $_POST['adminName'];
     $email = $_POST['email'];
     $password = $_POST['password'];
 }else{
-    $userName = "";
+    $adminName = "";
     $email = "";
     $password = "";
 }
 
 if (isset($_POST['submit'])){
-    $sql = "INSERT INTO tbl_admin (userName, email, password) VALUES ('$userName', '$email', '$password')";
+    $sql = "INSERT INTO tbl_admin (adminName, email, password) VALUES ('$adminName', '$email', '$password')";
     if(mysqli_query($conn, $sql)){
         header("Location: a_login.php");
     }else{
@@ -35,33 +35,16 @@ if (isset($_POST['submit'])){
 	<title>Mensa</title>
 </head>
 <body>
-    <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
-        <div class="container-fluid">
-            <div class="collapse navbar-collapse" id="navbarText">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0 nav-pills">
-                    <li class="nav-item">
-                    <a class="nav-link" href="./a_login.php">Login</a>
-                    </li>
-                    <li class="nav-item">
-                    <a class="nav-link active" href="#">Register</a>
-                    </li>
-                </ul>
-                <img src="../images/logo.png" alt="Seeäkerschule Logo" width=10%>
-            </div>
-        </div>
-    </nav> -->
 
     <div class="collapse" id="navbarToggleExternalContent">
-        <div class="bg-light p-4" style="display:inline-block;">
+        <div class="bg-light p-4 w-100" style="display:inline-block;">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 nav-pills nav_besonder">
                 <li class="nav-item item_besonder">
-                    <a class="nav-link" href="../index.php"><h5>Home</h5></a>
+                    <a class="nav-link" href="./a_login.php"><h6>Anmelden</h6></a>
                 </li>
+                
                 <li class="nav-item item_besonder">
-                    <a class="nav-link" href="./a_login.php"><h5>Login</h5></a>
-                </li>
-                <li class="nav-item item_besonder">
-                    <a class="nav-link active" href="#"><h5>Register</h5></a>
+                    <a class="nav-link active" href="#"><h6>Register</h6></a>
                 </li>
             </ul>
         </div>
@@ -82,8 +65,8 @@ if (isset($_POST['submit'])){
             <h4 class="text-center">Admin Konto erstellen</h4>
             <form action="a_register.php" method="post">
                 <div class="form-floating m-5">
-                    <input type="text" class="form-control" name="userName" id="userName" placeholder="Benutzername" required>
-                    <label for="userName">Benutzername</label>
+                    <input type="text" class="form-control" name="adminName" id="adminName" placeholder="Admin Name" required>
+                    <label for="adminName">Admin Name<i class="mdi mdi-near-me:"></i></label>
                 </div>
                 <div class="form-floating m-5">
                     <input type="email" class="form-control" name="email" id="email" placeholder="name@example.com" required>

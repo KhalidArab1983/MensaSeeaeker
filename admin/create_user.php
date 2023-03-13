@@ -1,29 +1,70 @@
 <?php
 include('../conn/db_conn.php');
 session_start();
-if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+// Check if the user is logged in
+if (isset($_SESSION['admin_id'])) {
+    $admin_id = $_SESSION['admin_id'];
+    
+}else{
     header("Location: a_login.php");
-    exit;
+	exit;
 }
+
 if ($_SERVER["REQUEST_METHOD"]=="POST"){
-    $klasse = $_POST['klasse'];
-    $schule = $_POST['schule'];
-    $plz = $_POST['plz'];
-    $ort = $_POST['ort'];
-    $userName = $_POST['userName'];
-    $firstName = $_POST['firstName'];
-    $lastName = $_POST['lastName'];
-    $email = $_POST['email'];
-    $phone = $_POST['phone'];
-    $adresse = $_POST['adresse'];
-    $ortsteil = $_POST['ortsteil'];
-    $birthday = $_POST['birthday'];
-    $password = $_POST['password'];
-    $btn = $_POST['button'];
-    $user_id = $_POST['id'];
+    if (isset($_POST['userName1'])) {
+        $userName1 = $_POST['userName1'];
+    }
+    if (isset($_POST['klasse'])) {
+        $klasse = $_POST['klasse'];
+    }
+    if (isset($_POST['schule'])) {
+        $schule = $_POST['schule'];
+    }
+    if (isset($_POST['plz'])) {
+        $plz = $_POST['plz'];
+    }
+    if (isset($_POST['ort'])) {
+        $ort = $_POST['ort'];
+    }
+    if (isset($_POST['userName'])) {
+        $userName = $_POST['userName'];
+    }
+    if (isset($_POST['firstName'])) {
+        $firstName = $_POST['firstName'];
+    }
+    if (isset($_POST['lastName'])) {
+        $lastName = $_POST['lastName'];
+    }
+    if (isset($_POST['email'])) {
+        $email = $_POST['email'];
+    }
+    if (isset($_POST['phone'])) {
+        $phone = $_POST['phone'];
+    }
+    if (isset($_POST['adresse'])) {
+        $adresse = $_POST['adresse'];
+    }
+    if (isset($_POST['ortsteil'])) {
+        $ortsteil = $_POST['ortsteil'];
+    }
+    if (isset($_POST['birthday'])) {
+        $birthday = $_POST['birthday'];
+    }
+    if (isset($_POST['password'])) {
+        $password = $_POST['password'];
+    }
+    if (isset($_POST['button'])) {
+        $button = $_POST['button'];
+    }
+    if (isset($_POST['id'])) {
+        $user_id = $_POST['id'];
+    }
+    if (isset($_POST['admin_id'])) {
+        $admin_id = $_POST['admin_id'];
+    }
 
     if(isset($_POST['klasse_submitted'])){
-        $sql= "INSERT INTO tbl_klasse (schule, klasse) VALUES ('$schule', '$klasse')";
+        $sql= "INSERT INTO tbl_klasse (schule, klasse, admin_id) VALUES ('$schule', '$klasse','{$admin_id}')";
         if(mysqli_query($conn, $sql)){
             header("Location: create_user.php");
         }else{
@@ -32,8 +73,8 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
         mysqli_close($conn);
     }
     
-    elseif(isset($_POST['ort_submitted'])){
-        $sql= "INSERT INTO tbl_ort (plz, ort) VALUES ('$plz', '$ort')";
+    if(isset($_POST['ort_submitted'])){
+        $sql= "INSERT INTO tbl_ort (plz, ort, admin_id) VALUES ('$plz', '$ort', '{$admin_id}')";
         if(mysqli_query($conn, $sql)){
             header("Location: create_user.php");
         }else{
@@ -42,9 +83,9 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
         mysqli_close($conn);
     }
 
-    elseif($btn == "insert"){
-        $sql = "INSERT INTO tbl_user (klasse, plz, userName, firstName, lastName, email, phone, adresse, ortsteil, birthday, password)
-                VALUES ('$klasse', '$plz', '$userName', '$firstName', '$lastName', '$email', '$phone', '$adresse', '$ortsteil', '$birthday', '$password')";
+    if($button == "insert"){
+        $sql = "INSERT INTO tbl_user (klasse, plz, userName, firstName, lastName, email, phone, adresse, ortsteil, birthday, password, admin_id)
+                VALUES ('$klasse', '$plz', '$userName', '$firstName', '$lastName', '$email', '$phone', '$adresse', '$ortsteil', '$birthday', '$password', '{$admin_id}')";
         if(mysqli_query($conn, $sql)){
             echo "Schüler ist erfolgreich hinzugefügt";
             header("Location: create_user.php");
@@ -53,7 +94,34 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
         }
         mysqli_close($conn);
     }
-    if($btn == "update"){
+    if($button == "update"){
+
+        // $userSuche = "SELECT klasse, plz, userName, firstName, lastName, email, phone, adresse, ortsteil, birthday FROM tbl_user WHERE id = ?";
+        // $stmt = $conn->prepare($userSuche);
+        // $stmt->bind_param("s", $user_id);
+        // $stmt->execute();
+
+        if(empty($klasse)) {
+            $query = "SELECT klasse FROM tbl_user WHERE id= '{$user_id}'";
+            $result = mysqli_query($conn, $query);
+            $row = mysqli_fetch_assoc($result);
+            $klasse = $row['klasse'];
+            
+        }
+        if(empty($plz)) {
+            $query = "SELECT plz FROM tbl_user WHERE id= '{$user_id}'";
+            $result = mysqli_query($conn, $query);
+            $row = mysqli_fetch_assoc($result);
+            $plz = $row['plz'];
+            
+        }
+        if(empty($userName)) {
+            $query = "SELECT userName FROM tbl_user WHERE id= '{$user_id}'";
+            $result = mysqli_query($conn, $query);
+            $row = mysqli_fetch_assoc($result);
+            $userName = $row['userName'];
+            
+        }
         if(empty($firstName)) {
             $query = "SELECT firstName FROM tbl_user WHERE id= '{$user_id}'";
             $result = mysqli_query($conn, $query);
@@ -91,7 +159,8 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
             $result = mysqli_query($conn, $query);
             $row = mysqli_fetch_assoc($result);
             $ortsteil = $row['ortsteil'];
-        }if(empty($password)){
+        }
+        if(empty($password)){
             $query = "SELECT password FROM tbl_user WHERE id = '{$user_id}'";
             $result = mysqli_query($conn, $query);
             $row = mysqli_fetch_assoc($result);
@@ -99,17 +168,29 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
         }
         
 
-        $sql = "UPDATE tbl_user SET klasse = ?, plz = ?, userName = ?, firstName = ?, lastName = ?, email = ?, phone = ?, adresse = ?, ortsteil = ?, password = ? WHERE id = ?";
+        $sql = "UPDATE tbl_user SET klasse = ?, plz = ?, firstName = ?, lastName = ?, email = ?, phone = ?, adresse = ?, ortsteil = ?, admin_id = ? WHERE id = ?";
         $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "sssssssssss", $klasse, $plz, $userName, $firstName, $lastName, $email, $phone, $adresse, $ortsteil, $password, $user_id);
+        mysqli_stmt_bind_param($stmt, "ssssssssss", $klasse, $plz, $firstName, $lastName, $email, $phone, $adresse, $ortsteil, $admin_id, $user_id);
         if(mysqli_stmt_execute($stmt)){
             header("Location: create_user.php");
         }else{
             echo "Error: " . "<br>" . mysqli_error($conn);
         }
     }
-
+    if($button == "delete"){
+        $sql = "DELETE u, b FROM tbl_user u
+                LEFT JOIN tbl_bestellung b ON u.id = b.user_id
+                WHERE u.id = '{$user_id}'";
+        if(mysqli_query($conn, $sql)){
+            header("Location: create_user.php");
+        }else{
+            echo "Error: " . "<br>" . mysqli_error($conn);
+        }
+    }
 }
+
+
+
 ?>
 
 
@@ -121,6 +202,40 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <link rel="stylesheet" href="../css/style.css">
 	<title>Mensa</title>
+    <style>
+        .tooltips {
+            position: relative;
+            display: inline-block;
+            border-bottom: 2px dotted black;
+            cursor: pointer;
+            color: black;
+            }
+
+            .hint {
+            display: none;
+            position: absolute;
+            z-index: 1;
+            background-color: #f9f9f9;
+            color:  navy; 
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 300px;
+            text-align: center;
+            }
+
+            .hint::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            right: 100%;
+            margin-top: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: transparent #f9f9f9 transparent transparent;
+            }
+                    
+    </style>
 </head>
 <body>
 
@@ -128,16 +243,23 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
         <div class="bg-light p-4 w-100" style="display:inline-block;">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 nav-pills nav_besonder">
                 <li class="nav-item item_besonder">
-                    <a class="nav-link" href="../index.php"><h5>Home</h5></a>
+                    <a class="nav-link" href="../index.php"><h6>Haupt Seite |</h6></a>
                 </li>
+
                 <li class="nav-item item_besonder">
-                    <a class="nav-link" href="./a_login.php"><h5>Login</h5></a>
+                    <a class="nav-link active" href="./create_user.php"><h6>Neu Benutzer |</h6></a>
                 </li>
+
                 <li class="nav-item item_besonder">
-                    <a class="nav-link" href="./a_register.php"><h5>Register</h5></a>
+                    <a class="nav-link" href="./a_user_page.php"><h6>Benutzer Seite |</h6></a>
                 </li>
+
                 <li class="nav-item item_besonder">
-                    <a class="nav-link" href="./a_logout.php"><h5>Logout</h5></a>
+                    <a class="nav-link" href="./meals_edit.php"><h6>Gerichte bearbeiten |</h6></a>
+                </li>
+
+                <li class="nav-item item_besonder">
+                    <a class="nav-link" href="./a_logout.php"><h6>Abmelden</h6></a>
                 </li>
             </ul>
         </div>
@@ -148,6 +270,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
             <button class="navbar-toggler bg-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            <h5 style="margin: 0;">Herzlich Willkommen <span style="color:green"><?php echo $_SESSION['adminName']; ?></span></h5>
         </div>
     </nav>
     
@@ -172,7 +295,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
                         </div>
                         <div>
                             <input type="hidden" name="klasse_submitted" value="1">
-                            <input type="submit" class="btn btn-primary" value="Kalsse Erstellen">
+                            <input type="submit" class="btn btn-warning" value="Kalsse Erstellen">
                         </div>
                     </form>
                 </div>
@@ -184,7 +307,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
                     </div>
                     <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
                         <div class="mb-1">
-                            <input type="text" style="width: 320px" name="plz" id="plz" placeholder="PLZ" required>
+                            <input type="text" style="width: 320px" name="plz" id="plz" placeholder="PLZ"  onkeyup="sucheStadt()" required>
                             <!-- <label for="plz">PLZ</label> -->
                         </div>
                         <div class="mb-1">
@@ -193,7 +316,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
                         </div>
                         <div>
                             <input type="hidden" name="ort_submitted" value="1">
-                            <input type="submit" class="btn btn-primary" value="Ort Erstellen">
+                            <input type="submit" class="btn btn-warning" value="Ort Erstellen">
                         </div>
                     </form>
                 </div>
@@ -203,24 +326,32 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
 
             <!-- Form to add a new student -->
             <div class="createUserForm">
-                <h4>Neu SchülerInnen hinzufügen</h4>
+                <h4>Neu SchülerInnen hinzufügen </h4>
+                <span class="tooltips" onclick="showHint()">info?</span>
+                <div class="hint" id="hint">This is a hint flmösdölkf sdf skdn fnsdnf nsdfnsdnbfjkn sdlkf ksdlöf lsdkfk nsdb fsdbfb s,dnfsd kfmsdmfl sdmlfsldmf .</div>
                 <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
-                    <input type="text" class="form-control" id="searchInput" onkeyup="filterOptions()" placeholder="Search for an option...">
-                    <select name="id" class="form-control" id="optionList">
-                        <?php
-                            // Send query to database to get users
-                                $sql = "SELECT id, userName FROM tbl_user";
-                                $result = mysqli_query($conn, $sql);
+                    <div class="mb-1">
+                        <input type="text" class="form-control" id="searchInput" onkeyup="filterOptions()" placeholder="Search for an option...">
+                    </div>
+                    <div class="mb-1">
+                        <select name="id" class="form-control" id="optionList">
+                            <option></option>
+                            <?php
+                                // Send query to database to get users
+                                    $sql = "SELECT id, userName FROM tbl_user";
+                                    $result = mysqli_query($conn, $sql);
 
-                            // Include each result as an option tag in the drop-down list
-                                while($row = mysqli_fetch_assoc($result)){
-                                    echo "<option value= '" . $row['id']."'>" .$row['userName'] . "</option>";
-                                }
-                            ?>
-                    </select>
+                                // Include each result as an option tag in the drop-down list
+                                    while($row = mysqli_fetch_assoc($result)){
+                                        echo "<option value= '" . $row['id']."'>" .$row['id']. "_".$row['userName'] . "</option>";
+                                    }
+                                ?>
+                        </select>
+                    </div>
                     <div class="mb-1">
                         <!-- <label for="klasse">Klasse:</label> -->
                         <select class="form-control" name="klasse" id="klasse">
+                            <option></option>
                             <?php
                             // Send query to database to get School Classes
                                 $sql = "SELECT * FROM tbl_klasse";
@@ -237,6 +368,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
                     <div class="mb-1">
                         <!-- <label for="plz">PLZ:</label> -->
                         <select class="form-control" name="plz" id="plz">
+                            <option></option>
                             <?php 
                                 include ('../conn/db_conn.php');
                             // Send query to database to get postal code and cities
@@ -288,12 +420,21 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
                         <!-- <label for="password">Kennwort:</label> -->
                         <input type="password" class="form-control" name="password" id="password" placeholder="Kennwort" readonly>
                     </div>
-                    <button type="submit" class="btn btn-primary" name="button" value="insert">Hinzufügen</button>
-                    <button type="submit" class="btn btn-primary" name="button" value="update">Aktualisieren</button>
+                    <button type="submit" class="btn btn-warning" name="button" value="insert">Hinzufügen</button>
+                    <button type="submit" class="btn btn-warning" name="button" value="update">Aktualisieren</button>
+                    <button type="submit" class="btn btn-warning" name="button" value="delete"  onclick="return confirm('Möchten Sie diesen Benutzer wirklich löschen?')">Löschen</button>
                 </form>
             </div>
         </div>
     </div>
+
+    <div style="margin-bottom: 80px">
+    
+    </div>
+    <footer class="fixed-bottom footer">
+        <p class="footer_text"><span>&copy; 2023 created by Khalid Arab</span></p>
+    </footer>
+
 
     <script>
         function filterOptions() {
@@ -310,8 +451,28 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
                 }
             }
         }
+
+
+        function showHint() {
+            var tooltip = document.getElementsByClassName("tooltips")[0];
+            var hint = document.getElementById("hint");
+            if (hint.style.display === "block") {
+                hint.style.display = "none";
+            } else {
+                hint.style.display = "block";
+                hint.style.top = tooltip.offsetTop + "px";
+                hint.style.left = (tooltip.offsetLeft + tooltip.offsetWidth) + "px";
+            }
+        }
+
+
+        function deleteRecord(id) {
+            if (confirm("Are you sure you want to delete this record?")) {
+                window.location.href = "delete.php?id=" + id;
+            }
+        }
     </script>
-    <!-- <script src="../js/jquery-3.6.0.min.js"></script> -->
+    <script src="../js/jquery-3.6.0.min.js"></script>
     <script src="../js/popper.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/script.js"></script>

@@ -52,11 +52,18 @@
     .logo{
         width: 20%;
     }
+    
 }
 
 @media(max-width: 821px){
     .createUserForm{
         width: 80% !important;
+    }
+    .insUpdMeals{
+        width: 80% !important;
+    }
+    .nav_besonder{
+        display: block;
     }
 }
 
@@ -64,16 +71,33 @@
     .createUserForm{
         width: 30% !important;
     }
+    .insUpdMeals{
+        width: 80% !important;
+    }
+    .nav_besonder {
+        display: flex;
+        flex-direction: row;
+    }
 }
-.nav_besonder {
-    display: flex;
-    flex-direction: row;
-}
+
 
 .nav-item{
-    margin-right: 30px;
+    margin: 0px 5px 0px 5px;
 }
 
+
+/********************* FOOTER ********************/
+.footer{
+    background-color: black;
+    
+}
+.footer_text{
+    text-align: center;
+    justify-content: center;
+    color: rgb(133, 130, 130);
+    margin: 0 auto;
+    margin: 15px;
+}
 
 
 /********************* u_login seite **********************/
@@ -129,7 +153,7 @@
 }
 
 .tab button.active {
-    background-color: #ccc;
+    background-color: #d6a140;
 }
 
 /* CSS für den Inhalt der Tabs */
@@ -144,6 +168,7 @@
 .card{
     background-color: #ccc; 
     padding: 10px;
+    
     
 }
 
@@ -181,4 +206,38 @@
     display: inline-block;
     align-items: center;
     justify-content: center;
+}
+
+.btn-warning{
+    background-color: #c2460d;
+    color:white;
+    
+}
+
+
+.nav-pills .nav-link.active,.nav-pills .show>.nav-link{color:#fff;background-color:#c2460d; padding: 5px 10px 5px 10px;}
+
+.btn-bestellen.disabled{
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+
+/************************* Tabellen *****************/
+table, th, td {
+    border: 1px solid black;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+th, td {
+    text-align: center;
+    padding: 5px;
+}
+th {
+    background-color: lightgray;
+}
+.selected {
+    background-color: yellow;
 }

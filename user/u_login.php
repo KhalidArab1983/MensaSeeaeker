@@ -1,7 +1,7 @@
 <?php 
 include('../conn/db_conn.php');
 
-session_start();
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     //Get email and password from the Form data
     $klasse = $_POST['klasse'];
@@ -9,11 +9,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     $email = $_POST['email'];
     $password  = $_POST['password'];
 
+
     //Check if the email and password are valid
-    $sql = "SELECT * FROM tbl_user WHERE userName = '$userName' AND klasse = '$klasse' AND email = '$email' AND password = '$password'";
+    $sql = "SELECT id, userName FROM tbl_user WHERE userName = '$userName' AND klasse = '$klasse' AND email = '$email' AND password = '$password'";
     $result = mysqli_query($conn, $sql);
     if(mysqli_num_rows($result) == 1){
+        $row= mysqli_fetch_assoc($result);
+        $user_id = $row['id'];
+        $userName = $row['userName'];
         //Start a session for the user
+        session_start();
+        $_SESSION['user_id'] = $user_id;
         $_SESSION['userName'] = $userName;
         $_SESSION['loggedin'] = true;
         header("Location: ./u_user_page.php");
