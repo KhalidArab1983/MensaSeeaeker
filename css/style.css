@@ -255,10 +255,9 @@ th {
     font-size: 1.5rem;
 }
 
-/* .btn{
+.btn{
     border: none;
-    color: white;
-    padding: 16px 32px;
+    color: #c2460d;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -269,12 +268,12 @@ th {
 }
 
 .btn-warning{
-    background-color: white;
-    color: black;
-    border: 2px solid #4CAF50;
+    background-color: #c2460d;
+    color: white;
+    border: 2px solid #d6a140;
 }
 
 .btn-warning:hover{
-    background-color: #4CAF50;
+    background-color: #d6a140;
     color: white;
-} */
+}
