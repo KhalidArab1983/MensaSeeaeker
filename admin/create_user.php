@@ -100,41 +100,35 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
         mysqli_close($conn);
     }
     if($button == "update"){
-        
         if(empty($klasse)) {
             $query = "SELECT klasse FROM tbl_user WHERE id= '{$user_id}'";
             $result = mysqli_query($conn, $query);
             $row = mysqli_fetch_assoc($result);
             $klasse = $row['klasse'];
-            
         }
         if(empty($plz)) {
             $query = "SELECT plz FROM tbl_user WHERE id= '{$user_id}'";
             $result = mysqli_query($conn, $query);
             $row = mysqli_fetch_assoc($result);
             $plz = $row['plz'];
-            
         }
         if(empty($userName)) {
             $query = "SELECT userName FROM tbl_user WHERE id= '{$user_id}'";
             $result = mysqli_query($conn, $query);
             $row = mysqli_fetch_assoc($result);
             $userName = $row['userName'];
-            
         }
         if(empty($firstName)) {
             $query = "SELECT firstName FROM tbl_user WHERE id= '{$user_id}'";
             $result = mysqli_query($conn, $query);
             $row = mysqli_fetch_assoc($result);
             $firstName = $row['firstName'];
-            
         }
         if(empty($lastName)) {
             $query = "SELECT lastName FROM tbl_user WHERE id= '{$user_id}'";
             $result = mysqli_query($conn, $query);
             $row = mysqli_fetch_assoc($result);
             $lastName = $row['lastName'];
-            
         }
         if(empty($email)){
             $query = "SELECT email FROM tbl_user WHERE id = '{$user_id}'";
@@ -167,7 +161,6 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
             $password = $row['password'];
         }
         
-
         $sql = "UPDATE tbl_user SET klasse = ?, plz = ?, firstName = ?, lastName = ?, email = ?, phone = ?, adresse = ?, ortsteil = ?, admin_id = ? WHERE id = ?";
         $stmt = mysqli_prepare($conn, $sql);
         mysqli_stmt_bind_param($stmt, "ssssssssss", $klasse, $plz, $firstName, $lastName, $email, $phone, $adresse, $ortsteil, $admin_id, $user_id);
@@ -192,11 +185,6 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
     }
 }
 
-
-
-
-
-
 ?>
 
 
@@ -208,62 +196,23 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <link rel="stylesheet" href="../css/style.css">
 	<title>Mensa</title>
-    <style>
-        .tooltips {
-            position: relative;
-            display: inline-block;
-            border-bottom: 2px dotted black;
-            cursor: pointer;
-            color: black;
-        }
-
-        .hint {
-            display: none;
-            position: absolute;
-            z-index: 1;
-            background-color: #f9f9f9;
-            color:  navy; 
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            width: 400px;
-            text-align: center;
-        }
-
-        .hint::before {
-            content: "";
-            position: absolute;
-            top: 50%;
-            right: 100%;
-            margin-top: -5px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: transparent #f9f9f9 transparent transparent;
-        }
-                    
-    </style>
 </head>
 <body>
-
     <div class="collapse" id="navbarToggleExternalContent">
         <div class="bg-light p-4 w-100" style="display:inline-block;">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 nav-pills nav_besonder">
                 <li class="nav-item item_besonder">
                     <a class="nav-link" href="../index.php"><h6>Haupt Seite |</h6></a>
                 </li>
-
                 <li class="nav-item item_besonder">
                     <a class="nav-link active" href="./create_user.php"><h6>Neu Benutzer |</h6></a>
                 </li>
-
                 <li class="nav-item item_besonder">
                     <a class="nav-link" href="./a_user_page.php"><h6>Benutzer Seite |</h6></a>
                 </li>
-
                 <li class="nav-item item_besonder">
                     <a class="nav-link" href="./meals_edit.php"><h6>Gerichte bearbeiten |</h6></a>
                 </li>
-
                 <li class="nav-item item_besonder">
                     <a class="nav-link" href="./a_logout.php"><h6>Abmelden</h6></a>
                 </li>
