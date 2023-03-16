@@ -48,7 +48,9 @@
     .form_width{
         width: 100%;
     }
-    
+    .u_login_bild{
+        display: none;
+    }
     .logo{
         width: 20%;
     }
@@ -64,6 +66,9 @@
     }
     .nav_besonder{
         display: block;
+    }
+    .pass_vergessen{
+        margin-bottom: 150px;
     }
 }
 
@@ -101,37 +106,35 @@
 
 
 /********************* u_login seite **********************/
-
 .left_side{
-    height: 100vh;
-    width: 49.5vw;
     float: left;
 }
 .right_side{
-    /* border: 2px solid green; */
     float: left;
-    height: 100vh;
-    width: 49.5vw;
     
 }
 .u_login_bild{
+    border:1px 1px 3px 2px solid black;
     box-shadow: 1px 0px 0px 0px;
     opacity: 0.75;
     
 }
-
 .welcomme{
     margin-top: 10%;
     display: block;
     text-align: center;
 }
 .form_login{
-    width: 60%;
     display: block;
-    align-items: center;
-    margin-left: 20%;
-    
+    align-items: center;  
+    width: 60% !important;
+    margin: auto;
 }
+.pass_vergessen{
+    text-decoration:underline;
+}
+
+
 
 /***************** u_user_page Tabs Style *****************/
 

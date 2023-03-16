@@ -83,12 +83,12 @@ if (isset($_POST['submit'])){
     </head>
     <body>
         <div>
-            <img class="u_login_bild" src="../images/banner1.jpg" width=100%>
+            <!-- <img class="u_login_bild" src="../images/banner1.jpg" width=100%> -->
             <div>
-                <div class="left_side">
-                    <img class="u_login_bild" src="../images/u_login_bild.jpg" width="100%" height="100%" style="border:1px 1px 3px 2px solid black;">
+                <div class="col-ms-12 col-md-12 col-lg-6 left_side">
+                    <img class="u_login_bild" src="../images/u_login_bild.jpg" width="100%" height="100%">
                 </div>
-                <div class="right_side">
+                <div class="col-ms-12 col-md-12 col-lg-6 right_side">
                     <div class="welcomme">
                         <img src="../images/logo.jpg" width="20%" class="mb-4">
                         <h3>Wilkommen bei Mensa</h3>
@@ -122,7 +122,7 @@ if (isset($_POST['submit'])){
                             </div>
                         </form>
                     </div>
-                    <h6 class="text-center mt-4" style="text-decoration:underline;"><a href="forget_password.php">Passwort vergessen?</a></h6>
+                    <h6 class="text-center mt-4 pass_vergessen"><a href="forget_password.php">Passwort vergessen?</a></h6>
                 </div>
             </div>
         </div>
