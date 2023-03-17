@@ -115,7 +115,6 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
             <button class="tablinks active" onclick="openTab(event, 'bestellung')">Bestellungen</button>
             <button class="tablinks" onclick="openTab(event, 'kontoStand')">Kontostand</button>
             <button class="tablinks" onclick="openTab(event, 'userData')">Benutzer Daten</button>
-            <button class="tablinks" onclick="openTab(event, 'sss')">sss</button>
         </div>
         <div id="bestellung" class="tabcontent" style="display:block">
             <div class="container">
@@ -664,9 +663,6 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                 ?>
 
             </div>
-        </div>
-        <div id="sss" class="tabcontent">
-            sssssssssssss
         </div>
 
 
