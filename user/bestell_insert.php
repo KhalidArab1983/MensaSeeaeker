@@ -52,7 +52,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
             }
         }
             
-        header("Location: danke.php");
+        // header("Location: danke.php");
         // }
         // $i++;
     }

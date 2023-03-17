@@ -14,13 +14,41 @@ if (isset($_SESSION['admin_id'])) {
 	exit;
 }
 
+// $userSql ="SELECT id, userName FROM tbl_user";
+// $result = mysqli_query($conn, $userSql);
+// while($userRow = mysqli_fetch_assoc($result)){
+//     $user_id = $userRow['id'];
+//     $userName = $userRow['userName'];
+// }
 
-if(isset($_POST['user_id'])){
-    $user_id = $_POST['user_id'];
+
+
+if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
+    $einzahlungsbetrag = $_POST['einzahlungsbetrag'];
+    $userEinzahlung = $_POST['userEinzahlung'];
+    $kontostandLabel = $_POST['kontostandLabel'];
+    $userKontoStand = $_POST['userKontoStand'];
+    if(isset($_POST["button"]) && $_POST["button"] == "einzahlen"){
+        $sql = "INSERT INTO tbl_einzahlung (einzahlung, user_id, admin_id) VALUES ($einzahlungsbetrag, $userEinzahlung, $admin_id)";
+        if(mysqli_query($conn, $sql)){
+            header("Location: a_user_page.php");
+        }else{
+            echo "Error: " . "<br>" . mysqli_error($conn);
+        }
+    }
+    
+
+// }
+// if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){    
+
+    if(isset($_POST["button"]) && $_POST["button"] == "kontostand"){
+        $sql= "SELECT SUM(einzahlung) AS gesamteEinzahlung, user_id FROM tbl_einzahlung WHERE user_id = $userEinzahlung";
+        $result = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_assoc($result);
+        $gesamteEinzahlung = $row['gesamteEinzahlung'];
+        // $user_id = $row['user_id'];
+    }
 }
-
-$isChecked = 'checked';
-$isDisabled ='disabled'; 
 ?>
 
 
@@ -32,36 +60,6 @@ $isDisabled ='disabled';
         <link href="../css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="../css/style.css">
         <title>Mensa</title>
-        <style>
-            
-            /* CSS für die Tabs
-            .tab {
-                overflow: hidden;
-                border: 1px solid #ccc;
-                background-color: #f1f1f1;
-                margin-top: 10px;
-            }
-
-            .tab button {
-                background-color: inherit;
-                float: left;
-                border: none;
-                outline: none;
-                cursor: pointer;
-                padding: 14px 16px;
-                transition: 0.3s;
-            }
-
-            .tab button.active {
-                background-color: #ccc;
-            }
-            .tabcontent {
-                display: none;
-                padding: 6px 12px;
-                border: 1px solid #ccc;
-                border-top: none;
-            } */
-        </style>
     </head>
     <body>
         <div class="collapse" id="navbarToggleExternalContent">
@@ -99,245 +97,360 @@ $isDisabled ='disabled';
             </div>
         </nav>
         <hr style="height: 5px">
-        
+
         <div class="tab">
-            <button class="tablinks active" onclick="openTab(event, 'userBestellung')">Bestellung des Benutzers</button>
-            <button class="tablinks" onclick="openTab(event, 'bestellungen')">Alle Bestellungen</button>
-            <button class="tablinks" onclick="openTab(event, 'lastWeekAllUser')">Nächste Woche</button>
-            <button class="tablinks" onclick="openTab(event, 'anzahlGerichte')">Gerichte Anzahl</button>
+            <button class="tablinks active" onclick="openTab(event, 'bestellung')">Bestellungen</button>
+            <button class="tablinks" onclick="openTab(event, 'kontoStand')">Kontostand</button>
+            <button class="tablinks" onclick="openTab(event, 'ddd')">ddd</button>
+            <button class="tablinks" onclick="openTab(event, 'sss')">sss</button>
         </div>
-
-        <div id="userBestellung" class="tabcontent" style="display:block">
+        <div id="bestellung" class="tabcontent" style="display:block">
             <div class="container">
-                <form method="get">
-                    <label for="user_id">Benutzername:</label>
-                    <!-- <input type="text" name="user_id" id="user_id"> -->
-                    <input type="text" name="userName" id="user_id"> 
-                    <input type="submit" value="Suchen">
-                </form>
-                <table>
-                    <thead>
-                        <tr>
-                        <th>Bestell-ID</th>
-                        <th>User ID</th>
-                        <th>UserName</th>
-                        <th>Gerichtsname</th>
-                        <th>GerichtID</th>
-                        <th>Der Tag</th>
-                        <th>Datum des Tages</th>
-                        <th>Bestell Datum</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                            // Überprüfen, ob eine Suchanfrage gesendet wurde
-                            if (isset($_GET['userName'])) {
-                                // Benutzereingabe bereinigen
-                                $userName = mysqli_real_escape_string($conn, $_GET['userName']);
-                                // Abrufen der Bestellungen für den angegebenen Benutzer
-                                $sql = "SELECT u.userName, b.id, b.user_id, b.option_name, b.option_id, b.day, b.day_datum, b.bestelldatum 
-                                        FROM tbl_bestellung AS b INNER JOIN tbl_user AS u ON u.id = b.user_id WHERE u.userName = '$userName' 
-                                        ORDER BY b.bestelldatum DESC;";
-                                $result = mysqli_query($conn, $sql);
-                                // Ausgabe der Bestellungen in einer Tabelle
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    echo '<tr>';
-                                        echo '<td>' . $row['id'] . '</td>';
-                                        echo '<td>' . $row['user_id'] . '</td>';
-                                        echo '<td>' . $row['userName'] . '</td>';
-                                        echo '<td>' . $row['option_name'] . '</td>';
-                                        echo '<td>' . $row['option_id'] . '</td>';
-                                        echo '<td>' . $row['day'] . '</td>';
-                                        echo '<td>' . $row['day_datum'] . '</td>';
-                                        echo '<td>' . $row['bestelldatum'] . '</td>';
-                                    echo '</tr>';
-                                }
-                            }else{
-                                echo '<tr>';
-                                    echo '<td>Keine Bestellungen für den Benutzer gefunden.</td>';
-                                echo '</tr>';
-                            }
-                        ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        
-        <div id="bestellungen" class="tabcontent">
-            <div class="container">
-                <table>
-                    <form method="POST">
-                        <thead>
-                            <tr>
-                                <th>
-                                    <input type="checkbox" id="checkboxId" name="checkboxId">
-                                    Bestell-ID
-                                </th>
-                                <th>User ID</th>
-                                <th>
-                                    <input type="checkbox" id="checkboxUserName" name="checkboxUserName" >
-                                    UserName
-                                </th>
-                                <th>Gerichtsname</th>
-                                <th>GerichtID</th>
-                                <th>Der Tag</th>
-                                <th>Datum des Tages</th>
-                                <th>
-                                    <input type="checkbox" id="checkboxBestellDatum" name="checkboxBestellDatum" >
-                                    Bestell Datum
-                                </th>
-                            </tr>
-                        </thead>
-                    </form>
-                    <tbody>
-                        <?php
-                            function isCheckboxChecked($checkboxName) {
-                                return isset($_POST[$checkboxName]) && $_POST[$checkboxName] == 'checked';
-                            }
-                            // Überprüfen, ob Checkboxen angeklickt wurden
-                            if (isCheckboxChecked('checkboxId')) {
-                                $sort_column = "b.id";
-                                $_POST['checkboxUserName'] = $isDisabled;
-                                $_POST['checkboxBestellDatum'] = $isDisabled;
+                <div class="tab">
+                    <button class="subtablinks active" onclick="openSubTab(event, 'userBestellung')">Bestellung des Benutzers</button>
+                    <button class="subtablinks" onclick="openSubTab(event, 'bestellungen')">Alle Bestellungen</button>
+                    <button class="subtablinks" onclick="openSubTab(event, 'lastWeekAllUser')">Nächste Woche</button>
+                    <button class="subtablinks" onclick="openSubTab(event, 'anzahlGerichte')">Gerichte Anzahl</button>
+                </div>
 
-
-                            } elseif (isCheckboxChecked('checkboxUserName')) {
-                                $sort_column = "u.userName";
-                                $_POST['checkboxId'] = $isDisabled;
-                                $_POST['checkboxBestellDatum'] = $isDisabled;
-
-
-                            } elseif (isCheckboxChecked('checkboxBestellDatum')) {
-                                $sort_column = "b.bestelldatum";
-                                $_POST['checkboxId'] = $isDisabled;
-                                $_POST['checkboxUserName'] = $isDisabled;
-
-                                
-                            } else {
-                                $sort_column = "b.bestelldatum"; // Standard-Sortierspalte
-                            }
-                            // Abrufen aller Bestellungen aus der Datenbank
-                            $sql = "SELECT b.id, b.user_id, u.userName, b.option_name, b.option_id, b.day, b.day_datum, b.bestelldatum 
-                                    FROM tbl_bestellung AS b INNER JOIN tbl_user AS u ON u.id = b.user_id ORDER BY $sort_column";
-                            $result = mysqli_query($conn, $sql);
-                            // Ausgabe der Bestellungen in einer Tabelle
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                echo '<tr>';
-                                    echo '<td>' . $row['id'] . '</td>';
-                                    echo '<td>' . $row['user_id'] . '</td>';
-                                    echo '<td>' . $row['userName'] . '</td>';
-                                    echo '<td>' . $row['option_name'] . '</td>';
-                                    echo '<td>' . $row['option_id'] . '</td>';
-                                    echo '<td>' . $row['day'] . '</td>';
-                                    echo '<td>' . $row['day_datum'] . '</td>';
-                                    echo '<td>' . $row['bestelldatum'] . '</td>';
-                                echo '</tr>';
-                            }
-                            // mysqli_close($conn);
-                        ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div id="lastWeekAllUser" class="tabcontent">
-            <div class="container">
-                <h3>die Bestellungen für alle Benutzer für nächste Woche:</h3>
-                <table>
-                    <form method="POST">
-                        <thead>
-                            <tr>
+                <div id="userBestellung" class="subtabcontent" >
+                    <div class="container">
+                        <form method="get">
+                            <label for="user_id">Benutzername:</label>
+                            <!-- <input type="text" name="user_id" id="user_id"> -->
+                            <input type="text" name="userName" id="user_id"> 
+                            <input type="submit" value="Suchen">
+                        </form>
+                        <table>
+                            <thead>
+                                <tr>
                                 <th>Bestell-ID</th>
-                                <!-- <th>User ID</th> -->
+                                <th>User ID</th>
                                 <th>UserName</th>
                                 <th>Gerichtsname</th>
                                 <th>GerichtID</th>
                                 <th>Der Tag</th>
                                 <th>Datum des Tages</th>
                                 <th>Bestell Datum</th>
-                            </tr>
-                        </thead>
-                    </form>
-                    <tbody>
-                        <?php
-                            // Abrufen aller Bestellungen aus der Datenbank
-                            $sql = "SELECT u.id, u.userName, b.id, b.option_name, b.option_id, b.day, b.day_datum, b.bestelldatum
-                                    FROM tbl_user u
-                                    JOIN (
-                                        SELECT id, user_id, option_name, option_id, day, day_datum, bestelldatum
-                                        FROM (
-                                            SELECT *, ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY bestelldatum DESC) AS row_num
-                                            FROM tbl_bestellung
-                                        ) t
-                                        WHERE t.row_num <= 5
-                                    ) b ON u.id = b.user_id
-                                    ORDER BY b.bestelldatum DESC;";
-                            $result = mysqli_query($conn, $sql);
-                            // Ausgabe der Bestellungen in einer Tabelle
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                echo '<tr>';
-                                    echo '<td>' . $row['id'] . '</td>';
-                                    // echo '<td>' . $row['user_id'] . '</td>';
-                                    echo '<td>' . $row['userName'] . '</td>';
-                                    echo '<td>' . $row['option_name'] . '</td>';
-                                    echo '<td>' . $row['option_id'] . '</td>';
-                                    echo '<td>' . $row['day'] . '</td>';
-                                    echo '<td>' . $row['day_datum'] . '</td>';
-                                    echo '<td>' . $row['bestelldatum'] . '</td>';
-                                echo '</tr>';
-                            }
-                            // mysqli_close($conn);
-                        ?>
-                    </tbody>
-                </table>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                    // Überprüfen, ob eine Suchanfrage gesendet wurde
+                                    if (isset($_GET['userName'])) {
+                                        // Benutzereingabe bereinigen
+                                        $userName = mysqli_real_escape_string($conn, $_GET['userName']);
+                                        // Abrufen der Bestellungen für den angegebenen Benutzer
+                                        $sql = "SELECT u.userName, b.id, b.user_id, b.option_name, b.option_id, b.day, b.day_datum, b.bestelldatum 
+                                                FROM tbl_bestellung AS b INNER JOIN tbl_user AS u ON u.id = b.user_id WHERE u.userName = '$userName' 
+                                                ORDER BY b.bestelldatum DESC;";
+                                        $result = mysqli_query($conn, $sql);
+                                        // Ausgabe der Bestellungen in einer Tabelle
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                            echo '<tr>';
+                                                echo '<td>' . $row['id'] . '</td>';
+                                                echo '<td>' . $row['user_id'] . '</td>';
+                                                echo '<td>' . $row['userName'] . '</td>';
+                                                echo '<td>' . $row['option_name'] . '</td>';
+                                                echo '<td>' . $row['option_id'] . '</td>';
+                                                echo '<td>' . $row['day'] . '</td>';
+                                                echo '<td>' . $row['day_datum'] . '</td>';
+                                                echo '<td>' . $row['bestelldatum'] . '</td>';
+                                            echo '</tr>';
+                                        }
+                                    }else{
+                                        echo '<tr>';
+                                            echo '<td>Keine Bestellungen für den Benutzer gefunden.</td>';
+                                        echo '</tr>';
+                                    }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div id="bestellungen" class="subtabcontent" style="display:none">
+                    <div class="container">
+                        <table>
+                            <form method="POST">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <input type="checkbox" id="checkboxId" name="checkboxId">
+                                            Bestell-ID
+                                        </th>
+                                        <th>User ID</th>
+                                        <th>
+                                            <input type="checkbox" id="checkboxUserName" name="checkboxUserName" >
+                                            UserName
+                                        </th>
+                                        <th>Gerichtsname</th>
+                                        <th>GerichtID</th>
+                                        <th>Der Tag</th>
+                                        <th>Datum des Tages</th>
+                                        <th>
+                                            <input type="checkbox" id="checkboxBestellDatum" name="checkboxBestellDatum" >
+                                            Bestell Datum
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </form>
+                            <tbody>
+                                <?php
+                                    function isCheckboxChecked($checkboxName) {
+                                        return isset($_POST[$checkboxName]) && $_POST[$checkboxName] == 'checked';
+                                    }
+                                    // Überprüfen, ob Checkboxen angeklickt wurden
+                                    if (isCheckboxChecked('checkboxId')) {
+                                        $sort_column = "b.id";
+                                        $_POST['checkboxUserName'] = $isDisabled;
+                                        $_POST['checkboxBestellDatum'] = $isDisabled;
+
+
+                                    } elseif (isCheckboxChecked('checkboxUserName')) {
+                                        $sort_column = "u.userName";
+                                        $_POST['checkboxId'] = $isDisabled;
+                                        $_POST['checkboxBestellDatum'] = $isDisabled;
+
+
+                                    } elseif (isCheckboxChecked('checkboxBestellDatum')) {
+                                        $sort_column = "b.bestelldatum";
+                                        $_POST['checkboxId'] = $isDisabled;
+                                        $_POST['checkboxUserName'] = $isDisabled;
+
+                                        
+                                    } else {
+                                        $sort_column = "b.bestelldatum"; // Standard-Sortierspalte
+                                    }
+                                    // Abrufen aller Bestellungen aus der Datenbank
+                                    $sql = "SELECT b.id, b.user_id, u.userName, b.option_name, b.option_id, b.day, b.day_datum, b.bestelldatum 
+                                            FROM tbl_bestellung AS b INNER JOIN tbl_user AS u ON u.id = b.user_id ORDER BY $sort_column";
+                                    $result = mysqli_query($conn, $sql);
+                                    // Ausgabe der Bestellungen in einer Tabelle
+                                    while ($row = mysqli_fetch_assoc($result)) {
+                                        echo '<tr>';
+                                            echo '<td>' . $row['id'] . '</td>';
+                                            echo '<td>' . $row['user_id'] . '</td>';
+                                            echo '<td>' . $row['userName'] . '</td>';
+                                            echo '<td>' . $row['option_name'] . '</td>';
+                                            echo '<td>' . $row['option_id'] . '</td>';
+                                            echo '<td>' . $row['day'] . '</td>';
+                                            echo '<td>' . $row['day_datum'] . '</td>';
+                                            echo '<td>' . $row['bestelldatum'] . '</td>';
+                                        echo '</tr>';
+                                    }
+                                    // mysqli_close($conn);
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="lastWeekAllUser" class="subtabcontent" style="display:none">
+                    <div class="container">
+                        <h3>die Bestellungen für alle Benutzer für nächste Woche:</h3>
+                        <table>
+                            <form method="POST">
+                                <thead>
+                                    <tr>
+                                        <th>Bestell-ID</th>
+                                        <!-- <th>User ID</th> -->
+                                        <th>UserName</th>
+                                        <th>Gerichtsname</th>
+                                        <th>GerichtID</th>
+                                        <th>Der Tag</th>
+                                        <th>Datum des Tages</th>
+                                        <th>Bestell Datum</th>
+                                    </tr>
+                                </thead>
+                            </form>
+                            <tbody>
+                                <?php
+                                    // Abrufen aller Bestellungen aus der Datenbank
+                                    $sql = "SELECT u.id, u.userName, b.id, b.option_name, b.option_id, b.day, b.day_datum, b.bestelldatum
+                                            FROM tbl_user u
+                                            JOIN (
+                                                SELECT id, user_id, option_name, option_id, day, day_datum, bestelldatum
+                                                FROM (
+                                                    SELECT *, ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY bestelldatum DESC) AS row_num
+                                                    FROM tbl_bestellung
+                                                ) t
+                                                WHERE t.row_num <= 5
+                                            ) b ON u.id = b.user_id
+                                            ORDER BY b.bestelldatum DESC;";
+                                    $result = mysqli_query($conn, $sql);
+                                    // Ausgabe der Bestellungen in einer Tabelle
+                                    while ($row = mysqli_fetch_assoc($result)) {
+                                        echo '<tr>';
+                                            echo '<td>' . $row['id'] . '</td>';
+                                            // echo '<td>' . $row['user_id'] . '</td>';
+                                            echo '<td>' . $row['userName'] . '</td>';
+                                            echo '<td>' . $row['option_name'] . '</td>';
+                                            echo '<td>' . $row['option_id'] . '</td>';
+                                            echo '<td>' . $row['day'] . '</td>';
+                                            echo '<td>' . $row['day_datum'] . '</td>';
+                                            echo '<td>' . $row['bestelldatum'] . '</td>';
+                                        echo '</tr>';
+                                    }
+                                    // mysqli_close($conn);
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div id="anzahlGerichte" class="subtabcontent" style="display:none">
+                    <div class="container">
+                        <h3>Anzahl der Bestellungen für nächste Woche:</h3>
+                        <table>
+                            <form method="POST">
+                                <thead>
+                                    <tr>
+                                        <th>Option ID</th>
+                                        <th>Gerichtsname</th>
+                                        <th>Anzahl</th>
+                                    </tr>
+                                </thead>
+                            </form>
+                            <tbody>
+                                <?php
+                                    // Abrufen aller Bestellungen aus der Datenbank
+                                    $sql = "SELECT b.option_id, b.option_name, COUNT(*) AS anzahl
+                                            FROM (
+                                                SELECT option_id, user_id, option_name, ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY bestelldatum DESC) AS row_num
+                                                FROM tbl_bestellung
+                                                ) AS b
+                                            WHERE b.row_num <= 5
+                                            GROUP BY b.option_name  
+                                            ORDER BY `b`.`option_name` ASC;";
+                                    $result = mysqli_query($conn, $sql);
+                                    // Ausgabe der Bestellungen in einer Tabelle
+                                    while ($row = mysqli_fetch_assoc($result)) {
+                                        echo '<tr>';
+                                            echo '<td>' . $row['option_id'] . '</td>';
+                                            echo '<td>' . $row['option_name'] . '</td>';
+                                            echo '<td>' . $row['anzahl'] . '</td>';
+                                        echo '</tr>';
+                                    }
+                                    // mysqli_close($conn);
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
-        
-        <div id="anzahlGerichte" class="tabcontent">
+        <div id="kontoStand" class="tabcontent">
             <div class="container">
-                <h3>Anzahl der Bestellungen für nächste Woche:</h3>
-                <table>
-                    <form method="POST">
-                        <thead>
-                            <tr>
-                                <th>Option ID</th>
-                                <th>Gerichtsname</th>
-                                <th>Anzahl</th>
-                            </tr>
-                        </thead>
+                <div class="tab">
+                    <button class="subtablinks active" onclick="openSubTab(event, 'einzahlungen')">Kontostand</button>
+                    <button class="subtablinks" onclick="openSubTab(event, 'auszahlungen')">Auszahlungen</button>
+                </div>
+                <div id="einzahlungen" class="subtabcontent" > 
+                    <form>
+                        <label for="einzahlungsbetrag">Betrag:</label>
+                        <input type="number" step="0.01" name="einzahlungsbetrag" id="einzahlungsbetrag">
+                        <select name="userEinzahlung" id="userEinzahlung">
+                            <?php 
+                                $sql = "SELECT id, userName FROM tbl_user";
+                                $result = mysqli_query($conn, $sql);
+                                while($row = mysqli_fetch_assoc($result)){
+                                    $user_id = $row['id'];
+                                    $userName = $row['userName'];
+                                    echo '<option value="' . $user_id . '">' . $user_id . "-" . $userName . '€</option>';
+                                }
+                            ?>
+                        </select>
+                        <button type="submit" name="button" value="einzahlen">Einzahlen</button>
+                        <button type="submit" name="button" value="kontostand">Kontostand anzeigen</button>
+                        <label name="kontostandLabel" id="kontostandLabel"> 
+                            <?php 
+                                global $gesamteEinzahlung;
+                                echo $gesamteEinzahlung;
+                            ?>
+                        </label>
                     </form>
-                    <tbody>
-                        <?php
-                            // Abrufen aller Bestellungen aus der Datenbank
-                            $sql = "SELECT b.option_id, b.option_name, COUNT(*) AS anzahl
-                                    FROM (
-                                        SELECT option_id, user_id, option_name, ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY bestelldatum DESC) AS row_num
-                                        FROM tbl_bestellung
-                                        ) AS b
-                                    WHERE b.row_num <= 5
-                                    GROUP BY b.option_name  
-                                    ORDER BY `b`.`option_name` ASC;";
-                            $result = mysqli_query($conn, $sql);
-                            // Ausgabe der Bestellungen in einer Tabelle
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                echo '<tr>';
-                                    echo '<td>' . $row['option_id'] . '</td>';
-                                    echo '<td>' . $row['option_name'] . '</td>';
-                                    echo '<td>' . $row['anzahl'] . '</td>';
-                                echo '</tr>';
-                            }
-                            mysqli_close($conn);
-                        ?>
-                    </tbody>
-                </table>
+                    <h3>Einzahlungen</h3>
+                    <table>
+                        <form method="POST">
+                            <thead>
+                                <tr>
+                                    <th>Benutzer Name</th>
+                                    <th>Einzahlungen</th>
+                                    <th>Einzahlungsdatum</th>
+                                </tr>
+                            </thead>
+                        </form>
+                        <tbody>
+                            <?php
+                                // Abrufen aller Bestellungen aus der Datenbank
+                                $sql = "SELECT u.userName, e.einzahlung, e.einzahlung_date FROM tbl_einzahlung e
+                                        INNER JOIN tbl_user u ON u.id = e.user_id";
+                                $result = mysqli_query($conn, $sql);
+                                // Ausgabe der Bestellungen in einer Tabelle
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    echo '<tr>';
+                                        echo '<td>' . $row['userName'] . '</td>';
+                                        echo '<td>' . $row['einzahlung'] . '€</td>';
+                                        echo '<td>' . $row['einzahlung_date'] . '</td>';
+                                    echo '</tr>';
+                                }
+                                // mysqli_close($conn);
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="auszahlungen" class="subtabcontent" style="display:none">            
+                    <h3>Auszahlungen</h3>
+                    <table>
+                        <form method="POST">
+                            <thead>
+                                <tr>
+                                    <th>Benutzer Name</th>
+                                    <th>Auszahlungen</th>
+                                    <th>Bestellungsdatum</th>
+                                </tr>
+                            </thead>
+                        </form>
+                        <tbody>
+                            <?php
+                                // Abrufen aller Bestellungen aus der Datenbank
+                                $sql = "SELECT u.userName, a.auszahlung, a.auszahlung_date FROM tbl_auszahlung a
+                                        INNER JOIN tbl_user u ON u.id = a.user_id";
+                                $result = mysqli_query($conn, $sql);
+                                // Ausgabe der Bestellungen in einer Tabelle
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    echo '<tr>';
+                                        echo '<td>' . $row['userName'] . '</td>';
+                                        echo '<td>' . $row['auszahlung'] . '€</td>';
+                                        echo '<td>' . $row['auszahlung_date'] . '</td>';
+                                    echo '</tr>';
+                                }
+                                // mysqli_close($conn);
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
+        <div id="ddd" class="tabcontent">
+            dddddddddddddd
+        </div>
+        <div id="sss" class="tabcontent">
+            sssssssssssss
+        </div>
+
+
         <div style="margin-bottom: 80px">
             
         </div>
         <footer class="fixed-bottom footer">
             <p class="footer_text"><span>&copy; 2023 created by Khalid Arab</span></p>
         </footer>
+        <script>
+            
+
+        </script>
         <script src="../js/jquery-3.6.0.min.js"></script>
         <script src="../js/popper.min.js"></script>
         <script src="../js/bootstrap.min.js"></script>

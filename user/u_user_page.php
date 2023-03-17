@@ -10,7 +10,7 @@ if (isset($_SESSION['user_id'])) {
     header("Location: u_login.php");
 	exit;
 }
-// date_default_timezone_set('Europe/Berlin');
+
 
 $stunden = 0;
 $minuten = 0;
@@ -26,71 +26,11 @@ if (isset($_SESSION['sessionTime'])) {
     $_SESSION['sessionTime'] = date('H:i:s');
 }
 
-
+$days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
 
 include ('./u_kontoZustand.php');
 include ('./bestell_insert.php');
-// include('./update_bestellstatus.php');
-
-if(date('l') == 'Saturday'){
-    $bestell_status = 0;
-    $aktuellBestellStatus = 1;
-    // Reset user's bestell_status at the start of every week
-    // Add this task to a weekly cron job
-    $sql = "UPDATE tbl_user SET bestell_status = ? WHERE bestell_status = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ss", $bestell_status, $aktuellBestellStatus);
-    $stmt->execute();
-}
-
-$days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
-
-
-// // Check if user has already placed an order this week
-// $sql = "SELECT COUNT(*) FROM tbl_bestellung WHERE user_id = ? AND day_datum >= ? AND day_datum <= ?";
-// $stmt = $conn->prepare($sql);
-// $stmt->bind_param("sss", $user_id, $week_start, $week_end);
-// $stmt->execute();
-// $result = $stmt->get_result();
-// $order_count = $result->fetch_row()[0];
-
-// if ($order_count > 0) {
-//     // User has already placed an order this week
-//     // Check if user's bestell_status is set to '1'
-//     $sql = "SELECT bestell_status FROM tbl_user WHERE user_id = ?";
-//     $stmt = $conn->prepare($sql);
-//     $stmt->bind_param("s", $user_id);
-//     $stmt->execute();
-//     $result = $stmt->get_result();
-//     $bestell_status = $result->fetch_row()[0];
-    
-//     if ($bestell_status == 1) {
-//         // User's order has been processed, disable the button
-//         echo "<script>document.getElementById('bestellen').disabled = true;</script>";
-//     } else {
-//         // User has not placed an order yet, enable the button
-//         echo "<script>document.getElementById('bestellen').disabled = false;</script>";
-//     }
-// } else {
-//     // User has not placed an order yet, enable the button
-//     echo "<script>document.getElementById('bestellen').disabled = false;</script>";
-// }
-
-// $current_day = date('l'); // Liefert den aktuellen Wochentag in Textform (z.B. "Monday")
-
-// if ($current_day == 'Saturday') {
-//     // Aktiviere den Bestellbutton für alle Tage
-//     $bestell_status = 0;
-//     // Reset user's bestell_status at the start of every week
-//     // Add this task to a weekly cron job
-//     $sql = "UPDATE tbl_user SET bestell_status = ?";
-//     $stmt = $conn->prepare($sql);
-//     $stmt->bind_param("s", $bestell_status);
-//     $stmt->execute();
-//     echo "<script>document.getElementById('bestellen').disabled = false;</script>";
-// }
-
-
+include ('./bestell_update.php');
 
     //um die ganze Bestellungen für den Benutzer abzurufen
     $bestellSql = "SELECT b.id, b.user_id, b.option_name, b.option_id, b.day, b.day_datum, b.bestelldatum, o.price
@@ -123,8 +63,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
         $letzte_bestellungen[] = $row;
     }
 
-
-    // SQL-Abfrage ausführen, um die Spalte zu summieren
+    // SQL-Abfrage ausführen, um die Preise in der Spalte zu summieren
     $query = "SELECT SUM(o.price) as total 
     FROM 
         ( SELECT b.option_id 
@@ -137,18 +76,52 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
     $row = mysqli_fetch_assoc($result);
     $totalPreis = $row['total'];
 
+
+
+    // um der gesamte Betrag von Bestellungen in die Tabelle tbl_auszahlung hinzufügen
+    // $current_time = date('Y-m-d H:i:s');
     if(isset($_POST['button']) && $_POST['button'] == 'bestellen'){
-        $sql = "INSERT INTO tbl_bank (auszahlung) VALUES ($totalPreis)";
-        mysqli_query($conn, $sql);
+        $sql = "INSERT INTO tbl_auszahlung (auszahlung, user_id) VALUES (?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ss", $totalPreis, $user_id);
+        $stmt->execute();
     }
 
+    // um der gesamte Betrag von Bestellungen aktualisieren, wenn der Benutzer während der Woche die Bestellungen ändert
+    foreach ($days as $day) {
+        if(isset($_POST['button']) && $_POST["button"] == $day){
+            $sql = "UPDATE tbl_auszahlung SET auszahlung = ? WHERE user_id = ? ORDER BY id DESC LIMIT 1";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ss", $totalPreis, $user_id);
+            $stmt->execute();
+        }
+    }
     // um die Bestell Status abzurufen und es im Button zu benutzen ob 1 ist, dann deaktiviert der Button
     $bestellStatusSql = "SELECT bestell_status FROM tbl_user WHERE id = $user_id";
     $statusBestell = mysqli_query($conn, $bestellStatusSql);
     $statusRow = mysqli_fetch_assoc($statusBestell);
     $bestell_status = $statusRow['bestell_status'];
     
+
+    // Um die Einzahlungen mit Datums in der Tabelle anzeigen
+    $einzahlungSql = "SELECT einzahlung, einzahlung_date FROM tbl_einzahlung WHERE user_id = $user_id";
+    $result = mysqli_query($conn, $einzahlungSql);
+    $einzahlungen = array();
+    while($einzahlungRow = mysqli_fetch_assoc($result)){
+        $einzahlungen[] = $einzahlungRow;
+    }
     
+
+    // Um die Auszahlungen mit Datums in der Tabelle anzeigen
+    $auszahlungSql = "SELECT auszahlung, auszahlung_date FROM tbl_auszahlung WHERE user_id = $user_id";
+    $result = mysqli_query($conn, $auszahlungSql);
+    $auszahlungen = array();
+    while($auszahlungRow = mysqli_fetch_assoc($result)){
+        $auszahlungen[] = $auszahlungRow;
+    }
+
+
+    $kontostandSql = "SELECT SUM(einzalung) AS einzahlung FROM tbl_einzahlung INNER JOIN tbl_auszahlung"
 ?>
 
 
@@ -188,7 +161,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
         <div class="tab">
             <button class="tablinks active" onclick="openTab(event, 'essenBestellung')">Essen Bestellung</button>
             <button class="tablinks" onclick="openTab(event, 'userData')">Benutzer Daten</button>
-            <button class="tablinks" onclick="openTab(event, 'kontoZustand')">Konto Zustand</button>
+            <button class="tablinks" onclick="openTab(event, 'kontoZustand')">Kontostand</button>
             <button class="tablinks" onclick="openTab(event, 'bestellendeEssen')">Bestellende Essen</button>
         </div>
 
@@ -211,25 +184,29 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                         $data = $row['data'];
                                         $price = $row['price'];
                                         $option_id = $row['id'];
-                                        echo '<option value="' . $option_id . '">' . $option_name . "-" . $price . '</option>';
+                                        echo '<option value="' . $option_id . '">'. $option_id. "-" . $option_name . "-" . $price . '€</option>';
                                     }
                                 ?>
                             </select>
-                            <button type="submit" class="btn btn-warning h-50 mb-2" name="button" value="<?php echo $day;?>" ><h6 style="color:white;">Ändern</h6></button>
+                            <button type="submit" class="btn btn-warning h-50 mb-2" name="button" id="<?php echo $day;?>" value="<?php echo $day;?>" 
+                                    <?php if($bestell_status == 2){echo "disabled";} ?>>
+                                    <h6 style="color:white;">Ändern</h6>
+                            </button>
                             <br>
-                            <label style="width:100px" id="monday" name="monday">
+                            <label style="width:100px" id="monday" name="<?php echo $day; ?>">
                                 <?php 
                                     $sql = "SELECT date FROM tbl_option WHERE day = '". $day."'";
                                     $result = mysqli_query($conn, $sql);
                                     $row = mysqli_fetch_assoc($result);
-                                    echo $row['date'];
+                                    $day_datum = $row['date'];
+                                    echo $day_datum;
                                 ?>
                             </label>
                         </div>
                     <?php } ?>
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary w-25 btn-bestellen" id="bestellen" name="button" value="bestellen" 
-                                <?php if($bestell_status == 1){echo "disabled";}else{echo "undisabled";}?>>
+                                <?php if($bestell_status == 1 || $bestell_status == 2){echo "disabled";}?>>
                                 Essen bestellen
                         </button>
                     </div>
@@ -261,26 +238,60 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
         </div>
 
         <div id="kontoZustand" class="tabcontent">
-            <h1>Bank Account Simulation</h1>
-
-            <p>Ihr Kontostand ist: <?php echo number_format(($_SESSION['balance']) - 500); ?>€</p>
-
-            <!-- <h2>Geld einzahlen <span style="font-size:20px; color:red">(Dieses Feld muss in Admin Seite scheinen und von hier ausblenden)</span></h2>
-            <form method="post">
-                <label for="deposit_amount">Betrag:</label>
-                <input type="number" step="0.01" name="deposit_amount" id="deposit_amount">
-                <button type="submit">einzahlen</button>
-            </form> -->
-
-            <h2>Geld auszahlen <span style="font-size:20px; color:red">(Dieses Feld muss in Admin Seite scheinen und von hier ausblenden)</span></h2>
-            <?php if (isset($error)): ?>
-                <p style="color: red;"><?php echo $error; ?></p>
-            <?php endif; ?>
-            <form method="post">
-                <label for="withdrawal_amount">Betrag:</label>
-                <input type="number" step="0.01" name="withdrawal_amount" id="withdrawal_amount">
-                <button type="submit">auszahlen</button>
-            </form>
+            <h1>Banktransaktionen und Kontostand</h1>
+            <div class="container">                        
+                <p>Ihr Kontostand ist: <?php echo number_format(($_SESSION['balance']) - 500); ?>€</p>
+                <div class="tab">
+                    <button class="subtablinks active" onclick="openSubTab(event, 'einzahlungen')">Einzahlungen</button>
+                    <button class="subtablinks" onclick="openSubTab(event, 'auszahlungen')">Auszahlungen</button>
+                </div>  
+                <div id="einzahlungen" class="subtabcontent" style="display:block">
+                    <table>
+                        <thead>
+                            <tr>
+                            <th>Einzahlungen</th>
+                            <th>Datum</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php 
+                                if(count($einzahlungen) > 0){
+                                    foreach($einzahlungen as $einzahl){
+                                        echo '<tr>';
+                                            echo '<td>'.$einzahl['einzahlung'].'</td>';
+                                            echo '<td>'.$einzahl['einzahlung_date'].'</td>';
+                                        echo '</tr>';
+                                        // mysqli_close($conn);
+                                    }
+                                }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="auszahlungen" class="subtabcontent" style="display:none">
+                    <table>
+                        <thead>
+                            <tr>
+                            <th>Auszahlungen</th>
+                            <th>Datum</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php 
+                                if(count($auszahlungen) > 0){
+                                    foreach($auszahlungen as $auszahl){
+                                        echo '<tr>';
+                                            echo '<td>'.$auszahl['auszahlung'].'</td>';
+                                            echo '<td>'.$auszahl['auszahlung_date'].'</td>';
+                                        echo '</tr>';
+                                        // mysqli_close($conn);
+                                    }
+                                }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
         
         <div id="bestellendeEssen" class="tabcontent">
@@ -312,8 +323,8 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                 if(count($letzte_bestellungen) > 0){
                                     foreach($letzte_bestellungen as $letzte_bestellung){
                                         echo '<tr>';
-                                            echo '<td>'.$letzte_bestellung['id']. '</td>';
-                                            echo '<td>'.$letzte_bestellung['option_name']. '</td>';
+                                            echo '<td>'.$letzte_bestellung['id'].'</td>';
+                                            echo '<td>'.$letzte_bestellung['option_name'].'</td>';
                                             echo '<td>'.$letzte_bestellung['price']. '€</td>';
                                             echo '<td>'.$letzte_bestellung['option_id']. '</td>';
                                             echo '<td>'.$letzte_bestellung['day'].'</td>';
