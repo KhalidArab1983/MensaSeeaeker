@@ -135,6 +135,12 @@ $conn->close();
                     <button type="submit" class="btn btn-warning m-1" name="button" value="dateUpdate">Datum aktualisieren</button>
                     <button type="submit" class="btn btn-warning m-1" name="button" value="holiday">Feiertag einstellen</button>
                 </form>
+                <p class="mt-5 font15">HINWEIS: Was an jedem Sonntag gemacht werden muss: <br> 1. Wenn es einen Feiertag gab, muss wieder auf Wochentag zurückgestellt werden.<br>
+                    Wählen Sie das gewünschte Datum des Tages aus seinem Feld und wählen Sie den Tag, für den es geändert werden soll, aus dem Feld Tage aus, 
+                    dann klicken Sie auf "Feiertag einstellen".<br>
+                    2. Müssen die Datums jede Woche für neue Woche geändert werden.<br> Wählen Sie den genauen Tag aus dem Tagefeld und dann das neue Datum aus, dann 
+                    klicken auf "Datum aktualisieren".
+                </p>
             </div>
             <div class="col-lg-3">
                 

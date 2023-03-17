@@ -10,6 +10,9 @@
 .font12{
     font-size:12px;
 }
+.font15{
+    font-size:15px;
+}
 .font20{
     font-size:20px;
 }
@@ -421,7 +424,7 @@ th {
     background-color: #d6a140;
     padding: 10px;
     transform: scale(1.1);
-    transition: 0.5s;
+    transition: 0.3s;
 }
 
 .btn-bestellen.disabled{
@@ -450,5 +453,6 @@ th {
 .btn-warning:hover{
     background-color: #d6a140;
     color: white;
+    padding: 10px 15px 0px 15px;
 }
 
