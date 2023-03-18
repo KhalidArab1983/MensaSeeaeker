@@ -6,26 +6,26 @@ $sonntag = 'Sunday';
 $current_day = date('l');
 $current_time = date('H:i:s');
 $current_date = date('Y-m-d');
-$bestell_status_deaktiv = 2;
+$bestell_status_deaktiv = 1;
 $bestell_status_aktiv = 0;
 
 if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
-    $tagen = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday');
+    $tagen = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday');
     foreach($tagen as $tag){
-        if($current_time >= '22:00:00' && $current_day == $tag){
+        if($current_time >= '22:00:00' && $current_day == 'Sunday'){
             // Reset user's bestell_status at the start of every week
-            $sql = "UPDATE tbl_user SET bestell_status = ? WHERE id = ?";
+            $sql = "UPDATE tbl_bestellstatus SET montag = ? WHERE user_id = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("ss", $bestell_status_deaktiv, $user_id);
             $stmt->execute();
         }
-        if($current_day == $samstag || $current_day == $sonntag){
-            // Reset user's bestell_status at the start of every week
-            $sql = "UPDATE tbl_user SET bestell_status = ? WHERE id = ?";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ss", $bestell_status_aktiv, $user_id);
-            $stmt->execute();
-        }
+        // if($current_day == $samstag || $current_day == $sonntag){
+        //     // Reset user's bestell_status at the start of every week
+        //     $sql = "UPDATE tbl_user SET bestell_status = ? WHERE id = ?";
+        //     $stmt = $conn->prepare($sql);
+        //     $stmt->bind_param("ss", $bestell_status_aktiv, $user_id);
+        //     $stmt->execute();
+        // }
 
         
     }

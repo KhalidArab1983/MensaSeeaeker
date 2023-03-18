@@ -150,9 +150,6 @@ include ('./bestell_update.php');
                     <span style="font-size:20px; font-weight:bold; color: green"><?php echo "$stunden:$minuten:$sekunden";?></span>
                 </p>
             </div>
-
-            
-
         </div>
         <div>
             <img class="logo" src="../images/logo.png" alt="Seeäkerschule Logo" width=6% style="float:right;">
@@ -189,7 +186,7 @@ include ('./bestell_update.php');
                                 ?>
                             </select>
                             <button type="submit" class="btn btn-warning h-50 mb-2" name="button" id="<?php echo $day;?>" value="<?php echo $day;?>" 
-                                    <?php if($bestell_status == 2){echo "disabled";} ?>>
+                                    <?php if($bestell_status == 1){echo "disabled";} ?>>
                                     <h6 style="color:white;">Ändern</h6>
                             </button>
                             <br>
@@ -206,7 +203,7 @@ include ('./bestell_update.php');
                     <?php } ?>
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary w-25 btn-bestellen" id="bestellen" name="button" value="bestellen" 
-                                <?php if($bestell_status == 1 || $bestell_status == 2){echo "disabled";}?>>
+                                <?php if($bestell_status == 1){echo "disabled";}?>>
                                 Essen bestellen
                         </button>
                     </div>
@@ -258,7 +255,7 @@ include ('./bestell_update.php');
                                 if(count($einzahlungen) > 0){
                                     foreach($einzahlungen as $einzahl){
                                         echo '<tr>';
-                                            echo '<td>'.$einzahl['einzahlung'].'</td>';
+                                            echo '<td>'.$einzahl['einzahlung'].'€</td>';
                                             echo '<td>'.$einzahl['einzahlung_date'].'</td>';
                                         echo '</tr>';
                                         // mysqli_close($conn);
@@ -281,7 +278,7 @@ include ('./bestell_update.php');
                                 if(count($auszahlungen) > 0){
                                     foreach($auszahlungen as $auszahl){
                                         echo '<tr>';
-                                            echo '<td>'.$auszahl['auszahlung'].'</td>';
+                                            echo '<td>'.$auszahl['auszahlung'].'€</td>';
                                             echo '<td>'.$auszahl['auszahlung_date'].'</td>';
                                         echo '</tr>';
                                         // mysqli_close($conn);
@@ -296,6 +293,7 @@ include ('./bestell_update.php');
         
         <div id="bestellendeEssen" class="tabcontent">
             <div class="container">
+                <button onclick="printContent()">Seite drucken</button>
                 <div class="tab">
                     <button class="subtablinks active" onclick="openSubTab(event, 'lastWeek')">Nächste Woche</button>
                     <button class="subtablinks" onclick="openSubTab(event, 'alleBestellungen')">Alle Bestellungen</button>
@@ -306,6 +304,7 @@ include ('./bestell_update.php');
                         <h3 class="m-3" style="float:left">Bestellende Essen für nächste Woche:</h3>
                         <h3 class="m-3" style="float:right">Benutzer-ID: <span style="color:red;"><?php echo "[". $user_id."]"?></span></h3>
                     </div>
+                    
                     <table>
                         <thead>
                             <tr>
@@ -395,6 +394,22 @@ include ('./bestell_update.php');
             <p class="footer_text"><span>&copy; 2023 created by Khalid Arab</span></p>
         </footer>
             
+        <script>
+            function printContent() {
+                var content = document.getElementById("alleBestellungen");
+                var pri = document.createElement("iframe");
+                pri.style.visibility = "hidden";
+                pri.style.position = "absolute";
+                pri.style.top = "0";
+                pri.style.left = "0";
+                document.body.appendChild(pri);
+                pri.contentWindow.document.open();
+                pri.contentWindow.document.write(content.innerHTML);
+                pri.contentWindow.document.close();
+                pri.contentWindow.focus();
+                pri.contentWindow.print();
+            }
+        </script>
         <script src="../js/popper.min.js"></script>
         <script src="../js/bootstrap.min.js"></script>
         <script src="../js/jquery-3.6.0.min.js"></script>

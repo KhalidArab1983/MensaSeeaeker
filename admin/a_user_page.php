@@ -347,7 +347,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
                     <button class="subtablinks" onclick="openSubTab(event, 'auszahlungen')">Auszahlungen</button>
                 </div>
                 <div id="einzahlungen" class="subtabcontent" > 
-                    <form>
+                    <form method="post">
                         <label for="einzahlungsbetrag">Betrag:</label>
                         <input type="number" step="0.01" name="einzahlungsbetrag" id="einzahlungsbetrag">
                         <select name="userEinzahlung" id="userEinzahlung">
