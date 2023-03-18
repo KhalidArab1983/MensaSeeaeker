@@ -20,6 +20,7 @@ if (!$conn) {
 $samstag = 'Saturday';
 $current_day = date('l');
 $bestell_status = 0;
+$update_status = 0;
         
 if($current_day == $samstag){
     // Aktiviere den Bestellbutton für Samstag
@@ -30,6 +31,11 @@ if($current_day == $samstag){
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $bestell_status);
     $stmt->execute();
+
+    $updateSql = "UPDATE tbl_bestellstatus SET montag = ?, dienstag = ?, mittwoch = ?, donnerstag = ?, freitag = ?";
+    $updateStmt = $conn->prepare($updateSql);
+    $updateStmt->bind_param("sssss", $update_status, $update_status, $update_status, $update_status, $update_status);
+    $updateStmt->execute();
     
 }
 

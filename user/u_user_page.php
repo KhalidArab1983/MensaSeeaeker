@@ -26,7 +26,7 @@ if (isset($_SESSION['sessionTime'])) {
     $_SESSION['sessionTime'] = date('H:i:s');
 }
 
-$days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
+$days = array('montag', 'dienstag', 'mittwoch', 'donnerstag', 'freitag');
 
 include ('./u_kontoZustand.php');
 include ('./bestell_insert.php');
@@ -103,6 +103,16 @@ include ('./bestell_update.php');
     $bestell_status = $statusRow['bestell_status'];
     
 
+    $updateSql = "SELECT montag, dienstag, mittwoch, donnerstag, freitag FROM tbl_bestellstatus WHERE user_id = $user_id";
+    $updateResult = mysqli_query($conn, $updateSql);
+    $updateRow = mysqli_fetch_assoc($updateResult);
+    $montag = $updateRow['montag'];
+    $dienstag = $updateRow['dienstag'];
+    $mittwoch = $updateRow['mittwoch'];
+    $donnerstag = $updateRow['donnerstag'];
+    $freitag = $updateRow['freitag'];
+
+    
     // Um die Einzahlungen mit Datums in der Tabelle anzeigen
     $einzahlungSql = "SELECT einzahlung, einzahlung_date FROM tbl_einzahlung WHERE user_id = $user_id";
     $result = mysqli_query($conn, $einzahlungSql);
@@ -186,7 +196,11 @@ include ('./bestell_update.php');
                                 ?>
                             </select>
                             <button type="submit" class="btn btn-warning h-50 mb-2" name="button" id="<?php echo $day;?>" value="<?php echo $day;?>" 
-                                    <?php if($bestell_status == 1){echo "disabled";} ?>>
+                                    <?php
+                                        if($$day == 1){
+                                            echo "disabled";
+                                        }
+                                    ?>>
                                     <h6 style="color:white;">Ändern</h6>
                             </button>
                             <br>
