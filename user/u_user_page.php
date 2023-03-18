@@ -26,11 +26,13 @@ if (isset($_SESSION['sessionTime'])) {
     $_SESSION['sessionTime'] = date('H:i:s');
 }
 
-$days = array('montag', 'dienstag', 'mittwoch', 'donnerstag', 'freitag');
+
 
 include ('./u_kontoZustand.php');
 include ('./bestell_insert.php');
 include ('./bestell_update.php');
+
+$days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
 
     //um die ganze Bestellungen für den Benutzer abzurufen
     $bestellSql = "SELECT b.id, b.user_id, b.option_name, b.option_id, b.day, b.day_datum, b.bestelldatum, o.price
@@ -106,11 +108,11 @@ include ('./bestell_update.php');
     $updateSql = "SELECT montag, dienstag, mittwoch, donnerstag, freitag FROM tbl_bestellstatus WHERE user_id = $user_id";
     $updateResult = mysqli_query($conn, $updateSql);
     $updateRow = mysqli_fetch_assoc($updateResult);
-    $montag = $updateRow['montag'];
-    $dienstag = $updateRow['dienstag'];
-    $mittwoch = $updateRow['mittwoch'];
-    $donnerstag = $updateRow['donnerstag'];
-    $freitag = $updateRow['freitag'];
+    $Montag = $updateRow['montag'];
+    $Dienstag = $updateRow['dienstag'];
+    $Mittwoch = $updateRow['mittwoch'];
+    $Donnerstag = $updateRow['donnerstag'];
+    $Freitag = $updateRow['freitag'];
 
     
     // Um die Einzahlungen mit Datums in der Tabelle anzeigen
@@ -196,11 +198,9 @@ include ('./bestell_update.php');
                                 ?>
                             </select>
                             <button type="submit" class="btn btn-warning h-50 mb-2" name="button" id="<?php echo $day;?>" value="<?php echo $day;?>" 
-                                    <?php
-                                        if($$day == 1){
-                                            echo "disabled";
-                                        }
-                                    ?>>
+                                    <?php 
+                                    if($$day == 1){ echo "disabled";} 
+                                    ?> >
                                     <h6 style="color:white;">Ändern</h6>
                             </button>
                             <br>

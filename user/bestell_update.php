@@ -59,12 +59,12 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
         $bestell_result = mysqli_query($conn, $bestellung_id_query);
         $bestell_id_row = mysqli_fetch_assoc($bestell_result);
         $bestellung_id = $bestell_id_row['id'];
-        echo $bestellung_id;
+
         if(isset($_POST['button']) && $_POST["button"] == $day){
 
             $option_name = $_POST['option_name_' .$day];
             $option_id = $_POST['option_name_' .$day];
-            $date = $_POST['option_name_' .$day];
+            // $date = $_POST['option_name_' .$day];
             $sql = "UPDATE tbl_bestellung INNER JOIN tbl_option ON tbl_bestellung.option_id = tbl_option.id
                     SET tbl_bestellung.option_name = (SELECT option_name FROM tbl_option WHERE id = $option_id), 
                     tbl_bestellung.option_id= $option_id WHERE tbl_bestellung.id =$bestellung_id";
