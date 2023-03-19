@@ -1,7 +1,7 @@
 <?php 
 include ('../conn/db_conn.php');
 
-/* 
+/* Cron-Job Funktion
 Die Funktion, die automatisch das bestellstatus für alle Benutzer am Samstag auf 0 setzt, ist mit cron-job wie folgendes gemacht:
 1. Öffnen Sie die Windows-Suche und suchen Sie nach "Task Scheduler(Aufgabenplanung)".
 2. Klicken Sie auf "Task Scheduler(Aufgabenplanung) öffnen", um das Tool zu öffnen.

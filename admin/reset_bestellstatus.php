@@ -23,10 +23,8 @@ $bestell_status = 0;
 $update_status = 0;
         
 if($current_day == $samstag){
-    // Aktiviere den Bestellbutton für Samstag
-    
-    // Reset user's bestell_status at the start of every week
-    // Add this task to a weekly cron job
+    // Aktiviere Alle Buttons am Samstag
+
     $sql = "UPDATE tbl_user SET bestell_status = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $bestell_status);
