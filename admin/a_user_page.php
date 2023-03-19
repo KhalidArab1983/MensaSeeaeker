@@ -14,20 +14,17 @@ if (isset($_SESSION['admin_id'])) {
 	exit;
 }
 
-// $userSql ="SELECT id, userName FROM tbl_user";
-// $result = mysqli_query($conn, $userSql);
-// while($userRow = mysqli_fetch_assoc($result)){
-//     $user_id = $userRow['id'];
-//     $userName = $userRow['userName'];
-// }
+$userSql ="SELECT id FROM tbl_user";
+$result = mysqli_query($conn, $userSql);
+$userRow = mysqli_fetch_assoc($result);
+$user_id = $userRow['id'];
+
 
 
 
 if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
     $einzahlungsbetrag = $_POST['einzahlungsbetrag'];
     $userEinzahlung = $_POST['userEinzahlung'];
-    $kontostandLabel = $_POST['kontostandLabel'];
-    $userKontoStand = $_POST['userKontoStand'];
     if(isset($_POST["button"]) && $_POST["button"] == "einzahlen"){
         $sql = "INSERT INTO tbl_einzahlung (einzahlung, user_id, admin_id) VALUES ($einzahlungsbetrag, $userEinzahlung, $admin_id)";
         if(mysqli_query($conn, $sql)){
@@ -37,17 +34,6 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
         }
     }
     
-
-// }
-// if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){    
-
-    if(isset($_POST["button"]) && $_POST["button"] == "kontostand"){
-        $sql= "SELECT SUM(einzahlung) AS gesamteEinzahlung, user_id FROM tbl_einzahlung WHERE user_id = $userEinzahlung";
-        $result = mysqli_query($conn, $sql);
-        $row = mysqli_fetch_assoc($result);
-        $gesamteEinzahlung = $row['gesamteEinzahlung'];
-        // $user_id = $row['user_id'];
-    }
 }
 ?>
 
@@ -115,18 +101,18 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
 
                 <div id="userBestellung" class="subtabcontent" >
                     <div class="container">
-                        <form method="get">
+                        <form method="get" style="float:left; margin-right:40%">
                             <label for="user_id">Benutzername:</label>
                             <!-- <input type="text" name="user_id" id="user_id"> -->
                             <input type="text" name="userName" id="user_id"> 
-                            <input type="submit" value="Suchen">
+                            <input type="submit" value="Suchen" >
                         </form>
                         <table>
                             <thead>
                                 <tr>
                                 <th>Bestell-ID</th>
-                                <th>User ID</th>
-                                <th>UserName</th>
+                                <!-- <th>User ID</th>
+                                <th>UserName</th> -->
                                 <th>Gerichtsname</th>
                                 <th>GerichtID</th>
                                 <th>Der Tag</th>
@@ -139,18 +125,23 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
                                     // Überprüfen, ob eine Suchanfrage gesendet wurde
                                     if (isset($_GET['userName'])) {
                                         // Benutzereingabe bereinigen
-                                        $userName = mysqli_real_escape_string($conn, $_GET['userName']);
+                                        $userName = trim(mysqli_real_escape_string($conn, $_GET['userName']));
                                         // Abrufen der Bestellungen für den angegebenen Benutzer
                                         $sql = "SELECT u.userName, b.id, b.user_id, b.option_name, b.option_id, b.day, b.day_datum, b.bestelldatum 
                                                 FROM tbl_bestellung AS b INNER JOIN tbl_user AS u ON u.id = b.user_id WHERE u.userName = '$userName' 
                                                 ORDER BY b.bestelldatum DESC;";
                                         $result = mysqli_query($conn, $sql);
+                                        $rowUser = mysqli_fetch_assoc($result);
+                                        echo '<div>';
+                                            echo '<h4 style="float:left; margin-right: 5%">'. $rowUser['userName'] . '</h4>';
+                                            echo '<h4>'." ID: ". $rowUser['user_id'] . '</h4>';
+                                        echo '</div>';
                                         // Ausgabe der Bestellungen in einer Tabelle
                                         while ($row = mysqli_fetch_assoc($result)) {
                                             echo '<tr>';
                                                 echo '<td>' . $row['id'] . '</td>';
-                                                echo '<td>' . $row['user_id'] . '</td>';
-                                                echo '<td>' . $row['userName'] . '</td>';
+                                                // echo '<td>' . $row['user_id'] . '</td>';
+                                                // echo '<td>' . $row['userName'] . '</td>';
                                                 echo '<td>' . $row['option_name'] . '</td>';
                                                 echo '<td>' . $row['option_id'] . '</td>';
                                                 echo '<td>' . $row['day'] . '</td>';
@@ -158,6 +149,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
                                                 echo '<td>' . $row['bestelldatum'] . '</td>';
                                             echo '</tr>';
                                         }
+                                        
                                     }else{
                                         echo '<tr>';
                                             echo '<td>Keine Bestellungen für den Benutzer gefunden.</td>';
@@ -343,7 +335,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
         <div id="kontoStand" class="tabcontent">
             <div class="container">
                 <div class="tab">
-                    <button class="subtablinks active" onclick="openSubTab(event, 'einzahlungen')">Kontostand</button>
+                    <button class="subtablinks active" onclick="openSubTab(event, 'einzahlungen')">Einzahlungen</button>
                     <button class="subtablinks" onclick="openSubTab(event, 'auszahlungen')">Auszahlungen</button>
                 </div>
                 <div id="einzahlungen" class="subtabcontent" > 
@@ -362,13 +354,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
                             ?>
                         </select>
                         <button type="submit" name="button" value="einzahlen">Einzahlen</button>
-                        <button type="submit" name="button" value="kontostand">Kontostand anzeigen</button>
-                        <label name="kontostandLabel" id="kontostandLabel"> 
-                            <?php 
-                                global $gesamteEinzahlung;
-                                echo $gesamteEinzahlung;
-                            ?>
-                        </label>
+                        
                     </form>
                     <h3>Einzahlungen</h3>
                     <table>

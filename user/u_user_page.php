@@ -144,7 +144,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
     $kontoAuszahlRow = mysqli_fetch_assoc($kontoAuszahlRes);
     $sumAuszahlung = $kontoAuszahlRow['auszahlung'];
 
-
+    // Kontostand zu berechnen
     $kontostand = $sumEinzahlung - $sumAuszahlung;
 ?>
 
@@ -268,7 +268,12 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                     <button class="subtablinks active" onclick="openSubTab(event, 'einzahlungen')">Einzahlungen</button>
                     <button class="subtablinks" onclick="openSubTab(event, 'auszahlungen')">Auszahlungen</button>
                 </div>  
-                <div id="einzahlungen" class="subtabcontent" style="display:block">
+                <div id="einzahlungen" class="subtabcontent">
+                    <h3 class="mt-3">
+                        <?php
+                            echo "Die Gesamte Einzahlungen sind: ". $sumEinzahlung. "€";
+                        ?>
+                    </h3>
                     <table>
                         <thead>
                             <tr>
@@ -290,13 +295,13 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                             ?>
                         </tbody>
                     </table>
-                    <h3 class="mt-3">
-                        <?php
-                            echo "Die Gesamte Einzahlungen ist: ". $sumEinzahlung. "€";
-                        ?>
-                    </h3>
                 </div>
                 <div id="auszahlungen" class="subtabcontent" style="display:none">
+                    <h3 class="mt-3">
+                        <?php
+                            echo "Die Gesamte Auszahlungen sind: ". $sumAuszahlung. "€";
+                        ?>
+                    </h3>
                     <table>
                         <thead>
                             <tr>
@@ -318,11 +323,6 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                             ?>
                         </tbody>
                     </table>
-                    <h3 class="mt-3">
-                        <?php
-                            echo "Die Gesamte Auszahlungen ist: ". $sumAuszahlung. "€";
-                        ?>
-                    </h3>
                 </div>
             </div>
         </div>
@@ -335,7 +335,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                     <button class="subtablinks" onclick="openSubTab(event, 'alleBestellungen')">Alle Bestellungen</button>
                 </div>
             
-                <div id="lastWeek" class="subtabcontent" style="display:block">
+                <div id="lastWeek" class="subtabcontent">
                     <div> 
                         <h3 class="m-3" style="float:left">Bestellende Essen für nächste Woche:</h3>
                         <h3 class="m-3" style="float:right">Benutzer-ID: <span style="color:red;"><?php echo "[". $user_id."]"?></span></h3>
@@ -432,7 +432,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
             
         <script>
             function printContent() {
-                var content = document.getElementById("alleBestellungen");
+                var content = document.getElementById("lastWeek");
                 var pri = document.createElement("iframe");
                 pri.style.visibility = "hidden";
                 pri.style.position = "absolute";
