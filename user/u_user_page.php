@@ -50,6 +50,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
         $bestellungen[] = $row;
     }
 
+
     //um die letzte Woche Bestellung abzurufen
     $letzteBestell = "(SELECT b.id, b.user_id, b.option_name, b.option_id, b.day, b.day_datum, b.bestelldatum, o.price
                         FROM tbl_bestellung b INNER JOIN tbl_option o ON o.id = b.option_id
@@ -104,7 +105,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
     $statusRow = mysqli_fetch_assoc($statusBestell);
     $bestell_status = $statusRow['bestell_status'];
     
-
+    // um die Update Status für jeden Tag aus der Tabelle tbl_bestellstatus abzurufen und es im Button zu benutzen ob 1 ist, dann deaktiviert der Button
     $updateSql = "SELECT montag, dienstag, mittwoch, donnerstag, freitag FROM tbl_bestellstatus WHERE user_id = $user_id";
     $updateResult = mysqli_query($conn, $updateSql);
     $updateRow = mysqli_fetch_assoc($updateResult);
