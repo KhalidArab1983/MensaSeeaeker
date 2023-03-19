@@ -132,8 +132,20 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
         $auszahlungen[] = $auszahlungRow;
     }
 
+    // Abfrage, um die Gesamte Einzahlungen anzugeben
+    $kontoEinzahlSql = "SELECT SUM(einzahlung) AS einzahlung FROM tbl_einzahlung WHERE user_id = $user_id";
+    $kontoEinzahlRes = mysqli_query($conn, $kontoEinzahlSql);
+    $kontoEinzahlRow = mysqli_fetch_assoc($kontoEinzahlRes);
+    $sumEinzahlung = $kontoEinzahlRow['einzahlung'];
 
-    $kontostandSql = "SELECT SUM(einzalung) AS einzahlung FROM tbl_einzahlung INNER JOIN tbl_auszahlung"
+    // // Abfrage, um die Gesamte Auszahlungen anzugeben
+    $kontoAuszahlSql = "SELECT SUM(auszahlung) AS auszahlung FROM tbl_auszahlung WHERE user_id = $user_id";
+    $kontoAuszahlRes = mysqli_query($conn, $kontoAuszahlSql);
+    $kontoAuszahlRow = mysqli_fetch_assoc($kontoAuszahlRes);
+    $sumAuszahlung = $kontoAuszahlRow['auszahlung'];
+
+
+    $kontostand = $sumEinzahlung - $sumAuszahlung;
 ?>
 
 
@@ -251,7 +263,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
         <div id="kontoZustand" class="tabcontent">
             <h1>Banktransaktionen und Kontostand</h1>
             <div class="container">                        
-                <p>Ihr Kontostand ist: <?php echo number_format(($_SESSION['balance']) - 500); ?>€</p>
+                <h2 class="text-center">Ihr Kontostand ist: <span style="color:green; font-weight:bold"><?php echo $kontostand; ?>€</span></h2>
                 <div class="tab">
                     <button class="subtablinks active" onclick="openSubTab(event, 'einzahlungen')">Einzahlungen</button>
                     <button class="subtablinks" onclick="openSubTab(event, 'auszahlungen')">Auszahlungen</button>
@@ -278,6 +290,11 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                             ?>
                         </tbody>
                     </table>
+                    <h3 class="mt-3">
+                        <?php
+                            echo "Die Gesamte Einzahlungen ist: ". $sumEinzahlung. "€";
+                        ?>
+                    </h3>
                 </div>
                 <div id="auszahlungen" class="subtabcontent" style="display:none">
                     <table>
@@ -301,6 +318,11 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                             ?>
                         </tbody>
                     </table>
+                    <h3 class="mt-3">
+                        <?php
+                            echo "Die Gesamte Auszahlungen ist: ". $sumAuszahlung. "€";
+                        ?>
+                    </h3>
                 </div>
             </div>
         </div>
