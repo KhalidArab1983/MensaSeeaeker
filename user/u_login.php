@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                             </div>
                         </form>
                     </div>
-                    <h6 class="text-center mt-4" style="text-decoration:underline;">Passwort vergessen?</h6>
+                    <a href="forget_password.php"><h6 class="text-center mt-4" style="text-decoration:underline;">Passwort vergessen?</h6></a>
                 </div>
             </div>
         </div>
