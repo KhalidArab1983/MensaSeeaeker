@@ -50,7 +50,11 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
         $bestellungen[] = $row;
     }
 
+    function btn_clicked(){
 
+    }
+
+    
     //um die letzte Woche Bestellung abzurufen
     $letzteBestell = "(SELECT b.id, b.user_id, b.option_name, b.option_id, b.day, b.day_datum, b.bestelldatum, o.price
                         FROM tbl_bestellung b INNER JOIN tbl_option o ON o.id = b.option_id
@@ -194,7 +198,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                     <?php foreach($days as $day) { ?>
                         <div class="mb-1" style="height:10vh">
                             <label for="option_name" style="width:115px; font-weight:bold"><?php echo $day;?>:</label>
-                            <select class="w-50 h-50" name="option_name_<?php echo $day; ?>" id="option_name_<?php echo $day; ?>" onChange="chImage<?php echo $day;?>()">
+                            <select class="w-50 h-50" name="option_name_<?php echo $day; ?>" id="option_name_<?php echo $day; ?>"  onChange="chImage<?php echo $day;?>()">
                                 <!-- <option></option> -->
                                 <?php
                                     // Send query to database to get School Classes
@@ -424,6 +428,11 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
             </div>
         </div>  
         
+        <button id="button_1" onclick="reply_click(this.id)">button 1</button>
+        <button id="button_2" onclick="reply_click(this.id)">button 2</button>
+        <button id="button_3" onclick="reply_click(this.id)">button 3</button>
+        <button id="button_4" onclick="reply_click(this.id)">button 4</button>
+        <button id="button_5" onclick="reply_click(this.id)">button 5</button>
         <div style="margin-bottom: 80px">
             
         </div>
@@ -445,6 +454,10 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                 pri.contentWindow.document.close();
                 pri.contentWindow.focus();
                 pri.contentWindow.print();
+            }
+
+            function reply_click(clicked_id){
+                alert(clicked_id);
             }
         </script>
         <script src="../js/popper.min.js"></script>

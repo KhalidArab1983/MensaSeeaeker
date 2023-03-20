@@ -58,14 +58,16 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
         //Optionen für jeden Tag durchlaufen
         $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
         foreach ($days as $day) {
-            $option_name = $_POST['option_name_' . $day];
-            $option_id = $_POST['option_name_' . $day];
-            $date = $_POST['option_name_' . $day];
-            $sql = "INSERT INTO tbl_bestellung (user_id, option_name, option_id, day, day_datum) 
-                    VALUES (?, (SELECT option_name FROM tbl_option WHERE id = ?), ?, ?, (SELECT date FROM tbl_option WHERE id = ?))";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sssss", $user_id, $option_name, $option_id, $day, $date);
-            $stmt->execute();
+            if(isset($_POST['option_name_' . $day]['disabled']) && $_POST['option_name_' . $day]['disabled'] == true){
+                $option_name = $_POST['option_name_' . $day];
+                $option_id = $_POST['option_name_' . $day];
+                $date = $_POST['option_name_' . $day];
+                $sql = "INSERT INTO tbl_bestellung (user_id, option_name, option_id, day, day_datum) 
+                        VALUES (?, (SELECT option_name FROM tbl_option WHERE id = ?), ?, ?, (SELECT date FROM tbl_option WHERE id = ?))";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("sssss", $user_id, $option_name, $option_id, $day, $date);
+                $stmt->execute();
+            }
         }
         
         $bestell_status = 1;
@@ -86,7 +88,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
         $updateStmt->bind_param("ssssss", $user_id, $nullWert, $nullWert, $nullWert, $nullWert, $nullWert);
         $updateStmt->execute();
     }
-    header("Location: danke.php");
+    // header("Location: danke.php");
 
 }
 

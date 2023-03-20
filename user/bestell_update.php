@@ -5,7 +5,7 @@ $current_day = date('N');
 $current_time = date('H:i:s');
 $current_date = date('Y-m-d');
 $bestell_status_deaktiv = 1;
-echo $current_day;
+
 if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
     if($current_time >= '22:00:00' && $current_day == 7 || $current_day < 7){
         // Update Button für Montag deaktivieren
