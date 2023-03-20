@@ -1,41 +1,41 @@
 <?php 
 include ('../conn/db_conn.php');
 
-$current_day = date('l');
+$current_day = date('N');
 $current_time = date('H:i:s');
 $current_date = date('Y-m-d');
 $bestell_status_deaktiv = 1;
-
+echo $current_day;
 if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
-    if($current_time >= '22:00:00' && $current_day == 'Sunday'){
+    if($current_time >= '22:00:00' && $current_day == 7 || $current_day < 7){
         // Update Button für Montag deaktivieren
         $sql = "UPDATE tbl_bestellstatus SET montag = ? WHERE user_id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ss", $bestell_status_deaktiv, $user_id);
         $stmt->execute();
     }
-    if($current_time >= '22:00:00' && $current_day == 'Monday'){
+    if($current_time >= '22:00:00' && $current_day >= 1){
         // Update Button für Dienstag deaktivieren
         $sql = "UPDATE tbl_bestellstatus SET dienstag = ? WHERE user_id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ss", $bestell_status_deaktiv, $user_id);
         $stmt->execute();
     }
-    if($current_time >= '22:00:00' && $current_day == 'Tuesday'){
+    if($current_time >= '22:00:00' && $current_day >= 2){
         // Update Button für Mittwoch deaktivieren
         $sql = "UPDATE tbl_bestellstatus SET mittwoch = ? WHERE user_id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ss", $bestell_status_deaktiv, $user_id);
         $stmt->execute();
     }
-    if($current_time >= '22:00:00' && $current_day == 'Wednesday'){
+    if($current_time >= '22:00:00' && $current_day >= 3){
         // Update Button für Donnerstag deaktivieren
         $sql = "UPDATE tbl_bestellstatus SET donnerstag = ? WHERE user_id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ss", $bestell_status_deaktiv, $user_id);
         $stmt->execute();
     }
-    if($current_time >= '22:00:00' && $current_day == 'Thursday'){
+    if($current_time >= '22:00:00' && $current_day >= 4){
         // Update Button für Freitag deaktivieren
         $sql = "UPDATE tbl_bestellstatus SET freitag = ? WHERE user_id = ?";
         $stmt = $conn->prepare($sql);
