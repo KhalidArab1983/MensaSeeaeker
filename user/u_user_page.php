@@ -11,6 +11,8 @@ if (isset($_SESSION['user_id'])) {
 	exit;
 }
 
+$week_count = date('W');
+
 
 $stunden = 0;
 $minuten = 0;
@@ -50,24 +52,22 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
         $bestellungen[] = $row;
     }
 
-    function btn_clicked(){
-
-    }
 
     
-    //um die letzte Woche Bestellung abzurufen
-    $letzteBestell = "(SELECT b.id, b.user_id, b.option_name, b.option_id, b.day, b.day_datum, b.bestelldatum, o.price
+        //um die letzte Woche Bestellung abzurufen
+    $letzteBestell = "(SELECT b.id, b.user_id, b.option_name, b.option_id, b.day, b.day_datum, b.week_count, b.bestelldatum, o.price
                         FROM tbl_bestellung b INNER JOIN tbl_option o ON o.id = b.option_id
-                        WHERE user_id = ? ORDER BY id DESC LIMIT 5) ORDER BY id ASC";
+                        WHERE user_id = ? AND b.week_count = ? ORDER BY id DESC LIMIT 5) ORDER BY id ASC";
     $letzte_bestell_stmt = mysqli_prepare($conn, $letzteBestell);
-    mysqli_stmt_bind_param($letzte_bestell_stmt, "s", $user_id);
+    mysqli_stmt_bind_param($letzte_bestell_stmt, "ss", $user_id, $week_count);
     mysqli_stmt_execute($letzte_bestell_stmt);
     $result = mysqli_stmt_get_result($letzte_bestell_stmt);
-
+    
     $letzte_bestellungen = array();
 
     while ($row = $result->fetch_assoc()){
         $letzte_bestellungen[] = $row;
+        
     }
 
     // SQL-Abfrage ausführen, um die Preise in der Spalte zu summieren
@@ -198,19 +198,33 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                     <?php foreach($days as $day) { ?>
                         <div class="mb-1" style="height:10vh">
                             <label for="option_name" style="width:115px; font-weight:bold"><?php echo $day;?>:</label>
-                            <select class="w-50 h-50" name="option_name_<?php echo $day; ?>" id="option_name_<?php echo $day; ?>"  onChange="chImage<?php echo $day;?>()">
+                            <select class="w-50 h-50" name="option_name_<?php echo $day; ?>" id="option_name_<?php echo $day; ?>" onChange="chImage<?php echo $day;?>()">
                                 <!-- <option></option> -->
                                 <?php
-                                    // Send query to database to get School Classes
-                                    $sql = "SELECT id, option_name, image_filename, data, day, price FROM tbl_option WHERE day = '" .$day."'";
-                                    $result = mysqli_query($conn, $sql);
-                                    // Include each result as an option tag in the drop-down list
-                                    while($row = mysqli_fetch_assoc($result)){
-                                        $option_name = $row['option_name'];
-                                        $data = $row['data'];
-                                        $price = $row['price'];
-                                        $option_id = $row['id'];
-                                        echo '<option value="' . $option_id . '">'. $option_id. "-" . $option_name . "-" . $price . '€</option>';
+                                    if($$day == 1){
+                                        // Send query to database to get School Classes
+                                        $sql = "SELECT id, option_name, image_filename, data, day, price FROM tbl_option WHERE price = 0.00";
+                                        $result = mysqli_query($conn, $sql);
+                                        // Include each result as an option tag in the drop-down list
+                                        $row = mysqli_fetch_assoc($result);
+                                            $option_name = $row['option_name'];
+                                            $data = $row['data'];
+                                            $price = $row['price'];
+                                            $option_id = $row['id'];
+                                            echo '<option value="' . $option_id . '">'. $option_id. "-" . $option_name . "-" . $price . '€</option>';
+                                        
+                                    }else{
+                                        // Send query to database to get School Classes
+                                        $sql = "SELECT id, option_name, image_filename, data, day, price FROM tbl_option WHERE day = '" .$day."'";
+                                        $result = mysqli_query($conn, $sql);
+                                        // Include each result as an option tag in the drop-down list
+                                        while($row = mysqli_fetch_assoc($result)){
+                                            $option_name = $row['option_name'];
+                                            $data = $row['data'];
+                                            $price = $row['price'];
+                                            $option_id = $row['id'];
+                                            echo '<option value="' . $option_id . '">'. $option_id. "-" . $option_name . "-" . $price . '€</option>';
+                                        }
                                     }
                                 ?>
                             </select>
@@ -373,9 +387,10 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                         echo '</tr>';
                                     }
                                 }else {
-                                    echo '<h4 style="color:red; text-align:center;">Keine Bestellungen gefunden.</h4>';
+                                    echo '<tr>';
+                                    echo '<td><h5 style="color:red; text-align:center;">Keine Bestellungen für diese Woche gefunden.</h5></td>';
+                                    echo '</tr>';
                                 }
-                                // mysqli_close($conn);
                             ?>
                         </tbody>
                     </table>
@@ -428,11 +443,6 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
             </div>
         </div>  
         
-        <button id="button_1" onclick="reply_click(this.id)">button 1</button>
-        <button id="button_2" onclick="reply_click(this.id)">button 2</button>
-        <button id="button_3" onclick="reply_click(this.id)">button 3</button>
-        <button id="button_4" onclick="reply_click(this.id)">button 4</button>
-        <button id="button_5" onclick="reply_click(this.id)">button 5</button>
         <div style="margin-bottom: 80px">
             
         </div>
@@ -454,10 +464,6 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                 pri.contentWindow.document.close();
                 pri.contentWindow.focus();
                 pri.contentWindow.print();
-            }
-
-            function reply_click(clicked_id){
-                alert(clicked_id);
             }
         </script>
         <script src="../js/popper.min.js"></script>

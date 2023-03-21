@@ -52,24 +52,23 @@ $samstag = 'Saturday';
 $sonntag = 'Sunday';
 $current_day = date('l');
 $current_time = date('H:i:s');
+$week_count = date('W');
 
 if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
     if(isset($_POST["button"]) && $_POST["button"] == "bestellen"){
         //Optionen für jeden Tag durchlaufen
         $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
         foreach ($days as $day) {
-            if(isset($_POST['option_name_' . $day]['disabled']) && $_POST['option_name_' . $day]['disabled'] == true){
-                $option_name = $_POST['option_name_' . $day];
-                $option_id = $_POST['option_name_' . $day];
-                $date = $_POST['option_name_' . $day];
-                $sql = "INSERT INTO tbl_bestellung (user_id, option_name, option_id, day, day_datum) 
-                        VALUES (?, (SELECT option_name FROM tbl_option WHERE id = ?), ?, ?, (SELECT date FROM tbl_option WHERE id = ?))";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("sssss", $user_id, $option_name, $option_id, $day, $date);
-                $stmt->execute();
-            }
+            $option_name = $_POST['option_name_' . $day];
+            $option_id = $_POST['option_name_' . $day];
+            $date = $_POST['option_name_' . $day];
+
+            $sql = "INSERT INTO tbl_bestellung (user_id, option_name, option_id, day, day_datum, week_count) 
+                    VALUES (?, (SELECT option_name FROM tbl_option WHERE id = ?), ?, ?, (SELECT date FROM tbl_option WHERE id = ?),?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ssssss", $user_id, $option_name, $option_id, $day, $date, $week_count);
+            $stmt->execute();
         }
-        
         $bestell_status = 1;
         // Update user's bestell_status to '1'
         $sql_status = "UPDATE tbl_user SET bestell_status = ? WHERE id = ?";
@@ -88,7 +87,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
         $updateStmt->bind_param("ssssss", $user_id, $nullWert, $nullWert, $nullWert, $nullWert, $nullWert);
         $updateStmt->execute();
     }
-    // header("Location: danke.php");
+    header("Location: danke.php");
 
 }
 

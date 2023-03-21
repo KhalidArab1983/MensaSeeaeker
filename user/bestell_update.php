@@ -14,28 +14,28 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
         $stmt->bind_param("ss", $bestell_status_deaktiv, $user_id);
         $stmt->execute();
     }
-    if($current_time >= '22:00:00' && $current_day >= 1){
+    if($current_time >= '22:00:00' && $current_day == 1 || $current_day > 1){
         // Update Button für Dienstag deaktivieren
         $sql = "UPDATE tbl_bestellstatus SET dienstag = ? WHERE user_id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ss", $bestell_status_deaktiv, $user_id);
         $stmt->execute();
     }
-    if($current_time >= '22:00:00' && $current_day >= 2){
+    if($current_time >= '22:00:00' && $current_day == 2 || $current_day > 2){
         // Update Button für Mittwoch deaktivieren
         $sql = "UPDATE tbl_bestellstatus SET mittwoch = ? WHERE user_id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ss", $bestell_status_deaktiv, $user_id);
         $stmt->execute();
     }
-    if($current_time >= '22:00:00' && $current_day >= 3){
+    if($current_time >= '22:00:00' && $current_day == 3 || $current_day > 3){
         // Update Button für Donnerstag deaktivieren
         $sql = "UPDATE tbl_bestellstatus SET donnerstag = ? WHERE user_id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ss", $bestell_status_deaktiv, $user_id);
         $stmt->execute();
     }
-    if($current_time >= '22:00:00' && $current_day >= 4){
+    if($current_time >= '22:00:00' && $current_day == 4 || $current_day > 4){
         // Update Button für Freitag deaktivieren
         $sql = "UPDATE tbl_bestellstatus SET freitag = ? WHERE user_id = ?";
         $stmt = $conn->prepare($sql);
@@ -64,8 +64,8 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
                     tbl_bestellung.option_id= $option_id WHERE tbl_bestellung.id =$bestellung_id";
             $result = mysqli_query($conn, $sql);
         }
-        header('Location: u_user_page.php');
+        
     }
-    
+    header('Location: u_user_page.php');
 }
 ?>
