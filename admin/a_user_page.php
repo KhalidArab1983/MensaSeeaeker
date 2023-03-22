@@ -14,6 +14,9 @@ if (isset($_SESSION['admin_id'])) {
 	exit;
 }
 
+$week_count = date('W');
+
+
 $userSql ="SELECT id FROM tbl_user";
 $result = mysqli_query($conn, $userSql);
 $userRow = mysqli_fetch_assoc($result);
@@ -111,8 +114,8 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
                             <thead>
                                 <tr>
                                 <th>Bestell-ID</th>
-                                <!-- <th>User ID</th>
-                                <th>UserName</th> -->
+                                <th>User-ID</th>
+                                <th>User Name</th>
                                 <th>Gerichtsname</th>
                                 <th>GerichtID</th>
                                 <th>Der Tag</th>
@@ -128,32 +131,36 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
                                         $userName = trim(mysqli_real_escape_string($conn, $_GET['userName']));
                                         // Abrufen der Bestellungen für den angegebenen Benutzer
                                         $sql = "SELECT u.userName, b.id, b.user_id, b.option_name, b.option_id, b.day, b.day_datum, b.bestelldatum 
-                                                FROM tbl_bestellung AS b INNER JOIN tbl_user AS u ON u.id = b.user_id WHERE u.userName = '$userName' 
+                                                FROM tbl_bestellung AS b LEFT JOIN tbl_user AS u ON u.id = b.user_id WHERE u.userName = '$userName' 
                                                 ORDER BY b.bestelldatum DESC;";
                                         $result = mysqli_query($conn, $sql);
-                                        $rowUser = mysqli_fetch_assoc($result);
-                                        echo '<div>';
-                                            echo '<h4 style="float:left; margin-right: 5%">'. $rowUser['userName'] . '</h4>';
-                                            echo '<h4>'." ID: ". $rowUser['user_id'] . '</h4>';
-                                        echo '</div>';
-                                        // Ausgabe der Bestellungen in einer Tabelle
-                                        while ($row = mysqli_fetch_assoc($result)) {
+                                        // $rowUser = mysqli_fetch_assoc($result);
+                                        // if($rowUser != null){
+                                        //     echo '<div>';
+                                        //         echo '<h4 style="float:left; margin-right: 5%">'. $rowUser['userName'] . '</h4>';
+                                        //         echo '<h4>'." ID: ". $rowUser['user_id'] . '</h4>';
+                                        //     echo '</div>';
+                                        // }
+                                        
+                                        if($result->num_rows > 0){
+                                            // Ausgabe der Bestellungen in einer Tabelle
+                                            while ($row = mysqli_fetch_assoc($result)) {
+                                                echo '<tr>';
+                                                    echo '<td>' . $row['id'] . '</td>';
+                                                    echo '<td>' . $row['user_id'] . '</td>';
+                                                    echo '<td>' . $row['userName'] . '</td>';
+                                                    echo '<td>' . $row['option_name'] . '</td>';
+                                                    echo '<td>' . $row['option_id'] . '</td>';
+                                                    echo '<td>' . $row['day'] . '</td>';
+                                                    echo '<td>' . $row['day_datum'] . '</td>';
+                                                    echo '<td>' . $row['bestelldatum'] . '</td>';
+                                                echo '</tr>';
+                                            }
+                                        }else{
                                             echo '<tr>';
-                                                echo '<td>' . $row['id'] . '</td>';
-                                                // echo '<td>' . $row['user_id'] . '</td>';
-                                                // echo '<td>' . $row['userName'] . '</td>';
-                                                echo '<td>' . $row['option_name'] . '</td>';
-                                                echo '<td>' . $row['option_id'] . '</td>';
-                                                echo '<td>' . $row['day'] . '</td>';
-                                                echo '<td>' . $row['day_datum'] . '</td>';
-                                                echo '<td>' . $row['bestelldatum'] . '</td>';
+                                                echo '<td>Keine Bestellungen für den Benutzer gefunden.</td>';
                                             echo '</tr>';
                                         }
-                                        
-                                    }else{
-                                        echo '<tr>';
-                                            echo '<td>Keine Bestellungen für den Benutzer gefunden.</td>';
-                                        echo '</tr>';
                                     }
                                 ?>
                             </tbody>
@@ -216,7 +223,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
                                     }
                                     // Abrufen aller Bestellungen aus der Datenbank
                                     $sql = "SELECT b.id, b.user_id, u.userName, b.option_name, b.option_id, b.day, b.day_datum, b.bestelldatum 
-                                            FROM tbl_bestellung AS b INNER JOIN tbl_user AS u ON u.id = b.user_id ORDER BY $sort_column";
+                                            FROM tbl_bestellung AS b INNER JOIN tbl_user AS u ON u.id = b.user_id ORDER BY userName";
                                     $result = mysqli_query($conn, $sql);
                                     // Ausgabe der Bestellungen in einer Tabelle
                                     while ($row = mysqli_fetch_assoc($result)) {
@@ -259,17 +266,13 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
                             <tbody>
                                 <?php
                                     // Abrufen aller Bestellungen aus der Datenbank
+                                    // $sql = "SELECT u.id, u.userName, b.id, b.option_name, b.option_id, b.day, b.day_datum, b.bestelldatum
+                                    //         FROM tbl_user u JOIN (SELECT id, user_id, option_name, option_id, day, day_datum, bestelldatum
+                                    //             FROM (SELECT *, ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY bestelldatum DESC) AS row_num FROM tbl_bestellung) t
+                                    //             WHERE t.row_num <= 5) b ON u.id = b.user_id ORDER BY b.bestelldatum DESC;";
                                     $sql = "SELECT u.id, u.userName, b.id, b.option_name, b.option_id, b.day, b.day_datum, b.bestelldatum
-                                            FROM tbl_user u
-                                            JOIN (
-                                                SELECT id, user_id, option_name, option_id, day, day_datum, bestelldatum
-                                                FROM (
-                                                    SELECT *, ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY bestelldatum DESC) AS row_num
-                                                    FROM tbl_bestellung
-                                                ) t
-                                                WHERE t.row_num <= 5
-                                            ) b ON u.id = b.user_id
-                                            ORDER BY b.bestelldatum DESC;";
+                                            FROM tbl_user u INNER JOIN tbl_bestellung b ON u.id = b.user_id
+                                            WHERE b.week_count = $week_count";
                                     $result = mysqli_query($conn, $sql);
                                     // Ausgabe der Bestellungen in einer Tabelle
                                     while ($row = mysqli_fetch_assoc($result)) {
@@ -307,14 +310,13 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
                             <tbody>
                                 <?php
                                     // Abrufen aller Bestellungen aus der Datenbank
-                                    $sql = "SELECT b.option_id, b.option_name, COUNT(*) AS anzahl
-                                            FROM (
-                                                SELECT option_id, user_id, option_name, ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY bestelldatum DESC) AS row_num
-                                                FROM tbl_bestellung
-                                                ) AS b
-                                            WHERE b.row_num <= 5
-                                            GROUP BY b.option_name  
-                                            ORDER BY `b`.`option_name` ASC;";
+                                    // $sql = "SELECT b.option_id, b.option_name, COUNT(*) AS anzahl
+                                    //         FROM (
+                                    //             SELECT option_id, user_id, option_name, ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY bestelldatum DESC) AS row_num
+                                    //             FROM tbl_bestellung) AS b WHERE b.row_num <= 5 GROUP BY b.option_name ORDER BY `b`.`option_name` ASC;";
+
+                                    $sql = "SELECT option_id, option_name, COUNT(*) AS anzahl
+                                            FROM tbl_bestellung WHERE week_count = $week_count GROUP BY option_name ORDER BY option_name ASC";
                                     $result = mysqli_query($conn, $sql);
                                     // Ausgabe der Bestellungen in einer Tabelle
                                     while ($row = mysqli_fetch_assoc($result)) {

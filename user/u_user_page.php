@@ -228,9 +228,9 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                     }
                                 ?>
                             </select>
-                            <button type="submit" class="btn btn-warning h-50 mb-2" name="button" id="<?php echo $day;?>" value="<?php echo $day;?>" 
+                            <button type="submit" class="btn btn-warning h-50 mb-2" name="button" id="<?php echo $day;?>" value="<?php echo $day;?>"
                                     <?php 
-                                    if($$day == 1){ echo "disabled";} 
+                                        if($$day == 1){ echo "disabled";}elseif($totalPreis > $kontostand){echo 'style="cursor: none; pointer-events: none;"';} 
                                     ?> >
                                     <h6 style="color:white;">Ändern</h6>
                             </button>
@@ -247,7 +247,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                         </div>
                     <?php } ?>
                     <div class="text-center">
-                        <button type="submit" class="btn btn-primary w-25 btn-bestellen" id="bestellen" name="button" value="bestellen" 
+                        <button type="submit" class="btn btn-primary w-25 btn-bestellen" id="bestellen" name="button" value="bestellen" onclick="unreichendeKontostand()"
                                 <?php if($bestell_status == 1){echo "disabled";}?>>
                                 Essen bestellen
                         </button>
@@ -282,7 +282,24 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
         <div id="kontoZustand" class="tabcontent">
             <h1>Banktransaktionen und Kontostand</h1>
             <div class="container">                        
-                <h2 class="text-center">Ihr Kontostand ist: <span style="color:green; font-weight:bold"><?php echo $kontostand; ?>€</span></h2>
+                <h2 class="text-center">Ihr Kontostand ist: 
+                    <?php
+                        if ($kontostand < 40 && $kontostand > 18){
+                            echo '<span style="color:orange; font-weight:bold">';
+                                echo $kontostand; 
+                            echo '€</span>';
+                        }elseif($kontostand < 18){
+                            echo '<span style="color:red; font-weight:bold">';
+                                echo $kontostand; 
+                            echo '€</span>';
+                        }else{
+                            echo '<span style="color:green; font-weight:bold">';
+                                echo $kontostand; 
+                            echo '€</span>';
+                        }
+                        
+                    ?>
+                </h2>
                 <div class="tab">
                     <button class="subtablinks active" onclick="openSubTab(event, 'einzahlungen')">Einzahlungen</button>
                     <button class="subtablinks" onclick="openSubTab(event, 'auszahlungen')">Auszahlungen</button>
@@ -464,6 +481,23 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                 pri.contentWindow.document.close();
                 pri.contentWindow.focus();
                 pri.contentWindow.print();
+            }
+
+            var kontostand = "<?php echo $kontostand; ?>";
+            var totalPreis = "<?php echo $totalPreis; ?>";
+
+            function unreichendeKontostand(event){
+                if(totalPreis > kontostand){
+                    event.preventDefault();
+                    alert('Das Guthaben reicht nicht aus, um den Kauf abzuschließen');
+                }
+            }
+            var btnBestellen = document.getElementById("bestellen");
+            btnBestellen.addEventListener("click", unreichendeKontostand(event));
+
+            
+            if(kontostand < 25){
+                alert('Ihr Guthaben ist sehr niedrig, bitte bald aufladen');
             }
         </script>
         <script src="../js/popper.min.js"></script>
