@@ -13,6 +13,10 @@ if (isset($_SESSION['user_id'])) {
 
 $week_count = date('W');
 
+global $totalPreis;
+
+
+
 
 $stunden = 0;
 $minuten = 0;
@@ -33,8 +37,12 @@ if (isset($_SESSION['sessionTime'])) {
 include ('./u_kontoZustand.php');
 include ('./bestell_insert.php');
 include ('./bestell_update.php');
+include ('./total_preis.php');
+
+
 
 $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
+
 
     //um die ganze Bestellungen für den Benutzer abzurufen
     $bestellSql = "SELECT b.id, b.user_id, b.option_name, b.option_id, b.day, b.day_datum, b.bestelldatum, o.price
@@ -70,18 +78,18 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
         
     }
 
-    // SQL-Abfrage ausführen, um die Preise in der Spalte zu summieren
-    $query = "SELECT SUM(o.price) as total 
-    FROM 
-        ( SELECT b.option_id 
-        FROM tbl_bestellung b 
-        WHERE b.user_id = $user_id 
-        ORDER BY b.bestelldatum 
-        DESC LIMIT 5 ) as b 
-    JOIN tbl_option o ON o.id = b.option_id;";
-    $result = mysqli_query($conn, $query);
-    $row = mysqli_fetch_assoc($result);
-    $totalPreis = $row['total'];
+    // //SQL-Abfrage ausführen, um die Preise in der Spalte zu summieren
+    // $query = "SELECT SUM(o.price) as total 
+    // FROM 
+    //     ( SELECT b.option_id 
+    //     FROM tbl_bestellung b 
+    //     WHERE b.user_id = $user_id 
+    //     ORDER BY b.bestelldatum 
+    //     DESC LIMIT 5 ) as b 
+    // JOIN tbl_option o ON o.id = b.option_id;";
+    // $result = mysqli_query($conn, $query);
+    // $row = mysqli_fetch_assoc($result);
+    // $totalPreis = $row['total'];
 
 
 
@@ -195,63 +203,82 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
             <h4>Essen bestellen</h4>
             <div class="col-lg-8" style="float:left; margin-top:100px;">
                 <form id="bestellForm" action="u_user_page.php" method="post">
-                    <?php foreach($days as $day) { ?>
-                        <div class="mb-1" style="height:10vh">
-                            <label for="option_name" style="width:115px; font-weight:bold"><?php echo $day;?>:</label>
-                            <select class="w-50 h-50" name="option_name_<?php echo $day; ?>" id="option_name_<?php echo $day; ?>" onChange="chImage<?php echo $day;?>()">
-                                <!-- <option></option> -->
-                                <?php
-                                    if($$day == 1){
-                                        // Send query to database to get School Classes
-                                        $sql = "SELECT id, option_name, image_filename, data, day, price FROM tbl_option WHERE price = 0.00";
-                                        $result = mysqli_query($conn, $sql);
-                                        // Include each result as an option tag in the drop-down list
-                                        $row = mysqli_fetch_assoc($result);
-                                            $option_name = $row['option_name'];
-                                            $data = $row['data'];
-                                            $price = $row['price'];
-                                            $option_id = $row['id'];
-                                            echo '<option value="' . $option_id . '">'. $option_id. "-" . $option_name . "-" . $price . '€</option>';
+                    <?php 
+                        foreach($days as $day) {?>
+                            <div class="mb-1" style="height:10vh">
+                                <label for="option_name" style="width:115px; font-weight:bold"><?php echo $day;?>:</label>
+                                <select class="w-50 h-50" name="option_name_<?php echo $day; ?>" id="option_name_<?php echo $day; ?>" onChange="chImage<?php echo $day;?>(); berechnePreis(this, '<?php echo $day; ?>')">
+                                    <!-- <option></option> -->
+                                    <?php
                                         
-                                    }else{
-                                        // Send query to database to get School Classes
-                                        $sql = "SELECT id, option_name, image_filename, data, day, price FROM tbl_option WHERE day = '" .$day."'";
-                                        $result = mysqli_query($conn, $sql);
-                                        // Include each result as an option tag in the drop-down list
-                                        while($row = mysqli_fetch_assoc($result)){
-                                            $option_name = $row['option_name'];
-                                            $data = $row['data'];
-                                            $price = $row['price'];
-                                            $option_id = $row['id'];
-                                            echo '<option value="' . $option_id . '">'. $option_id. "-" . $option_name . "-" . $price . '€</option>';
+                                        if($$day == 1){
+                                            // Send query to database to get School Classes
+                                            $sql = "SELECT id, option_name, image_filename, data, day, price FROM tbl_option WHERE price = 0.00";
+                                            $result = mysqli_query($conn, $sql);
+                                            // Include each result as an option tag in the drop-down list
+                                            $row = mysqli_fetch_assoc($result);
+                                                $option_name = $row['option_name'];
+                                                $data = $row['data'];
+                                                $price = $row['price'];
+                                                $option_id = $row['id'];
+                                                echo '<option value="' . $option_id . '">'. $option_name . "-" . $price . '€</option>';
+                                                
+                                        }else{
+                                            // Send query to database to get meals option
+                                            $sql = "SELECT id, option_name, image_filename, data, day, price FROM tbl_option WHERE day = '" .$day."'";
+                                            $result = mysqli_query($conn, $sql);
+                                            // Include each result as an option tag in the drop-down list
+                                            while($row = mysqli_fetch_assoc($result)){
+                                                $option_name = $row['option_name'];
+                                                $data = $row['data'];
+                                                $price = $row['price'];
+                                                $option_id = $row['id'];
+                                                echo '<option value="' . $option_id . '">'. $option_name . "-" . $price . '€</option>';
+                                                
+                                                
+                                            }
                                         }
-                                    }
-                                ?>
-                            </select>
-                            <button type="submit" class="btn btn-warning h-50 mb-2" name="button" id="<?php echo $day;?>" value="<?php echo $day;?>"
+                                        
+                                    ?>
+                                    
+                                </select>
+                                <button type="submit" class="btn btn-warning h-50 mb-2" name="button" id="<?php echo $day;?>" value="<?php echo $day;?>"
+                                        <?php 
+                                            if($$day == 1){ echo "disabled";}elseif($totalPreis > $kontostand){echo 'style="cursor: none; pointer-events: none;"';} 
+                                        ?> >
+                                        <h6 style="color:white;">Ändern</h6>
+                                </button>
+
+                                <br>
+                                <label style="width:100px" id="monday" name="<?php echo $day; ?>">
                                     <?php 
-                                        if($$day == 1){ echo "disabled";}elseif($totalPreis > $kontostand){echo 'style="cursor: none; pointer-events: none;"';} 
-                                    ?> >
-                                    <h6 style="color:white;">Ändern</h6>
-                            </button>
-                            <br>
-                            <label style="width:100px" id="monday" name="<?php echo $day; ?>">
-                                <?php 
-                                    $sql = "SELECT date FROM tbl_option WHERE day = '". $day."'";
-                                    $result = mysqli_query($conn, $sql);
-                                    $row = mysqli_fetch_assoc($result);
-                                    $day_datum = $row['date'];
-                                    echo $day_datum;
-                                ?>
-                            </label>
-                        </div>
+                                        $sql = "SELECT date FROM tbl_option WHERE day = '". $day."'";
+                                        $result = mysqli_query($conn, $sql);
+                                        $row = mysqli_fetch_assoc($result);
+                                        $day_datum = $row['date'];
+                                        echo $day_datum;
+                                    ?>
+                                </label>
+                            </div>
                     <?php } ?>
+                    
+                    <?php 
+                    // echo 'Gesamtpreis: '. number_format($GLOBALS['totalPreis'], 2) ;
+                    // echo '<br>';
+                    
+                    echo "TotalPreis: ". $totalPreis;
+                    ?>
+                    <label name="totalPreis" id="totalPreis"></label>
+
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary w-25 btn-bestellen" id="bestellen" name="button" value="bestellen" onclick="unreichendeKontostand()"
-                                <?php if($bestell_status == 1){echo "disabled";}?>>
+                                <?php 
+                                    if($bestell_status == 1){echo "disabled";}
+                                ?>>
                                 Essen bestellen
                         </button>
                     </div>
+                    
                 </form>
             </div>
             <div class="col-lg-4" style="float:left; box-shadow: -4px 1px 4px #888; height:100vh; margin-top:10px">
@@ -483,8 +510,58 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                 pri.contentWindow.print();
             }
 
+            
+
+            // // Globale Variable für den Gesamtpreis
+            // var totalPreis = {};
+
+                        
+            // // Funktion zum Berechnen des Preises der ausgewählten Option
+            // function berechnePreis(select, tag) {
+            //     // Preis der ausgewählten Option abrufen
+            //     var optionId = select.value;
+            //     if (optionId == '') {
+            //         optionId = 0;
+            //     }
+            //     var preis = 0;
+            //     if (optionId != 0) {
+            //         preis = parseFloat(select.options[select.selectedIndex].text.split("-")[1]);
+            //     }
+
+            //     // Gesamtpreis aktualisieren
+            //     totalPreis[tag] = preis;
+            //     var gesamtpreis = 0;
+            //     for (var tag in totalPreis) {
+            //         gesamtpreis += totalPreis[tag];
+            //     }
+
+            //     // Preise in das HTML-Element einfügen
+            //     var preisAusgabe = document.getElementById('totalPreis');
+            //     preisAusgabe.innerHTML = 'Gesamtpreis: ' + gesamtpreis.toFixed(2) + ' €';
+            // }
+
+
+
+            // // AJAX-Anfrage senden
+            // var xhttp = new XMLHttpRequest();
+            // xhttp.onreadystatechange = function() {
+            // if (this.readyState == 4 && this.status == 200) {
+            //     console.log("Antwort vom Server: " + this.responseText);
+            // }
+            // };
+            // xhttp.open("POST", "total_preis.php", true);
+            // xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            // xhttp.send("totalPreis=" + totalPreis);
+
+
+
+            if(kontostand < 25){
+                alert('Ihr Guthaben ist sehr niedrig, bitte bald aufladen');
+            }
+
+
+
             var kontostand = "<?php echo $kontostand; ?>";
-            var totalPreis = "<?php echo $totalPreis; ?>";
 
             function unreichendeKontostand(event){
                 if(totalPreis > kontostand){
@@ -495,10 +572,6 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
             var btnBestellen = document.getElementById("bestellen");
             btnBestellen.addEventListener("click", unreichendeKontostand(event));
 
-            
-            if(kontostand < 25){
-                alert('Ihr Guthaben ist sehr niedrig, bitte bald aufladen');
-            }
         </script>
         <script src="../js/popper.min.js"></script>
         <script src="../js/bootstrap.min.js"></script>

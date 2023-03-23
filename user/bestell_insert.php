@@ -1,4 +1,5 @@
 <?php 
+
 include ('../conn/db_conn.php');
 
 /* Cron-Job Funktion
@@ -48,16 +49,18 @@ Code in der reset_bestellstatus.php ist wie folgendes:
 */
 
 
+
 $samstag = 'Saturday';
 $sonntag = 'Sunday';
 $current_day = date('l');
 $current_time = date('H:i:s');
 $week_count = date('W');
+$days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
+
 
 if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
     if(isset($_POST["button"]) && $_POST["button"] == "bestellen"){
         //Optionen für jeden Tag durchlaufen
-        $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
         foreach ($days as $day) {
             $option_name = $_POST['option_name_' . $day];
             $option_id = $_POST['option_name_' . $day];
@@ -90,6 +93,8 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
     header("Location: danke.php");
 
 }
+
+// echo "Gesamtpreis ist: $". number_format($GLOBALS['totalPreis'], 2)
 
 ?>
 
