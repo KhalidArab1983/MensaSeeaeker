@@ -1,8 +1,6 @@
 <?php
 include ('../conn/db_conn.php');
-// $current_date = date_format(new DateTime() ,'Y.m.d');
-// // $result = date_format(new DateTime() ,'Y.m.d');
-// echo $current_date;
+
 
 session_start();
 // Check if the user is logged in
