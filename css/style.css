@@ -241,3 +241,9 @@ th {
 .selected {
     background-color: yellow;
 }
+
+
+.error{
+    color : red;
+    font-size: 1rem;
+}
