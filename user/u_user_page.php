@@ -15,8 +15,6 @@ $week_count = date('W');
 
 
 
-
-
 $stunden = 0;
 $minuten = 0;
 $sekunden = 0;
