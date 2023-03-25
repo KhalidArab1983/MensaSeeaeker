@@ -12,7 +12,7 @@
 
     } else {
     
-        // echo "Keine Daten übermittelt";
+        echo "Keine Daten übermittelt";
 
     }
 

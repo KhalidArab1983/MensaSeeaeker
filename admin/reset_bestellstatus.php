@@ -22,7 +22,7 @@ $current_day = date('l');
 $bestell_status = 0;
 $update_status = 0;
         
-if($current_day == $samstag){
+// if($current_day == $samstag){
     // Aktiviere Alle Buttons am Samstag
 
     $sql = "UPDATE tbl_user SET bestell_status = ?";
@@ -35,6 +35,6 @@ if($current_day == $samstag){
     $updateStmt->bind_param("sssss", $update_status, $update_status, $update_status, $update_status, $update_status);
     $updateStmt->execute();
     
-}
+// }
 
 ?>
