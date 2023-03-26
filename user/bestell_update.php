@@ -7,28 +7,28 @@ $current_date = date('Y-m-d');
 $bestell_status_deaktiv = 1;
 
 if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
-    if($current_time >= '22:00:00' && $current_day == 0 || $current_day > 0 && $current_day < 1){
+    if($current_time >= '22:00:00' && $current_day == 0 || $current_day > 0 && $current_day < 5){
         // Update Button für Montag deaktivieren
         $sql = "UPDATE tbl_bestellstatus SET montag = ? WHERE user_id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ss", $bestell_status_deaktiv, $user_id);
         $stmt->execute();
     }
-    if($current_time >= '22:00:00' && $current_day == 1 || $current_day > 1 && $current_day < 2){
+    if($current_time >= '22:00:00' && $current_day == 1 || $current_day > 1 && $current_day < 5){
         // Update Button für Dienstag deaktivieren
         $sql = "UPDATE tbl_bestellstatus SET dienstag = ? WHERE user_id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ss", $bestell_status_deaktiv, $user_id);
         $stmt->execute();
     }
-    if($current_time >= '22:00:00' && $current_day == 2 || $current_day > 2 && $current_day < 3){
+    if($current_time >= '22:00:00' && $current_day == 2 || $current_day > 2 && $current_day < 5){
         // Update Button für Mittwoch deaktivieren
         $sql = "UPDATE tbl_bestellstatus SET mittwoch = ? WHERE user_id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ss", $bestell_status_deaktiv, $user_id);
         $stmt->execute();
     }
-    if($current_time >= '22:00:00' && $current_day == 3 || $current_day > 3 && $current_day < 4){
+    if($current_time >= '22:00:00' && $current_day == 3 || $current_day > 3 && $current_day < 5){
         // Update Button für Donnerstag deaktivieren
         $sql = "UPDATE tbl_bestellstatus SET donnerstag = ? WHERE user_id = ?";
         $stmt = $conn->prepare($sql);

@@ -54,7 +54,7 @@ $samstag = 'Saturday';
 $sonntag = 'Sunday';
 $current_day = date('l');
 $current_time = date('H:i:s');
-$week_count = date('W') + 1;
+$week_count = date('W');
 $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
 
 
@@ -65,12 +65,22 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
             $option_name = $_POST['option_name_' . $day];
             $option_id = $_POST['option_name_' . $day];
             $date = $_POST['option_name_' . $day];
-
-            $sql = "INSERT INTO tbl_bestellung (user_id, option_name, option_id, day, day_datum, week_count) 
+            if($current_day == $sonntag){
+                $week_count = date('W') +1;
+                $sql = "INSERT INTO tbl_bestellung (user_id, option_name, option_id, day, day_datum, week_count) 
                     VALUES (?, (SELECT option_name FROM tbl_option WHERE id = ?), ?, ?, (SELECT date FROM tbl_option WHERE id = ?),?)";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ssssss", $user_id, $option_name, $option_id, $day, $date, $week_count);
-            $stmt->execute();
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("ssssss", $user_id, $option_name, $option_id, $day, $date, $week_count);
+                $stmt->execute();
+            }else{
+                $week_count = date('W');
+                $sql = "INSERT INTO tbl_bestellung (user_id, option_name, option_id, day, day_datum, week_count) 
+                    VALUES (?, (SELECT option_name FROM tbl_option WHERE id = ?), ?, ?, (SELECT date FROM tbl_option WHERE id = ?),?)";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("ssssss", $user_id, $option_name, $option_id, $day, $date, $week_count);
+                $stmt->execute();
+            }
+            
         }
         $bestell_status = 1;
         // Update user's bestell_status to '1'
