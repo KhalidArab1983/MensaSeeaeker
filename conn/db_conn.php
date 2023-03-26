@@ -1,9 +1,9 @@
 <?php
-$host = "f"; // Database host
-$username = "s"; // Database username
+$host = "localhost"; // Database host
+$username = "root"; // Database username
 $password = ""; // Database password
-$dbname = "s"; // Database name
-$db_port = "3"; // Database Port
+$dbname = "mensa_seeaeker"; // Database name
+$db_port = "3306"; // Database Port
 
 
 // Create connection
