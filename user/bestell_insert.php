@@ -54,7 +54,7 @@ $samstag = 'Saturday';
 $sonntag = 'Sunday';
 $current_day = date('l');
 $current_time = date('H:i:s');
-$week_count = date('W');
+$week_count = date('W') + 1;
 $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
 
 
