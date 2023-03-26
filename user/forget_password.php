@@ -20,7 +20,7 @@ if(isset($_POST['send_code'])) {
     // E-Mail-Adresse des Benutzers aus dem Formular erhalten
     $email = $_POST['email'];
     if(empty($email)){
-        $errors['emailEmptyError'] = '* Bitte geben Sie die E-mail ein';
+        $errors['emailEmptyError'] = '* Bitte geben Sie Ihre E-Mail-Adresse ein, um den Code zu erhalten.';
     }
     if(!array_filter($errors)){
         $email =    mysqli_real_escape_string($conn, $_POST['email']);
@@ -68,7 +68,7 @@ if(isset($_POST['send_code'])) {
             }
         }else{
             // E-Mail-Adresse existiert nicht in der Datenbank
-            $errors['emailExistError'] = "Die E-Mail-Adresse $email existiert nicht in der Datenbank.";
+            $errors['emailExistError'] = "Die E-Mail-Adresse <span style='color:green; font-weight:bold'> $email</span> ist nicht registriert.";
         }
     }
 }
