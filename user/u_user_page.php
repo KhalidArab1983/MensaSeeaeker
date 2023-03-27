@@ -40,8 +40,8 @@ include ('./bestell_update.php');
 
 
 $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
-// $gesamtPreis = 0;
-// global $gesamtPreis;
+$gesamtPreis = 0;
+global $gesamtPreis;
 
     //um die ganze Bestellungen für den Benutzer abzurufen
     $bestellSql = "SELECT b.id, b.user_id, b.option_name, b.option_id, b.day, b.day_datum, b.bestelldatum, o.price
@@ -205,7 +205,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                     <?php foreach($days as $day): ?>
                             <div class="mb-1" style="height:10vh">
                                 <label for="option_name_<?php echo $day; ?>" style="width:115px; font-weight:bold"><?php echo $day;?>:</label>
-                                <select class="w-50 h-50" name="option_name_<?php echo $day; ?>" id="option_name_<?php echo $day; ?>" onChange="chImage<?php echo $day;?>()">
+                                <select class="w-50 h-50" name="option_name_<?php echo $day; ?>" id="option_name_<?php echo $day; ?>"  onChange="chImage<?php echo $day;?>()">
                                     <!-- <option></option> -->
                                     <?php
                                         
@@ -232,6 +232,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                                 $price = $row['price'];
                                                 $option_id = $row['id'];
                                                 echo '<option value="' . $option_id . '">'. $option_id ."-". $option_name . "-" . $price . '€</option>';
+                                                
                                             }
                                         }
                                     ?>
@@ -265,6 +266,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                         </button>
                     </div>
                 </form>
+                
             </div>
             <div class="col-lg-4" style="float:left; box-shadow: -4px 1px 4px #888; height:100vh; margin-top:10px">
                 <div id="imageContainer1">
