@@ -14,6 +14,9 @@ if (isset($_SESSION['user_id'])) {
 $week_count = date('W');
 
 
+global $gesamtePreis;
+
+
 
 $stunden = 0;
 $minuten = 0;
@@ -201,8 +204,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
             <h4>Essen bestellen</h4>
             <div class="col-lg-8" style="float:left; margin-top:100px;">
                 <form id="bestellForm" action="u_user_page.php" method="POST">
-                    <?php 
-                        foreach($days as $day): ?>
+                    <?php foreach($days as $day): ?>
                             <div class="mb-1" style="height:10vh">
                                 <label for="option_name_<?php echo $day; ?>" style="width:115px; font-weight:bold"><?php echo $day;?>:</label>
                                 <select class="w-50 h-50" name="option_name_<?php echo $day; ?>" id="option_name_<?php echo $day; ?>" onChange="chImage<?php echo $day;?>()">
@@ -232,7 +234,6 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                                 $price = $row['price'];
                                                 $option_id = $row['id'];
                                                 echo '<option value="' . $option_id . '">'. $option_id ."-". $option_name . "-" . $price . '€</option>';
-                                                
                                             }
                                         }
                                     ?>
@@ -265,6 +266,25 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                 Essen bestellen
                         </button>
                     </div>
+                    <?php
+                    $totalPreis = 0;
+                    foreach($days as $day){
+                        if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
+                            if(isset($_POST['option_name_'.$day])){
+                                $option_id = $_POST['option_name_'.$day];
+                                $sql = "SELECT price FROM tbl_option WHERE id = ".$option_id;
+                                $result = mysqli_query($conn, $sql);
+                                $row = mysqli_fetch_assoc($result);
+                                $totalPreis += $row['price'];
+                                echo $day . ": " . $row['price'] . "€<br>";
+                            }
+                        }
+                    }
+                    echo "Gesamtpreis: " . $totalPreis . "€<br>";
+                    
+                    // Make totalPreis global
+                    $GLOBALS['totalPreis'] = $totalPreis;
+                    ?>
                 </form>
             </div>
             <div class="col-lg-4" style="float:left; box-shadow: -4px 1px 4px #888; height:100vh; margin-top:10px">
