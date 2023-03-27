@@ -14,8 +14,6 @@ if (isset($_SESSION['user_id'])) {
 $week_count = date('W');
 
 
-global $gesamtePreis;
-
 
 
 $stunden = 0;
@@ -266,25 +264,6 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                 Essen bestellen
                         </button>
                     </div>
-                    <?php
-                    $totalPreis = 0;
-                    foreach($days as $day){
-                        if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
-                            if(isset($_POST['option_name_'.$day])){
-                                $option_id = $_POST['option_name_'.$day];
-                                $sql = "SELECT price FROM tbl_option WHERE id = ".$option_id;
-                                $result = mysqli_query($conn, $sql);
-                                $row = mysqli_fetch_assoc($result);
-                                $totalPreis += $row['price'];
-                                echo $day . ": " . $row['price'] . "€<br>";
-                            }
-                        }
-                    }
-                    echo "Gesamtpreis: " . $totalPreis . "€<br>";
-                    
-                    // Make totalPreis global
-                    $GLOBALS['totalPreis'] = $totalPreis;
-                    ?>
                 </form>
             </div>
             <div class="col-lg-4" style="float:left; box-shadow: -4px 1px 4px #888; height:100vh; margin-top:10px">
