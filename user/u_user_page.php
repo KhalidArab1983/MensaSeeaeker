@@ -208,7 +208,6 @@ global $gesamtPreis;
                                 <select class="w-50 h-50" name="option_name_<?php echo $day; ?>" id="option_name_<?php echo $day; ?>"  onChange="chImage<?php echo $day;?>()">
                                     <!-- <option></option> -->
                                     <?php
-                                        
                                         if($$day == 1){
                                             // Send query to database to get School Classes
                                             $sql = "SELECT id, option_name, image_filename, data, day, price FROM tbl_option WHERE price = 0.00";
