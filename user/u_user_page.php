@@ -35,7 +35,7 @@ if (isset($_SESSION['sessionTime'])) {
 // include ('./u_kontoZustand.php');
 include ('./bestell_insert.php');
 include ('./bestell_update.php');
-// include ('./total_preis.php');
+include ('./total_preis.php');
 
 
 
@@ -232,7 +232,9 @@ global $gesamtPreis;
                                                 $price = $row['price'];
                                                 $option_id = $row['id'];
                                                 echo '<option value="' . $option_id . '">'. $option_id ."-". $option_name . "-" . $price . '€</option>';
-                                                
+                                                // if(isset($_POST['option_name_'.$day]) && $_POST['option_name_'.$day] == $option_id){
+                                                //     $gesamtPreis += $price;
+                                                // }
                                             }
                                         }
                                     ?>
@@ -265,8 +267,8 @@ global $gesamtPreis;
                                 Essen bestellen
                         </button>
                     </div>
+                    
                 </form>
-                
             </div>
             <div class="col-lg-4" style="float:left; box-shadow: -4px 1px 4px #888; height:100vh; margin-top:10px">
                 <div id="imageContainer1">
