@@ -121,7 +121,7 @@ if (isset($_POST['submit'])){
                     <div class="form-text error"><?php echo $errors['confirmError'] ?></div>
                 </div>
                 <div class="text-center">
-                    <input type="submit" name="submit" class="btn btn-primary m-5 w-25" value="Register">
+                    <input type="submit" name="submit" class="btn btn-warning m-5 w-25" value="Register">
                 </div>
             </form>
         </div>
