@@ -95,12 +95,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
         mysqli_close($conn);
     }
     if($button == "update"){
-
-        // $userSuche = "SELECT klasse, plz, userName, firstName, lastName, email, phone, adresse, ortsteil, birthday FROM tbl_user WHERE id = ?";
-        // $stmt = $conn->prepare($userSuche);
-        // $stmt->bind_param("s", $user_id);
-        // $stmt->execute();
-
+        
         if(empty($klasse)) {
             $query = "SELECT klasse FROM tbl_user WHERE id= '{$user_id}'";
             $result = mysqli_query($conn, $query);
@@ -331,11 +326,11 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
                 <div class="hint" id="hint">This is a hint flmösdölkf sdf skdn fnsdnf nsdfnsdnbfjkn sdlkf ksdlöf lsdkfk nsdb fsdbfb s,dnfsd kfmsdmfl sdmlfsldmf .</div>
                 <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
                     <div class="mb-1">
-                        <input type="text" class="form-control" id="searchInput" onkeyup="filterOptions()" placeholder="Search for an option...">
+                        <input type="text" class="form-control" id="searchInput" onkeyup="filterOptions()" placeholder="nach einem Benutzer suchen...">
                     </div>
                     <div class="mb-1">
                         <select name="id" class="form-control" id="optionList">
-                            <option></option>
+                            <option>Benutzer Name auswählen...</option>
                             <?php
                                 // Send query to database to get users
                                     $sql = "SELECT id, userName FROM tbl_user";
@@ -467,7 +462,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
 
 
         function deleteRecord(id) {
-            if (confirm("Are you sure you want to delete this record?")) {
+            if (confirm("Möchten Sie diesen Benutzer wirklich löschen?")) {
                 window.location.href = "delete.php?id=" + id;
             }
         }

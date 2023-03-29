@@ -5,11 +5,13 @@ session_start();
 // Check if the user is logged in
 if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
-    
+    $gesamtPreis = $_SESSION['gesamtPreis'];
 }else{
     header("Location: u_login.php");
 	exit;
 }
+
+global $gesamtPreis;
 
 $week_count = date('W');
 
@@ -35,13 +37,13 @@ if (isset($_SESSION['sessionTime'])) {
 // include ('./u_kontoZustand.php');
 include ('./bestell_insert.php');
 include ('./bestell_update.php');
-include ('./total_preis.php');
+// include ('./total_preis.php');
 
 
 
 $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
-$gesamtPreis = 0;
-global $gesamtPreis;
+// $gesamtPreis = 0;
+// global $gesamtPreis;
 
     //um die ganze Bestellungen für den Benutzer abzurufen
     $bestellSql = "SELECT b.id, b.user_id, b.option_name, b.option_id, b.day, b.day_datum, b.bestelldatum, o.price
@@ -202,24 +204,25 @@ global $gesamtPreis;
             <h4>Essen bestellen</h4>
             <div class="col-lg-8" style="float:left; margin-top:100px;">
                 <form id="bestellForm" action="u_user_page.php" method="POST">
-                    <?php foreach($days as $day): ?>
+                    <?php 
+                        foreach($days as $day): ?>
                             <div class="mb-1" style="height:10vh">
                                 <label for="option_name_<?php echo $day; ?>" style="width:115px; font-weight:bold"><?php echo $day;?>:</label>
                                 <select class="w-50 h-50" name="option_name_<?php echo $day; ?>" id="option_name_<?php echo $day; ?>"  onChange="chImage<?php echo $day;?>()">
                                     <!-- <option></option> -->
-                                    <?php
+                                    <?php 
                                         if($$day == 1){
                                             // Send query to database to get School Classes
                                             $sql = "SELECT id, option_name, image_filename, data, day, price FROM tbl_option WHERE price = 0.00";
                                             $result = mysqli_query($conn, $sql);
                                             // Include each result as an option tag in the drop-down list
                                             $row = mysqli_fetch_assoc($result);
-                                                $option_name = $row['option_name'];
-                                                $data = $row['data'];
-                                                $price = $row['price'];
-                                                $option_id = $row['id'];
-                                                echo '<option value="' . $option_id . '">'. $option_name . "-" . $price . '€</option>';  
-                                                
+                                            $option_name = $row['option_name'];
+                                            $data = $row['data'];
+                                            $price = $row['price'];
+                                            $option_id = $row['id'];
+                                            echo '<option value="' . $option_id . '">'. $option_name . "-" . $price . '€</option>';  
+                                            // $gesamtPreis += $price;
                                         }else{
                                             // Send query to database to get meals option
                                             $sql = "SELECT id, option_name, image_filename, data, day, price FROM tbl_option WHERE day = '" .$day."'";
@@ -231,13 +234,11 @@ global $gesamtPreis;
                                                 $price = $row['price'];
                                                 $option_id = $row['id'];
                                                 echo '<option value="' . $option_id . '">'. $option_id ."-". $option_name . "-" . $price . '€</option>';
-                                                // if(isset($_POST['option_name_'.$day]) && $_POST['option_name_'.$day] == $option_id){
-                                                //     $gesamtPreis += $price;
-                                                // }
+                                                
                                             }
                                         }
+                                        
                                     ?>
-                                    
                                 </select>
                                 <button type="submit" class="btn btn-warning h-50 mb-2" name="button" id="<?php echo $day;?>" value="<?php echo $day;?>"
                                         <?php 
@@ -257,7 +258,8 @@ global $gesamtPreis;
                                     ?>
                                 </label>
                             </div>
-                    <?php endforeach; ?>
+                    <?php endforeach; $gesamtPreis += $price;?>
+                    
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary w-25 btn-bestellen" id="bestellen" name="button" value="bestellen" onclick="unreichendeKontostand()"
                                 <?php 
@@ -266,8 +268,13 @@ global $gesamtPreis;
                                 Essen bestellen
                         </button>
                     </div>
-                    
+                    <?php
+                        $_SESSION['gesamtPreis'] = $gesamtPreis;
+                        echo $gesamtPreis;
+                    ?>
+                    <div name="gesamtPreis" id="gesamtPreis"></div>
                 </form>
+                
             </div>
             <div class="col-lg-4" style="float:left; box-shadow: -4px 1px 4px #888; height:100vh; margin-top:10px">
                 <div id="imageContainer1">
