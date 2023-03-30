@@ -10,7 +10,7 @@ if (isset($_SESSION['admin_id'])) {
     header("Location: a_login.php");
 	exit;
 }
-
+date_default_timezone_set("Europe/Berlin");
 
 // include('./admin/insertUpdateMeals.php');
 

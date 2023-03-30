@@ -14,6 +14,8 @@ if (isset($_SESSION['admin_id'])) {
 	exit;
 }
 
+date_default_timezone_set("Europe/Berlin");
+
 $week_count = date('W');
 
 

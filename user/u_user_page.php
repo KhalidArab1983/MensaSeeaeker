@@ -5,13 +5,11 @@ session_start();
 // Check if the user is logged in
 if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
-    $gesamtPreis = $_SESSION['gesamtPreis'];
 }else{
     header("Location: u_login.php");
 	exit;
 }
-
-global $gesamtPreis;
+date_default_timezone_set("Europe/Berlin");
 
 $week_count = date('W');
 
@@ -222,7 +220,6 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                             $price = $row['price'];
                                             $option_id = $row['id'];
                                             echo '<option value="' . $option_id . '">'. $option_id ."-". $option_name . "-" . $price . '€</option>';  
-                                            // $gesamtPreis += $price;
                                         }else{
                                             // Send query to database to get meals option
                                             $sql = "SELECT id, option_name, image_filename, data, day, price FROM tbl_option WHERE day = '" .$day."'";
@@ -236,7 +233,6 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                                 echo '<option value="' . $option_id . '">'. $option_id ."-". $option_name . "-" . $price . '€</option>';
                                                 
                                             }
-                                            $gesamtPreis += $price;
                                         }
                                         
                                     ?>
@@ -269,11 +265,6 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                 Essen bestellen
                         </button>
                     </div>
-                    <?php
-                        $_SESSION['gesamtPreis'] = $gesamtPreis;
-                        echo $gesamtPreis;
-                    ?>
-                    <div name="gesamtPreis" id="gesamtPreis"></div>
                 </form>
                 
             </div>
