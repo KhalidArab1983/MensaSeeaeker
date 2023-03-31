@@ -15,7 +15,6 @@ $week_count = date('W');
 
 
 
-
 $stunden = 0;
 $minuten = 0;
 $sekunden = 0;
@@ -203,6 +202,10 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
             <div class="col-lg-8" style="float:left; margin-top:100px;">
                 <form id="bestellForm" action="u_user_page.php" method="POST">
                     <?php 
+                        $gesamtPreis = 0;
+                        $price = 0;
+                        global $price;
+                        global $gesamtPreis;
                         foreach($days as $day): ?>
                             <div class="mb-1" style="height:10vh">
                                 <label for="option_name_<?php echo $day; ?>" style="width:115px; font-weight:bold"><?php echo $day;?>:</label>
@@ -255,7 +258,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                     ?>
                                 </label>
                             </div>
-                    <?php endforeach;?>
+                    <?php endforeach; ?>
                     
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary w-25 btn-bestellen" id="bestellen" name="button" value="bestellen" onclick="unreichendeKontostand()"
@@ -265,6 +268,11 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                 Essen bestellen
                         </button>
                     </div>
+                    <?php
+                        
+                        echo $gesamtPreis;
+                        var_dump($gesamtPreis);
+                    ?>
                 </form>
                 
             </div>

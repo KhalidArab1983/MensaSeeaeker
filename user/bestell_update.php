@@ -41,6 +41,11 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ss", $bestell_status_deaktiv, $user_id);
         $stmt->execute();
+
+        $bestellSql= "UPDATE tbl_user SET bestell_status = ?";
+        $stmt = $conn->prepare($bestellSql);
+        $stmt->bind_param("s", $bestell_status_deaktiv);
+        $stmt->execute();
     }
 }
 
