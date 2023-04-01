@@ -14,6 +14,7 @@ date_default_timezone_set("Europe/Berlin");
 
 $week_count = date('W');
 
+
 if ($_SERVER["REQUEST_METHOD"]=="POST"){
     $totalPrice = $_POST['totalPrice'];
 }else{
@@ -45,8 +46,6 @@ include ('./bestell_update.php');
 
 
 $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
-// $gesamtPreis = 0;
-// global $gesamtPreis;
 
     //um die ganze Bestellungen für den Benutzer abzurufen
     $bestellSql = "SELECT b.id, b.user_id, b.option_name, b.option_id, b.day, b.day_datum, b.bestelldatum, o.price
@@ -82,18 +81,18 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
         
     }
 
-    // //SQL-Abfrage ausführen, um die Preise in der Spalte zu summieren
-    // $query = "SELECT SUM(o.price) as total 
-    // FROM 
-    //     ( SELECT b.option_id 
-    //     FROM tbl_bestellung b 
-    //     WHERE b.user_id = $user_id 
-    //     ORDER BY b.bestelldatum 
-    //     DESC LIMIT 5 ) as b 
-    // JOIN tbl_option o ON o.id = b.option_id;";
-    // $result = mysqli_query($conn, $query);
-    // $row = mysqli_fetch_assoc($result);
-    // $totalPreis = $row['total'];
+    //SQL-Abfrage ausführen, um die Preise in der Spalte zu summieren
+    $query = "SELECT SUM(o.price) as total 
+    FROM 
+        ( SELECT b.option_id 
+        FROM tbl_bestellung b 
+        WHERE b.user_id = $user_id 
+        ORDER BY b.bestelldatum 
+        DESC LIMIT 5 ) as b 
+    JOIN tbl_option o ON o.id = b.option_id;";
+    $result = mysqli_query($conn, $query);
+    $row = mysqli_fetch_assoc($result);
+    $gesamtPreis = $row['total'];
 
 
 
@@ -102,7 +101,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
     if(isset($_POST['button']) && $_POST['button'] == 'bestellen'){
         $sql = "INSERT INTO tbl_auszahlung (auszahlung, user_id) VALUES (?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ss", $totalPreis, $user_id);
+        $stmt->bind_param("ss", $totalPrice, $user_id);
         $stmt->execute();
     }
 
@@ -111,7 +110,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
         if(isset($_POST['button']) && $_POST["button"] == $day){
             $sql = "UPDATE tbl_auszahlung SET auszahlung = ? WHERE user_id = ? ORDER BY id DESC LIMIT 1";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ss", $totalPreis, $user_id);
+            $stmt->bind_param("ss", $totalPrice, $user_id);
             $stmt->execute();
         }
     }
@@ -205,81 +204,83 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
 
         <div id="essenBestellung" class="tabcontent" style="display:block">
             <h4>Essen bestellen</h4>
-            <div class="col-lg-8" style="float:left; margin-top:100px;">
-                <form id="bestellForm" action="u_user_page.php" method="POST">
-                    <?php 
-                        // $gesamtPreis = 0;
-                        // $price = 0;
-                        // global $price;
-                        // global $gesamtPreis;
-                        $totalPrice= 0;
-                        
-                        foreach($days as $day): ?>
-                            <div class="mb-1" style="height:10vh">
-                                <label for="option_name_<?php echo $day; ?>" style="width:115px; font-weight:bold"><?php echo $day;?>:</label>
-                                <select class="w-50 h-50" name="option_name_<?php echo $day; ?>" id="option_name_<?php echo $day; ?>"  onChange="chImage<?php echo $day;?>(); calculateTotalPrice(this);">
-                                    <!-- <option></option> -->
-                                    <?php 
-                                        // if($$day == 1){
-                                        //     // Send query to database to get School Classes
-                                        //     $sql = "SELECT id, option_name, image_filename, data, day, price FROM tbl_option WHERE price = 0.00 AND  day = '" .$day."'";
-                                        //     $result = mysqli_query($conn, $sql);
-                                        //     // Include each result as an option tag in the drop-down list
-                                        //     $row = mysqli_fetch_assoc($result);
-                                        //     $option_name = $row['option_name'];
-                                        //     $data = $row['data'];
-                                        //     $price = $row['price'];
-                                        //     $option_id = $row['id'];
-                                        //     echo '<option value="' . $option_id . '">'. $option_id ."-". $option_name . "-" . $price . '€</option>';  
-                                        // }else{
-                                            // Send query to database to get meals option
-                                            $sql = "SELECT id, option_name, image_filename, data, day, price FROM tbl_option WHERE day = '" .$day."'";
-                                            $result = mysqli_query($conn, $sql);
-                                            // Include each result as an option tag in the drop-down list
-                                            while($row = mysqli_fetch_assoc($result)){
-                                                $option_name = $row['option_name'];
-                                                $data = $row['data'];
-                                                $tag = $row['day'];
-                                                $price = $row['price'];
-                                                $option_id = $row['id'];
-                                                echo '<option value="' . $option_id. '" data-price="'.$price.'">'. $option_id ."-". $option_name . "-" . $price . '€</option>';
-                                                
-                                            }
-                                        // }
-                                        
-                                    ?>
-                                </select>
-                                <button type="submit" class="btn btn-warning h-50 mb-2" name="button" id="<?php echo $day;?>" value="<?php echo $day;?>"
-                                        <?php 
-                                            if($$day == 1){ echo "disabled";}
-                                            // elseif($totalPreis > $kontostand){echo 'style="cursor: none; pointer-events: none;"';} 
-                                        ?> >
-                                        <h6 style="color:white;">Ändern</h6>
-                                </button>
-                                <br>
-                                <label style="width:100px" id="monday" name="<?php echo $day; ?>">
-                                    <?php 
-                                        $sql = "SELECT date FROM tbl_option WHERE day = '". $day."'";
-                                        $result = mysqli_query($conn, $sql);
-                                        $row = mysqli_fetch_assoc($result);
-                                        $day_datum = $row['date'];
-                                        echo $day_datum;
-                                    ?>
-                                </label>
-                            </div>
-                    <?php endforeach; ?>
-                    
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-primary w-25 btn-bestellen" id="bestellen" name="button" value="bestellen" onclick="unreichendeKontostand()"
-                                <?php 
-                                    // if($bestell_status == 1){echo "disabled";}
-                                ?>>
-                                Essen bestellen
-                        </button>
+            
+            <div class="col-lg-8" style="float:left; margin-top:20px;">
+                <div>
+                    <div class="mb-3 text-center" style="display:flex; text-align:center">
+                        <h2>Gesamt Preis: </h2>
+                        <div class="ms-4" style="font-size:30px; font-weight:bold; color:blue" name="totalPrice" id="totalPrice"></div>
                     </div>
-                    <div name="totalPrice" id="totalPrice"></div>
-                </form>
-                
+                    <form id="bestellForm" action="u_user_page.php" method="POST">
+                        <?php 
+                            $totalPrice= 0;
+                            
+                            foreach($days as $day): ?>
+                                <div class="mb-1" style="height:10vh">
+                                    <label for="option_name_<?php echo $day; ?>" style="width:115px; font-weight:bold"><?php echo $day;?>:</label>
+                                    <select class="w-50 h-50" name="option_name_<?php echo $day; ?>" id="option_name_<?php echo $day; ?>"  onChange="chImage<?php echo $day;?>(); calculateTotalPrice(this);">
+                                        <!-- <option></option> -->
+                                        <?php 
+                                            // if($$day == 1){
+                                            //     // Send query to database to get School Classes
+                                            //     $sql = "SELECT id, option_name, image_filename, data, day, price FROM tbl_option WHERE price = 0.00 AND  day = '" .$day."'";
+                                            //     $result = mysqli_query($conn, $sql);
+                                            //     // Include each result as an option tag in the drop-down list
+                                            //     $row = mysqli_fetch_assoc($result);
+                                            //     $option_name = $row['option_name'];
+                                            //     $data = $row['data'];
+                                            //     $price = $row['price'];
+                                            //     $option_id = $row['id'];
+                                            //     echo '<option value="' . $option_id . '">'. $option_id ."-". $option_name . "-" . $price . '€</option>';  
+                                            // }else{
+                                                // Send query to database to get meals option
+                                                $sql = "SELECT id, option_name, image_filename, data, day, price FROM tbl_option WHERE day = '" .$day."'";
+                                                $result = mysqli_query($conn, $sql);
+                                                // Include each result as an option tag in the drop-down list
+                                                while($row = mysqli_fetch_assoc($result)){
+                                                    $option_name = $row['option_name'];
+                                                    $data = $row['data'];
+                                                    $tag = $row['day'];
+                                                    $price = $row['price'];
+                                                    $option_id = $row['id'];
+                                                    echo '<option value="' . $option_id. '">'. $option_id ."-". $option_name . "-" . $price . '€</option>';
+                                                    
+                                                }
+                                            // }
+                                            
+                                        ?>
+                                    </select>
+                                    <button type="submit" class="btn btn-warning h-50 mb-2" name="button" id="<?php echo $day;?>" value="<?php echo $day;?>"
+                                            <?php 
+                                                if($$day == 1){ echo "disabled";}
+                                                // elseif($totalPreis > $kontostand){echo 'style="cursor: none; pointer-events: none;"';} 
+                                            ?> >
+                                            <h6 style="color:white;">Ändern</h6>
+                                    </button>
+                                    <br>
+                                    <label style="width:100px" id="monday" name="<?php echo $day; ?>">
+                                        <?php 
+                                            $sql = "SELECT date FROM tbl_option WHERE day = '". $day."'";
+                                            $result = mysqli_query($conn, $sql);
+                                            $row = mysqli_fetch_assoc($result);
+                                            $day_datum = $row['date'];
+                                            echo $day_datum;
+                                        ?>
+                                    </label>
+                                </div>
+                        <?php endforeach; ?>
+                        
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary w-25 btn-bestellen" id="bestellen" name="button" value="bestellen" onclick="unreichendeKontostand()"
+                                    <?php 
+                                        // if($bestell_status == 1){echo "disabled";}
+                                    ?>>
+                                    Essen bestellen
+                            </button>
+                        </div>
+                        
+                    </form>
+                </div>
             </div>
             <div class="col-lg-4" style="float:left; box-shadow: -4px 1px 4px #888; height:100vh; margin-top:10px">
                 <div id="imageContainerMontag">
@@ -440,7 +441,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                     </table>
                     <h3 class="mt-3">
                         <?php
-                            echo "Der Gesamtbetrag ist: ". $totalPrice. "€";
+                            echo "Der Gesamtbetrag ist: ". $gesamtPreis. "€";
                         ?>
                     </h3>
                 </div>
