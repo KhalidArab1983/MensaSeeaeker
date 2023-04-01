@@ -2,6 +2,7 @@
 include('../conn/db_conn.php');
 
 session_start();
+
 // Check if the user is logged in
 if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
@@ -13,6 +14,11 @@ date_default_timezone_set("Europe/Berlin");
 
 $week_count = date('W');
 
+if ($_SERVER["REQUEST_METHOD"]=="POST"){
+    $totalPrice = $_POST['totalPrice'];
+}else{
+    $totalPrice = "";
+}
 
 
 $stunden = 0;
@@ -76,18 +82,18 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
         
     }
 
-    //SQL-Abfrage ausführen, um die Preise in der Spalte zu summieren
-    $query = "SELECT SUM(o.price) as total 
-    FROM 
-        ( SELECT b.option_id 
-        FROM tbl_bestellung b 
-        WHERE b.user_id = $user_id 
-        ORDER BY b.bestelldatum 
-        DESC LIMIT 5 ) as b 
-    JOIN tbl_option o ON o.id = b.option_id;";
-    $result = mysqli_query($conn, $query);
-    $row = mysqli_fetch_assoc($result);
-    $totalPreis = $row['total'];
+    // //SQL-Abfrage ausführen, um die Preise in der Spalte zu summieren
+    // $query = "SELECT SUM(o.price) as total 
+    // FROM 
+    //     ( SELECT b.option_id 
+    //     FROM tbl_bestellung b 
+    //     WHERE b.user_id = $user_id 
+    //     ORDER BY b.bestelldatum 
+    //     DESC LIMIT 5 ) as b 
+    // JOIN tbl_option o ON o.id = b.option_id;";
+    // $result = mysqli_query($conn, $query);
+    // $row = mysqli_fetch_assoc($result);
+    // $totalPreis = $row['total'];
 
 
 
@@ -202,28 +208,30 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
             <div class="col-lg-8" style="float:left; margin-top:100px;">
                 <form id="bestellForm" action="u_user_page.php" method="POST">
                     <?php 
-                        $gesamtPreis = 0;
-                        $price = 0;
-                        global $price;
-                        global $gesamtPreis;
+                        // $gesamtPreis = 0;
+                        // $price = 0;
+                        // global $price;
+                        // global $gesamtPreis;
+                        $totalPrice= 0;
+                        
                         foreach($days as $day): ?>
                             <div class="mb-1" style="height:10vh">
                                 <label for="option_name_<?php echo $day; ?>" style="width:115px; font-weight:bold"><?php echo $day;?>:</label>
-                                <select class="w-50 h-50" name="option_name_<?php echo $day; ?>" id="option_name_<?php echo $day; ?>"  onChange="chImage<?php echo $day;?>()">
+                                <select class="w-50 h-50" name="option_name_<?php echo $day; ?>" id="option_name_<?php echo $day; ?>"  onChange="chImage<?php echo $day;?>(); calculateTotalPrice(this);">
                                     <!-- <option></option> -->
                                     <?php 
-                                        if($$day == 1){
-                                            // Send query to database to get School Classes
-                                            $sql = "SELECT id, option_name, image_filename, data, day, price FROM tbl_option WHERE price = 0.00 AND  day = '" .$day."'";
-                                            $result = mysqli_query($conn, $sql);
-                                            // Include each result as an option tag in the drop-down list
-                                            $row = mysqli_fetch_assoc($result);
-                                            $option_name = $row['option_name'];
-                                            $data = $row['data'];
-                                            $price = $row['price'];
-                                            $option_id = $row['id'];
-                                            echo '<option value="' . $option_id . '">'. $option_id ."-". $option_name . "-" . $price . '€</option>';  
-                                        }else{
+                                        // if($$day == 1){
+                                        //     // Send query to database to get School Classes
+                                        //     $sql = "SELECT id, option_name, image_filename, data, day, price FROM tbl_option WHERE price = 0.00 AND  day = '" .$day."'";
+                                        //     $result = mysqli_query($conn, $sql);
+                                        //     // Include each result as an option tag in the drop-down list
+                                        //     $row = mysqli_fetch_assoc($result);
+                                        //     $option_name = $row['option_name'];
+                                        //     $data = $row['data'];
+                                        //     $price = $row['price'];
+                                        //     $option_id = $row['id'];
+                                        //     echo '<option value="' . $option_id . '">'. $option_id ."-". $option_name . "-" . $price . '€</option>';  
+                                        // }else{
                                             // Send query to database to get meals option
                                             $sql = "SELECT id, option_name, image_filename, data, day, price FROM tbl_option WHERE day = '" .$day."'";
                                             $result = mysqli_query($conn, $sql);
@@ -231,12 +239,13 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                             while($row = mysqli_fetch_assoc($result)){
                                                 $option_name = $row['option_name'];
                                                 $data = $row['data'];
+                                                $tag = $row['day'];
                                                 $price = $row['price'];
                                                 $option_id = $row['id'];
-                                                echo '<option value="' . $option_id . '">'. $option_id ."-". $option_name . "-" . $price . '€</option>';
+                                                echo '<option value="' . $option_id. '" data-price="'.$price.'">'. $option_id ."-". $option_name . "-" . $price . '€</option>';
                                                 
                                             }
-                                        }
+                                        // }
                                         
                                     ?>
                                 </select>
@@ -263,33 +272,29 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary w-25 btn-bestellen" id="bestellen" name="button" value="bestellen" onclick="unreichendeKontostand()"
                                 <?php 
-                                    if($bestell_status == 1){echo "disabled";}
+                                    // if($bestell_status == 1){echo "disabled";}
                                 ?>>
                                 Essen bestellen
                         </button>
                     </div>
-                    <?php
-                        
-                        echo $gesamtPreis;
-                        var_dump($gesamtPreis);
-                    ?>
+                    <div name="totalPrice" id="totalPrice"></div>
                 </form>
                 
             </div>
             <div class="col-lg-4" style="float:left; box-shadow: -4px 1px 4px #888; height:100vh; margin-top:10px">
-                <div id="imageContainer1">
+                <div id="imageContainerMontag">
                     
                 </div>
-                <div id="imageContainer2">
+                <div id="imageContainerDienstag">
 
                 </div>
-                <div id="imageContainer3" >
+                <div id="imageContainerMittwoch" >
 
                 </div>
-                <div id="imageContainer4">
+                <div id="imageContainerDonnerstag">
 
                 </div>
-                <div id="imageContainer5">
+                <div id="imageContainerFreitag">
 
                 </div>
             </div>
@@ -435,7 +440,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                     </table>
                     <h3 class="mt-3">
                         <?php
-                            echo "Der Gesamtbetrag ist: ". $totalPreis. "€";
+                            echo "Der Gesamtbetrag ist: ". $totalPrice. "€";
                         ?>
                     </h3>
                 </div>
@@ -506,23 +511,73 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
             }
 
 
-            if(kontostand < 25){
-                alert('Ihr Guthaben ist sehr niedrig, bitte bald aufladen');
-            }
+            // if(kontostand < 25){
+            //     alert('Ihr Guthaben ist sehr niedrig, bitte bald aufladen');
+            // }
 
 
 
-            var kontostand = "<?php echo $kontostand; ?>";
+            // var kontostand = "<?php echo $kontostand; ?>";
 
-            function unreichendeKontostand(event){
-                if(totalPreis > kontostand){
-                    event.preventDefault();
-                    alert('Das Guthaben reicht nicht aus, um den Kauf abzuschließen');
+            // function unreichendeKontostand(event){
+            //     if(totalPreis > kontostand){
+            //         event.preventDefault();
+            //         alert('Das Guthaben reicht nicht aus, um den Kauf abzuschließen');
+            //     }
+            // }
+            // var btnBestellen = document.getElementById("bestellen");
+            // btnBestellen.addEventListener("click", unreichendeKontostand(event));
+
+
+            // function updateTotalPrice(select) {
+            //     var price = select.options[select.selectedIndex].getAttribute('data-price');
+            //     totalPrice += parseFloat(price);
+            //     document.getElementById("totalPrice").innerHTML = totalPrice.toFixed(2) + " €";
+            // }
+
+            // Define an object to store the prices for each day
+            var prices = {
+                Montag: 0,
+                Dienstag: 0,
+                Mittwoch: 0,
+                Donnerstag: 0,
+                Freitag: 0
+            };
+
+            // Define a function to calculate the total price based on the selected options
+            function calculateTotalPrice() {
+                var totalPrice = 0;
+
+                // Loop through each day
+                for (var day in prices) {
+                    // Get the selected option for this day
+                    var selectList = document.getElementById("option_name_" + day);
+                    var selectedOption = selectList.options[selectList.selectedIndex];
+                    
+                    // Extract the price from the selected option
+                    var price = parseFloat(selectedOption.text.split("-")[2].replace("€", ""));
+                    
+                    // Update the price for this day in the prices object
+                    prices[day] = price;
+                    
+                    // Add the price to the total price
+                    totalPrice += price;
                 }
+                
+                // Update the total price display
+                document.getElementById("totalPrice").innerText = totalPrice.toFixed(2) + "€";
+                
+                // Return the total price
+                return totalPrice;
             }
-            var btnBestellen = document.getElementById("bestellen");
-            btnBestellen.addEventListener("click", unreichendeKontostand(event));
 
+            // Call the calculateTotalPrice function whenever a new option is selected
+            var selectLists = document.querySelectorAll("select");
+            for (var i = 0; i < selectLists.length; i++) {
+                selectLists[i].addEventListener("change", function() {
+                    var totalPrice = calculateTotalPrice();
+                });
+            }
         </script>
         <script src="../js/popper.min.js"></script>
         <script src="../js/bootstrap.min.js"></script>
