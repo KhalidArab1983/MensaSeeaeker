@@ -68,51 +68,6 @@ function updateInputUser(){
 }
 
 //Um Bilder aus der Datenbank abzurufen und sie mit einem Dropdown-Element anzuzeigen
-// const days = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag'];
-
-
-// function chImage(day) {
-//     // Elemente auswählen
-//     var selectList = document.getElementById(`option_name_${day}`);
-//     var container = document.getElementById(`imageContainer${day}`);
-//     // Ausgewähltes Element auswählen
-//     var selectedOption = selectList.options[selectList.selectedIndex];
-//     var optionID = selectedOption.id;
-//     var optionValue = selectedOption.value;
-//     var optionName = selectedOption.name;
-
-//     // AJAX-Anfrage senden, um das Bild aus der Datenbank abzurufen
-//     var xhr = new XMLHttpRequest();
-//     xhr.onreadystatechange = function() {
-//         if (xhr.readyState == 4 && xhr.status == 200) {
-//             var imageURL = xhr.responseText;
-//             // Bild in den Container einfügen
-//             container.innerHTML = imageURL;
-//         }
-//     };
-//     xhr.open("GET", `images.php?id=${optionID}&value=${optionValue}&name=${optionName}`, true);
-//     xhr.send();
-
-//     // Gesamtpreis berechnen und in Session speichern
-//     var gesamtPreis = parseFloat(optionValue);
-//     if (isNaN(gesamtPreis)) {
-//         gesamtPreis = 0;
-//     }
-//     var gesamtPreisSession = parseFloat(sessionStorage.getItem('gesamtPreis'));
-//     if (isNaN(gesamtPreisSession)) {
-//         gesamtPreisSession = 0;
-//     }
-//     gesamtPreisSession += gesamtPreis;
-//     sessionStorage.setItem('gesamtPreis', gesamtPreisSession);
-// }
-
-// var days = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag"];
-
-// days.forEach(function(day) {
-//     chImage(day);
-// });
-
-var totalPrice = 0;
 function chImageMontag() {
     // Elemente auswählen
     var selectList = document.getElementById("option_name_Montag");
@@ -130,7 +85,7 @@ function chImageMontag() {
             container.innerHTML = imageURL;
         }
     };
-    xhr.open("GET", `images.php?id=${optionID}` , true);
+    xhr.open("GET", "images.php?id=" + optionID , true);
     xhr.send();
 }
 
@@ -151,7 +106,7 @@ function chImageDienstag() {
             container.innerHTML = imageURL;
         }
     };
-    xhr.open("GET", `images.php?id=${optionID}`, true);
+    xhr.open("GET", "images.php?id=" + optionID, true);
     xhr.send();
 }
 

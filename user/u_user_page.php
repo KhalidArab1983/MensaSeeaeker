@@ -221,18 +221,18 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                     <select class="w-50 h-50" name="option_name_<?php echo $day; ?>" id="option_name_<?php echo $day; ?>"  onChange="chImage<?php echo $day;?>(); calculateTotalPrice(this);">
                                         <!-- <option></option> -->
                                         <?php 
-                                            // if($$day == 1){
-                                            //     // Send query to database to get School Classes
-                                            //     $sql = "SELECT id, option_name, image_filename, data, day, price FROM tbl_option WHERE price = 0.00 AND  day = '" .$day."'";
-                                            //     $result = mysqli_query($conn, $sql);
-                                            //     // Include each result as an option tag in the drop-down list
-                                            //     $row = mysqli_fetch_assoc($result);
-                                            //     $option_name = $row['option_name'];
-                                            //     $data = $row['data'];
-                                            //     $price = $row['price'];
-                                            //     $option_id = $row['id'];
-                                            //     echo '<option value="' . $option_id . '">'. $option_id ."-". $option_name . "-" . $price . '€</option>';  
-                                            // }else{
+                                            if($$day == 1){
+                                                // Send query to database to get School Classes
+                                                $sql = "SELECT id, option_name, image_filename, data, day, price FROM tbl_option WHERE price = 0.00 AND  day = '" .$day."'";
+                                                $result = mysqli_query($conn, $sql);
+                                                // Include each result as an option tag in the drop-down list
+                                                $row = mysqli_fetch_assoc($result);
+                                                $option_name = $row['option_name'];
+                                                $data = $row['data'];
+                                                $price = $row['price'];
+                                                $option_id = $row['id'];
+                                                echo '<option value="' . $option_id . '">'. $option_id ."-". $option_name . "-" . $price . '€</option>';  
+                                            }else{
                                                 // Send query to database to get meals option
                                                 $sql = "SELECT id, option_name, image_filename, data, day, price FROM tbl_option WHERE day = '" .$day."'";
                                                 $result = mysqli_query($conn, $sql);
@@ -246,7 +246,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                                     echo '<option value="' . $option_id. '">'. $option_id ."-". $option_name . "-" . $price . '€</option>';
                                                     
                                                 }
-                                            // }
+                                            }
                                             
                                         ?>
                                     </select>
@@ -273,7 +273,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary w-25 btn-bestellen" id="bestellen" name="button" value="bestellen" onclick="unreichendeKontostand()"
                                     <?php 
-                                        // if($bestell_status == 1){echo "disabled";}
+                                        if($bestell_status == 1){echo "disabled";}
                                     ?>>
                                     Essen bestellen
                             </button>
