@@ -12,12 +12,27 @@ if (isset($_SESSION['user_id'])) {
 }
 date_default_timezone_set("Europe/Berlin");
 
-$week_count = date('W');
-// echo $week_count;
+// include ('./u_kontoZustand.php');
+include ('./bestell_insert.php');
+include ('./bestell_update.php');
+// include ('./total_preis.php');
+
+
+
+
+$sonntag = 'Sunday';
+$current_day = date('l');
+
 
 // $guthaben = "Das Guthaben ist unzureichend";
 
-// //um der gesamtpreis aus javaScript in der Variable totalPrice zu speichern 
+// //um der gesamtpreis aus javaScript in der Variable totalPrice zu speichern
+// if(isset($_SERVER['REQUEST_METHOD'])){
+//     $totalPrice = "";
+// }else{
+//     $totalPrice = number_format($_COOKIE['totalPrice'], 2);
+//     global $totalPrice;
+// }
 $totalPrice = number_format($_COOKIE['totalPrice'], 2);
 
 $stunden = 0;
@@ -36,10 +51,7 @@ if (isset($_SESSION['sessionTime'])) {
 
 
 
-// include ('./u_kontoZustand.php');
-include ('./bestell_insert.php');
-include ('./bestell_update.php');
-// include ('./total_preis.php');
+
 
 
 $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
@@ -52,22 +64,21 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
     mysqli_stmt_bind_param($bestell_stmt, "s", $user_id);
     mysqli_stmt_execute($bestell_stmt);
     $result = mysqli_stmt_get_result($bestell_stmt);
-    
-
     $bestellungen = array();
-
     while ($row = $result->fetch_assoc()){
         $bestellungen[] = $row;
     }
 
+    // $week_count = 14;
+    // echo $week_count;
 
-    
+    $woche_count = ($current_day == $sonntag)?$week_count = date('W') + 1 : $week_count = date('W');   
         //um die letzte Woche Bestellung abzurufen
     $letzteBestell = "(SELECT b.id, b.user_id, b.option_name, b.option_id, b.day, b.day_datum, b.week_count, b.bestelldatum, o.price
                         FROM tbl_bestellung b INNER JOIN tbl_option o ON o.id = b.option_id
-                        WHERE user_id = ? AND b.week_count = ? ORDER BY id DESC LIMIT 5) ORDER BY id ASC";
+                        WHERE b.user_id = ? AND b.week_count = ? ORDER BY id DESC LIMIT 5) ORDER BY id ASC";
     $letzte_bestell_stmt = mysqli_prepare($conn, $letzteBestell);
-    mysqli_stmt_bind_param($letzte_bestell_stmt, "ss", $user_id, $week_count);
+    mysqli_stmt_bind_param($letzte_bestell_stmt, "ii", $user_id, $woche_count);
     mysqli_stmt_execute($letzte_bestell_stmt);
     $result = mysqli_stmt_get_result($letzte_bestell_stmt);
     
@@ -94,7 +105,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
     if(isset($_POST['button']) && $_POST['button'] == 'bestellen'){
         $sql = "INSERT INTO tbl_auszahlung (auszahlung, user_id) VALUES (?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ss", $totalPrice, $user_id);
+        $stmt->bind_param("ss", $gesamtPreis, $user_id);
         $stmt->execute();
     }
 
@@ -155,6 +166,8 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
 
     // Kontostand zu berechnen
     $kontostand = $sumEinzahlung - $sumAuszahlung;
+
+    global $day;
 ?>
 
 
@@ -245,7 +258,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                     <button type="submit" class="btn btn-warning h-50 mb-2" name="button" id="<?php echo $day;?>" value="<?php echo $day;?>"
                                             <?php 
                                                 if($$day == 1){ echo "disabled";}
-                                                elseif($totalPrice > $kontostand){echo 'style="cursor: none; pointer-events: none;"';} 
+                                                // elseif($totalPrice > $kontostand){echo 'style="cursor: none; pointer-events: none;"';} 
                                             ?> >
                                             <h6 style="color:white;">Ändern</h6>
                                     </button>
@@ -266,7 +279,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                             <button type="submit" class="btn btn-primary w-25 btn-bestellen" id="bestellen" name="button" value="bestellen" onclick="unreichendeKontostand()"
                                     <?php 
                                         // if($bestell_status == 1){echo "disabled";}
-                                        if($totalPrice > $kontostand){echo 'style="cursor: none; pointer-events: none;"';}
+                                        // if($totalPrice > $kontostand){echo 'style="cursor: none; pointer-events: none;"';}
                                     ?>>
                                     Essen bestellen
                                     
@@ -506,33 +519,6 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                 pri.contentWindow.print();
             }
 
-            // var kontostand = "<?php echo $kontostand; ?>";
-
-            
-            // if(kontostand < 25){
-            //     alert('Ihr Guthaben ist sehr niedrig, bitte bald aufladen');
-            // }
-            
-
-
-
-            
-
-            // function unreichendeKontostand(event){
-            //     if(totalPrice > kontostand){
-            //         event.preventDefault();
-            //         alert('Das Guthaben reicht nicht aus, um den Kauf abzuschließen');
-            //     }
-            // }
-            // var btnBestellen = document.getElementById("bestellen");
-            // btnBestellen.addEventListener("click", unreichendeKontostand(event));
-
-
-            // function updateTotalPrice(select) {
-            //     var price = select.options[select.selectedIndex].getAttribute('data-price');
-            //     totalPrice += parseFloat(price);
-            //     document.getElementById("totalPrice").innerHTML = totalPrice.toFixed(2) + " €";
-            // }
 
             // Define an object to store the prices for each day
             var prices = {
@@ -543,10 +529,12 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                 Freitag: 0
             };
 
+            // Define a variable to store the total price
+            var totalPrice = 0;
+
             // Define a function to calculate the total price based on the selected options
             function calculateTotalPrice() {
-                var totalPrice = 0;
-
+                totalPrice = 0;
                 // Loop through each day
                 for (var day in prices) {
                     // Get the selected option for this day
@@ -562,25 +550,61 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                     // Add the price to the total price
                     totalPrice += price;
                 }
-                
                 // Update the total price display
                 document.getElementById("totalPrice").innerText = totalPrice.toFixed(2) + "€";
-                
                 // Return the total price
                 return totalPrice;
-                
             }
-
             // Call the calculateTotalPrice function whenever a new option is selected
             var selectLists = document.querySelectorAll("select");
             for (var i = 0; i < selectLists.length; i++) {
                 selectLists[i].addEventListener("change", function() {
-                    var totalPrice = calculateTotalPrice();
+                    totalPrice = calculateTotalPrice();
                     document.cookie = 'totalPrice='+totalPrice;
-                    
                 });
-                
             }
+
+            var totalPrice = "<?php echo $totalPrice; ?>";
+            // console.log(totalPreis);
+            var kontostand = "<?php echo $kontostand; ?>";
+
+            function unreichendeKontostand(event){
+                if(totalPrice > kontostand){
+                    event.preventDefault();
+                    alert('Das Guthaben reicht nicht aus, um den Kauf abzuschließen');
+                }
+                else if(totalPrice === 0.00){
+                    event.preventDefault();
+                    alert('bitte ein Gericht auswählen');
+                }
+            }
+            
+            var btnBestellen = document.getElementById("bestellen");
+            btnBestellen.addEventListener("click", unreichendeKontostand);
+            
+            if(kontostand < 25){
+                alert('Ihr Guthaben ist sehr niedrig, bitte bald aufladen');
+            }
+            
+            // var tag = "<?php echo $day; ?>";
+
+            // var day = document.getElementById(tag);
+
+            // console.log(day);
+
+
+            
+
+            
+
+
+            // function updateTotalPrice(select) {
+            //     var price = select.options[select.selectedIndex].getAttribute('data-price');
+            //     totalPrice += parseFloat(price);
+            //     document.getElementById("totalPrice").innerHTML = totalPrice.toFixed(2) + " €";
+            // }
+
+            
             
         </script>
         <script src="../js/popper.min.js"></script>
