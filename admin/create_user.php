@@ -107,7 +107,6 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
         $sql = "INSERT INTO tbl_user (klasse, plz, userName, firstName, lastName, email, phone, adresse, ortsteil, birthday, aktiv_ab, password, admin_id)
                 VALUES ('$klasse', '$plz', '$userName', '$firstName', '$lastName', '$email', '$phone', '$adresse', '$ortsteil', '$birthday', '$aktiv_ab', '$hashed_password', '{$admin_id}')";
         if(mysqli_query($conn, $sql)){
-            
             $mail = new PHPMailer();
             try {
                 // $mail->SMTPDebug = 2; 
@@ -131,7 +130,6 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
                                 passwort: <h3 style='color:blue'> $password</h3><br>
                                 Geben Sie die Daten im Anmeldeformular über den folgenden Link ein <a>abowisam.com</a><br>
                                 Bitte ändern Sie Ihr Passwort sofort nach der ersten Anmeldung.";  // Inhalt der E-Mail
-
                 // E-Mail senden
                 $mail->send();
                 echo 'Email sent successfully';
@@ -139,12 +137,13 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
             } catch (Exception $e) {
                 echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
             }
-
         }else{
             echo "Error: " . "<br>" . mysqli_error($conn);
         }
         mysqli_close($conn);
     }
+
+    
     if($button == "update"){
         if(empty($user_id) || $user_id == "Benutzer Name auswählen..."){
             $error = "Wählen Sie bitte einen Benutzer aus!";

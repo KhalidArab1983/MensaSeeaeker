@@ -150,8 +150,9 @@ $email = $row['email'];
 
 
 // include ('./u_kontoZustand.php');
-include ('./bestell_insert.php');
 include ('./bestell_update.php');
+include ('./bestell_insert.php');
+
 
 
 $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
@@ -379,7 +380,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                         <?php endforeach; ?>
                         
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary w-25 btn-bestellen" id="bestellen" name="button" value="bestellen"
+                            <button type="submit" class="btn btn-warning w-25 btn-bestellen" id="bestellen" name="button" value="bestellen"
                                     <?php 
                                         // if($bestell_status == 1){echo "disabled";}
                                     ?>>

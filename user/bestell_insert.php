@@ -78,6 +78,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
                 $stmt = $conn->prepare($sql);
                 $stmt->bind_param("ssssss", $user_id, $option_name, $option_id, $day, $date, $week_count);
                 $stmt->execute();
+                header("Location: danke.php");
             }else{
                 $week_count = date('W');
                 $sql = "INSERT INTO tbl_bestellung (user_id, option_name, option_id, day, day_datum, week_count) 
@@ -85,6 +86,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
                 $stmt = $conn->prepare($sql);
                 $stmt->bind_param("ssssss", $user_id, $option_name, $option_id, $day, $date, $week_count);
                 $stmt->execute();
+                header("Location: danke.php");
             }
             
         }
