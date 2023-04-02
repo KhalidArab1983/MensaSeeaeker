@@ -13,14 +13,12 @@ if (isset($_SESSION['user_id'])) {
 date_default_timezone_set("Europe/Berlin");
 
 $week_count = date('W');
+// echo $week_count;
 
+// $guthaben = "Das Guthaben ist unzureichend";
 
-if ($_SERVER["REQUEST_METHOD"]=="POST"){
-    $totalPrice = $_POST['totalPrice'];
-}else{
-    $totalPrice = "";
-}
-
+// //um der gesamtpreis aus javaScript in der Variable totalPrice zu speichern 
+$totalPrice = number_format($_COOKIE['totalPrice'], 2);
 
 $stunden = 0;
 $minuten = 0;
@@ -42,7 +40,6 @@ if (isset($_SESSION['sessionTime'])) {
 include ('./bestell_insert.php');
 include ('./bestell_update.php');
 // include ('./total_preis.php');
-
 
 
 $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
@@ -81,14 +78,10 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
         
     }
 
-    //SQL-Abfrage ausführen, um die Preise in der Spalte zu summieren
+    //SQL-Abfrage ausführen, um die Preise aus Datenbank in der Spalte zu summieren
     $query = "SELECT SUM(o.price) as total 
     FROM 
-        ( SELECT b.option_id 
-        FROM tbl_bestellung b 
-        WHERE b.user_id = $user_id 
-        ORDER BY b.bestelldatum 
-        DESC LIMIT 5 ) as b 
+        ( SELECT b.option_id FROM tbl_bestellung b WHERE b.user_id = $user_id ORDER BY b.bestelldatum DESC LIMIT 5 ) as b 
     JOIN tbl_option o ON o.id = b.option_id;";
     $result = mysqli_query($conn, $query);
     $row = mysqli_fetch_assoc($result);
@@ -110,7 +103,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
         if(isset($_POST['button']) && $_POST["button"] == $day){
             $sql = "UPDATE tbl_auszahlung SET auszahlung = ? WHERE user_id = ? ORDER BY id DESC LIMIT 1";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ss", $totalPrice, $user_id);
+            $stmt->bind_param("ss", $gesamtPreis, $user_id);
             $stmt->execute();
         }
     }
@@ -209,11 +202,10 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                 <div>
                     <div class="mb-3 text-center" style="display:flex; text-align:center">
                         <h2>Gesamt Preis: </h2>
-                        <div class="ms-4" style="font-size:30px; font-weight:bold; color:blue" name="totalPrice" id="totalPrice"></div>
+                        <div class="ms-4" style="font-size:30px; font-weight:bold; color:blue" name="totalPrice" id="totalPrice">0.00€</div>
                     </div>
                     <form id="bestellForm" action="u_user_page.php" method="POST">
                         <?php 
-                            $totalPrice= 0;
                             
                             foreach($days as $day): ?>
                                 <div class="mb-1" style="height:10vh">
@@ -253,7 +245,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                     <button type="submit" class="btn btn-warning h-50 mb-2" name="button" id="<?php echo $day;?>" value="<?php echo $day;?>"
                                             <?php 
                                                 if($$day == 1){ echo "disabled";}
-                                                // elseif($totalPreis > $kontostand){echo 'style="cursor: none; pointer-events: none;"';} 
+                                                elseif($totalPrice > $kontostand){echo 'style="cursor: none; pointer-events: none;"';} 
                                             ?> >
                                             <h6 style="color:white;">Ändern</h6>
                                     </button>
@@ -273,10 +265,13 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary w-25 btn-bestellen" id="bestellen" name="button" value="bestellen" onclick="unreichendeKontostand()"
                                     <?php 
-                                        if($bestell_status == 1){echo "disabled";}
+                                        // if($bestell_status == 1){echo "disabled";}
+                                        if($totalPrice > $kontostand){echo 'style="cursor: none; pointer-events: none;"';}
                                     ?>>
                                     Essen bestellen
+                                    
                             </button>
+                            <div name="guthaben"></div>
                         </div>
                         
                     </form>
@@ -511,17 +506,20 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                 pri.contentWindow.print();
             }
 
+            // var kontostand = "<?php echo $kontostand; ?>";
 
+            
             // if(kontostand < 25){
             //     alert('Ihr Guthaben ist sehr niedrig, bitte bald aufladen');
             // }
+            
 
 
 
-            // var kontostand = "<?php echo $kontostand; ?>";
+            
 
             // function unreichendeKontostand(event){
-            //     if(totalPreis > kontostand){
+            //     if(totalPrice > kontostand){
             //         event.preventDefault();
             //         alert('Das Guthaben reicht nicht aus, um den Kauf abzuschließen');
             //     }
@@ -570,6 +568,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                 
                 // Return the total price
                 return totalPrice;
+                
             }
 
             // Call the calculateTotalPrice function whenever a new option is selected
@@ -577,8 +576,12 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
             for (var i = 0; i < selectLists.length; i++) {
                 selectLists[i].addEventListener("change", function() {
                     var totalPrice = calculateTotalPrice();
+                    document.cookie = 'totalPrice='+totalPrice;
+                    
                 });
+                
             }
+            
         </script>
         <script src="../js/popper.min.js"></script>
         <script src="../js/bootstrap.min.js"></script>
