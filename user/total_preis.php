@@ -1,9 +1,9 @@
 
 <?php
 
-    include('../conn/db_conn.php');
+    // include('../conn/db_conn.php');
 
-    $totalPrice = $_GET["totalPrice"];
+    // $totalPrice = $_GET["totalPrice"];
 
     // // Überprüfen, ob die AJAX-Anfrage Daten übermittelt hat
     // if (isset($_POST["totalPreis"])) {
@@ -19,6 +19,12 @@
 
     // }
 
+
+    // Aktualisieren des Cookie-Werts auf der PHP-Seite
+$totalPrice = number_format($_COOKIE['totalPrice'], 2);
+
+// Senden der aktualisierten Preisinformationen als Antwort auf die AJAX-Anfrage
+echo $totalPrice;
 ?>
 
 

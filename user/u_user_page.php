@@ -18,7 +18,7 @@ include ('./bestell_update.php');
 // include ('./total_preis.php');
 
 
-
+$error = "";
 
 $sonntag = 'Sunday';
 $current_day = date('l');
@@ -26,14 +26,30 @@ $current_day = date('l');
 
 // $guthaben = "Das Guthaben ist unzureichend";
 
+// $totalPrice = "";
 // //um der gesamtpreis aus javaScript in der Variable totalPrice zu speichern
 // if(isset($_SERVER['REQUEST_METHOD'])){
 //     $totalPrice = "";
-// }else{
+// }
+// else{
 //     $totalPrice = number_format($_COOKIE['totalPrice'], 2);
 //     global $totalPrice;
 // }
+
+
+
+// // Speichern des Cookie-Werts in einer Sitzungsvariable
+// $_SESSION['totalPrice'] = $_COOKIE['totalPrice'];
+
+// // Aufrufen der Sitzungsvariable und Anzeigen des Werts auf der Seite
+// $totalPrice = $_SESSION['totalPrice'];
+// echo "Total price: " . $totalPrice;
+
+
+
 $totalPrice = number_format($_COOKIE['totalPrice'], 2);
+echo "Total: ".$totalPrice;
+
 
 $stunden = 0;
 $minuten = 0;
@@ -223,7 +239,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                             foreach($days as $day): ?>
                                 <div class="mb-1" style="height:10vh">
                                     <label for="option_name_<?php echo $day; ?>" style="width:115px; font-weight:bold"><?php echo $day;?>:</label>
-                                    <select class="w-50 h-50" name="option_name_<?php echo $day; ?>" id="option_name_<?php echo $day; ?>"  onChange="chImage<?php echo $day;?>(); calculateTotalPrice(this);">
+                                    <select class="w-50 h-50" name="option_name_<?php echo $day; ?>" id="option_name_<?php echo $day; ?>" onChange="chImage<?php echo $day;?>(); calculateTotalPrice(this);">
                                         <!-- <option></option> -->
                                         <?php 
                                             if($$day == 1){
@@ -258,7 +274,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                     <button type="submit" class="btn btn-warning h-50 mb-2" name="button" id="<?php echo $day;?>" value="<?php echo $day;?>"
                                             <?php 
                                                 if($$day == 1){ echo "disabled";}
-                                                // elseif($totalPrice > $kontostand){echo 'style="cursor: none; pointer-events: none;"';} 
+                                                elseif($totalPrice > $kontostand){echo 'style="cursor: none; pointer-events: none;"';} 
                                             ?> >
                                             <h6 style="color:white;">Ändern</h6>
                                     </button>
@@ -276,15 +292,18 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                         <?php endforeach; ?>
                         
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary w-25 btn-bestellen" id="bestellen" name="button" value="bestellen" onclick="unreichendeKontostand()"
+                            <button type="submit" class="btn btn-primary w-25 btn-bestellen" id="bestellen" name="button" value="bestellen"
                                     <?php 
                                         // if($bestell_status == 1){echo "disabled";}
-                                        // if($totalPrice > $kontostand){echo 'style="cursor: none; pointer-events: none;"';}
+                                        if($totalPrice > $kontostand){
+                                            echo 'style="cursor: none; pointer-events: none;"';
+                                            $error = "Das Guthaben reicht nicht aus, um den Kauf abzuschließen";
+                                        }
                                     ?>>
                                     Essen bestellen
                                     
                             </button>
-                            <div name="guthaben"></div>
+                            <div name="guthaben" class="error" ><?php echo $error; ?></div>
                         </div>
                         
                     </form>
@@ -519,6 +538,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                 pri.contentWindow.print();
             }
 
+            var kontostand = "<?php echo $kontostand; ?>";
 
             // Define an object to store the prices for each day
             var prices = {
@@ -554,6 +574,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                 document.getElementById("totalPrice").innerText = totalPrice.toFixed(2) + "€";
                 // Return the total price
                 return totalPrice;
+                
             }
             // Call the calculateTotalPrice function whenever a new option is selected
             var selectLists = document.querySelectorAll("select");
@@ -564,23 +585,21 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                 });
             }
 
-            var totalPrice = "<?php echo $totalPrice; ?>";
-            // console.log(totalPreis);
-            var kontostand = "<?php echo $kontostand; ?>";
-
-            function unreichendeKontostand(event){
-                if(totalPrice > kontostand){
-                    event.preventDefault();
-                    alert('Das Guthaben reicht nicht aus, um den Kauf abzuschließen');
-                }
-                else if(totalPrice === 0.00){
-                    event.preventDefault();
-                    alert('bitte ein Gericht auswählen');
-                }
-            }
             
-            var btnBestellen = document.getElementById("bestellen");
-            btnBestellen.addEventListener("click", unreichendeKontostand);
+
+            // function unreichendeKontostand(event){
+            //     if(totalPrice > kontostand){
+            //         event.preventDefault();
+            //         alert('Das Guthaben reicht nicht aus, um den Kauf abzuschließen');
+            //     }
+            //     else if(totalPrice === 0.00){
+            //         event.preventDefault();
+            //         alert('bitte ein Gericht auswählen');
+            //     }
+            // }
+            
+            // var btnBestellen = document.getElementById("bestellen");
+            // btnBestellen.addEventListener("click", unreichendeKontostand);
             
             if(kontostand < 25){
                 alert('Ihr Guthaben ist sehr niedrig, bitte bald aufladen');
