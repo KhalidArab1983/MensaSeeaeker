@@ -172,8 +172,6 @@ function chImageFreitag() {
 
 
 
-
-
 // Funktion, um Tab-Inhalt anzuzeigen
 function openTab(evt, tabName) {
 
@@ -236,3 +234,7 @@ function openSubTab(evt, subTabName) {
     evt.currentTarget.className += " active";
 
 }
+
+
+
+
