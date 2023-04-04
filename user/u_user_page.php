@@ -18,7 +18,6 @@ include ('./bestell_update.php');
 // include ('./total_preis.php');
 
 
-$error = "";
 
 $sonntag = 'Sunday';
 $current_day = date('l');
@@ -47,8 +46,8 @@ $current_day = date('l');
 
 
 
-$totalPrice = number_format($_COOKIE['totalPrice'], 2);
-echo "Total: ".$totalPrice;
+// $totalPrice = number_format($_COOKIE['totalPrice'], 2);
+// echo "Total: ".$totalPrice;
 
 
 $stunden = 0;
@@ -239,21 +238,21 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                             foreach($days as $day): ?>
                                 <div class="mb-1" style="height:10vh">
                                     <label for="option_name_<?php echo $day; ?>" style="width:115px; font-weight:bold"><?php echo $day;?>:</label>
-                                    <select class="w-50 h-50" name="option_name_<?php echo $day; ?>" id="option_name_<?php echo $day; ?>" onChange="chImage<?php echo $day;?>(); calculateTotalPrice(this);">
+                                    <select class="w-50 h-50" name="option_name_<?php echo $day; ?>" id="option_name_<?php echo $day; ?>" onChange="chImage<?php echo $day;?>(); calculateTotalPrice(this);" onclick="unreichendeKontostand()">
                                         <!-- <option></option> -->
                                         <?php 
-                                            if($$day == 1){
-                                                // Send query to database to get School Classes
-                                                $sql = "SELECT id, option_name, image_filename, data, day, price FROM tbl_option WHERE price = 0.00 AND  day = '" .$day."'";
-                                                $result = mysqli_query($conn, $sql);
-                                                // Include each result as an option tag in the drop-down list
-                                                $row = mysqli_fetch_assoc($result);
-                                                $option_name = $row['option_name'];
-                                                $data = $row['data'];
-                                                $price = $row['price'];
-                                                $option_id = $row['id'];
-                                                echo '<option value="' . $option_id . '">'. $option_id ."-". $option_name . "-" . $price . '€</option>';  
-                                            }else{
+                                            // if($$day == 1){
+                                            //     // Send query to database to get School Classes
+                                            //     $sql = "SELECT id, option_name, image_filename, data, day, price FROM tbl_option WHERE price = 0.00 AND  day = '" .$day."'";
+                                            //     $result = mysqli_query($conn, $sql);
+                                            //     // Include each result as an option tag in the drop-down list
+                                            //     $row = mysqli_fetch_assoc($result);
+                                            //     $option_name = $row['option_name'];
+                                            //     $data = $row['data'];
+                                            //     $price = $row['price'];
+                                            //     $option_id = $row['id'];
+                                            //     echo '<option value="' . $option_id . '">'. $option_id ."-". $option_name . "-" . $price . '€</option>';  
+                                            // }else{
                                                 // Send query to database to get meals option
                                                 $sql = "SELECT id, option_name, image_filename, data, day, price FROM tbl_option WHERE day = '" .$day."'";
                                                 $result = mysqli_query($conn, $sql);
@@ -267,14 +266,14 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                                     echo '<option value="' . $option_id. '">'. $option_id ."-". $option_name . "-" . $price . '€</option>';
                                                     
                                                 }
-                                            }
+                                            // }
                                             
                                         ?>
                                     </select>
                                     <button type="submit" class="btn btn-warning h-50 mb-2" name="button" id="<?php echo $day;?>" value="<?php echo $day;?>"
                                             <?php 
                                                 if($$day == 1){ echo "disabled";}
-                                                elseif($totalPrice > $kontostand){echo 'style="cursor: none; pointer-events: none;"';} 
+                                                // elseif($totalPrice > $kontostand){echo 'style="cursor: none; pointer-events: none;"';} 
                                             ?> >
                                             <h6 style="color:white;">Ändern</h6>
                                     </button>
@@ -295,15 +294,15 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                             <button type="submit" class="btn btn-primary w-25 btn-bestellen" id="bestellen" name="button" value="bestellen"
                                     <?php 
                                         // if($bestell_status == 1){echo "disabled";}
-                                        if($totalPrice > $kontostand || $totalPrice == 0.00){
-                                            echo 'style="cursor: none; pointer-events: none;"';
-                                            $error = "Das Guthaben reicht nicht aus, um den Kauf abzuschließen";
-                                        }
+                                        // if($totalPrice > $kontostand || $totalPrice == 0.00){
+                                        //     echo 'style="cursor: none; pointer-events: none;"';
+                                        //     $error = "Das Guthaben reicht nicht aus, um den Kauf abzuschließen";
+                                        // }
                                     ?>>
                                     Essen bestellen
                                     
                             </button>
-                            <div name="guthaben" class="error" ><?php echo $error; ?></div>
+                            <div name="guthaben" id="guthaben" class="error" ></div>
                         </div>
                     </form>
                 </div>
@@ -340,15 +339,15 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                     <?php
                         if ($kontostand < 40 && $kontostand > 18){
                             echo '<span style="color:orange; font-weight:bold">';
-                                echo $kontostand; 
+                                echo number_format($kontostand, 2); 
                             echo '€</span>';
                         }elseif($kontostand < 18){
                             echo '<span style="color:red; font-weight:bold">';
-                                echo $kontostand; 
+                                echo number_format($kontostand, 2); 
                             echo '€</span>';
                         }else{
                             echo '<span style="color:green; font-weight:bold">';
-                                echo $kontostand; 
+                                echo number_format($kontostand, 2); 
                             echo '€</span>';
                         }
                         
@@ -538,7 +537,10 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
             }
 
             var kontostand = "<?php echo $kontostand; ?>";
+            var btnBestellen = document.getElementById('bestellen');
+            var guthabenError = document.getElementById('guthaben');
 
+            console.log(kontostand);
             // Define an object to store the prices for each day
             var prices = {
                 Montag: 0,
@@ -580,30 +582,36 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
             for (var i = 0; i < selectLists.length; i++) {
                 selectLists[i].addEventListener("change", function() {
                     totalPrice = calculateTotalPrice();
-                    document.cookie = 'totalPrice='+totalPrice;
+                    price = calculateTotalPrice();
+                    // document.cookie = 'totalPrice='+totalPrice;
+                    if(totalPrice > kontostand){
+                        btnBestellen.style = 'cursor: none; pointer-events: none;';
+                        guthabenError.innerHTML = "Das Guthaben reicht nicht aus, um den Kauf abzuschließen";
+                    }else{
+                        btnBestellen.style = 'cursor: pointer; pointer-events: visible;';
+                        guthabenError.innerHTML = "";
+                    }
+
                 });
             }
 
             
-
-            // function unreichendeKontostand(event){
-            //     if(totalPrice > kontostand){
-            //         event.preventDefault();
-            //         alert('Das Guthaben reicht nicht aus, um den Kauf abzuschließen');
-            //     }
-            //     else if(totalPrice === 0.00){
-            //         event.preventDefault();
-            //         alert('bitte ein Gericht auswählen');
-            //     }
-            // }
-            
+            function unreichendeKontostand(event){
+                if(kontostand === 0){
+                    event.preventDefault();
+                    alert('Das Guthaben reicht nicht aus, um den Kauf abzuschließen');
+                }
+            }
             // var btnBestellen = document.getElementById("bestellen");
-            // btnBestellen.addEventListener("click", unreichendeKontostand);
+            btnBestellen.addEventListener("click", unreichendeKontostand);
+            
             
             if(kontostand < 25){
                 alert('Ihr Guthaben ist sehr niedrig, bitte bald aufladen');
             }
-            
+            // else if(kontostand === 0.00){
+            //     btnBestellen.disabled = true;
+            // }
             // var tag = "<?php echo $day; ?>";
 
             // var day = document.getElementById(tag);
