@@ -295,7 +295,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                             <button type="submit" class="btn btn-primary w-25 btn-bestellen" id="bestellen" name="button" value="bestellen"
                                     <?php 
                                         // if($bestell_status == 1){echo "disabled";}
-                                        if($totalPrice > $kontostand){
+                                        if($totalPrice > $kontostand || $totalPrice == 0.00){
                                             echo 'style="cursor: none; pointer-events: none;"';
                                             $error = "Das Guthaben reicht nicht aus, um den Kauf abzuschließen";
                                         }
@@ -305,7 +305,6 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                             </button>
                             <div name="guthaben" class="error" ><?php echo $error; ?></div>
                         </div>
-                        
                     </form>
                 </div>
             </div>

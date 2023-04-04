@@ -1,30 +1,23 @@
 
 <?php
 
-    // include('../conn/db_conn.php');
-
-    // $totalPrice = $_GET["totalPrice"];
-
-    // // Überprüfen, ob die AJAX-Anfrage Daten übermittelt hat
-    // if (isset($_POST["totalPreis"])) {
-    //     // Die übermittelten Daten verarbeiten
-    //     $totalPrice = $_POST["totalPrice"];
-
-    //     // Hier können Sie die $totalPreis Variable verwenden
-    //     echo "Totalpreis ist: " . $totalPreis;
-
-    // } else {
-    
-    //     echo "Keine Daten übermittelt";
-
-    // }
+include('../conn/db_conn.php');
 
 
-    // Aktualisieren des Cookie-Werts auf der PHP-Seite
-$totalPrice = number_format($_COOKIE['totalPrice'], 2);
+if ($_SERVER["REQUEST_METHOD"]=="POST"){
+    $option_name = $_POST['option_name'];
+}else{
+    $option_name = "";
+}
 
-// Senden der aktualisierten Preisinformationen als Antwort auf die AJAX-Anfrage
-echo $totalPrice;
+if(isset($_GET['id'])){
+
+    $selectList = $_GET["id"];
+    // Update the variable in PHP
+    $totalPrice = $selectList;
+
+    echo "gesamt: ". $totalPrice;
+}
 ?>
 
 
