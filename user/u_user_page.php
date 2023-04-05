@@ -241,18 +241,18 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                     <select class="w-50 h-50" name="option_name_<?php echo $day; ?>" id="option_name_<?php echo $day; ?>" onChange="chImage<?php echo $day;?>(); calculateTotalPrice(this);">
                                         <!-- <option></option> -->
                                         <?php 
-                                            // if($$day == 1){
-                                            //     // Send query to database to get School Classes
-                                            //     $sql = "SELECT id, option_name, image_filename, data, day, price FROM tbl_option WHERE price = 0.00 AND  day = '" .$day."'";
-                                            //     $result = mysqli_query($conn, $sql);
-                                            //     // Include each result as an option tag in the drop-down list
-                                            //     $row = mysqli_fetch_assoc($result);
-                                            //     $option_name = $row['option_name'];
-                                            //     $data = $row['data'];
-                                            //     $price = $row['price'];
-                                            //     $option_id = $row['id'];
-                                            //     echo '<option value="' . $option_id . '">'. $option_id ."-". $option_name . "-" . $price . '€</option>';  
-                                            // }else{
+                                            if($$day == 1){
+                                                // Send query to database to get School Classes
+                                                $sql = "SELECT id, option_name, image_filename, data, day, price FROM tbl_option WHERE price = 0.00 AND  day = '" .$day."'";
+                                                $result = mysqli_query($conn, $sql);
+                                                // Include each result as an option tag in the drop-down list
+                                                $row = mysqli_fetch_assoc($result);
+                                                $option_name = $row['option_name'];
+                                                $data = $row['data'];
+                                                $price = $row['price'];
+                                                $option_id = $row['id'];
+                                                echo '<option value="' . $option_id . '">'. $option_id ."-". $option_name . "-" . $price . '€</option>';  
+                                            }else{
                                                 // Send query to database to get meals option
                                                 $sql = "SELECT id, option_name, image_filename, data, day, price FROM tbl_option WHERE day = '" .$day."'";
                                                 $result = mysqli_query($conn, $sql);
@@ -266,7 +266,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                                     echo '<option value="' . $option_id. '">'. $option_id ."-". $option_name . "-" . $price . '€</option>';
                                                     
                                                 }
-                                            // }
+                                            }
                                             
                                         ?>
                                     </select>
@@ -293,7 +293,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary w-25 btn-bestellen" id="bestellen" name="button" value="bestellen"
                                     <?php 
-                                        // if($bestell_status == 1){echo "disabled";}
+                                        if($bestell_status == 1){echo "disabled";}
                                         // if($totalPrice > $kontostand || $totalPrice == 0.00){
                                         //     echo 'style="cursor: none; pointer-events: none;"';
                                         //     $error = "Das Guthaben reicht nicht aus, um den Kauf abzuschließen";
@@ -538,32 +538,33 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
 
             
 
-            var btnMontag = document.getElementById('Montag');
-            var btnDienstag = document.getElementById('Dienstag');
-            var btnMittwoch = document.getElementById('Mittwoch');
-            var btnDonnerstag = document.getElementById('Donnerstag');
-            var btnFreitag = document.getElementById('Freitag');
+            // var btnMontag = document.getElementById('Montag');
+            // var btnDienstag = document.getElementById('Dienstag');
+            // var btnMittwoch = document.getElementById('Mittwoch');
+            // var btnDonnerstag = document.getElementById('Donnerstag');
+            // var btnFreitag = document.getElementById('Freitag');
 
-            var statusMontag = "<?php echo $Montag; ?>";
-            var statusDienstag = "<?php echo $Dienstag; ?>";
-            var statusMittwoch = "<?php echo $Mittwoch; ?>";
-            var statusDonnerstag = "<?php echo $Donnerstag; ?>";
-            var statusFreitag = "<?php echo $Freitag; ?>";
+            
 
-            // var tagStatus = "<?php echo $$day; ?>";
+            
             var kontostand = "<?php echo $kontostand; ?>";
             var btnBestellen = document.getElementById('bestellen');
             var guthabenError = document.getElementById('guthaben');
+            var bestellStatus = "<?php echo $bestell_status; ?>"
 
-
+            if(bestellStatus == 1){
+                btnBestellen.disabled = true;
+            }
             if(kontostand == 0){
                 btnBestellen.disabled = true;
                 btnBestellen.style.cursor = 'not-allowed';
                 guthabenError.innerHTML = "Ihr aktuelles Guthaben ist 0.00€, bitte laden Sie es auf, um Ihren Einkauf abzuschließen.";
             }else{
-                btnBestellen.disabled = false;
-                btnBestellen.style.cursor = 'pointer';
-                guthabenError.innerHTML = "";
+                if(bestellStatus == 0){
+                    btnBestellen.disabled = false;
+                    btnBestellen.style.cursor = 'pointer';
+                    guthabenError.innerHTML = "";
+                }
             }
             
 
@@ -607,84 +608,118 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                     totalPrice = calculateTotalPrice();
                     price = calculateTotalPrice();
                     // document.cookie = 'totalPrice='+totalPrice;
+
+                    if(bestellStatus == 1){
+                        btnBestellen.disabled = true;
+                    }
                     if(totalPrice > kontostand){
                         btnBestellen.disabled = true;
                         btnBestellen.style = 'cursor: none; pointer-events: none;';
-                        guthabenError.innerHTML = "Das Guthaben reicht nicht aus, um den Kauf abzuschließen";
+                        if(bestellStatus == 1){
+                            guthabenError.innerHTML = "Das Guthaben reicht nicht aus, um den Kauf abzuschließen";
+                        }
+                        
                     }
                     else{
-                        btnBestellen.disabled = false;
-                        btnBestellen.style = 'cursor: pointer; pointer-events: visible;';
-                        guthabenError.innerHTML = "";
+                        if(bestellStatus == 0){
+                            btnBestellen.disabled = false;
+                            btnBestellen.style = 'cursor: pointer; pointer-events: visible;';
+                            guthabenError.innerHTML = "";
+                        }
                     }
                     
 
+                    var statusMontag = "<?php echo $Montag; ?>";
+                    var statusDienstag = "<?php echo $Dienstag; ?>";
+                    var statusMittwoch = "<?php echo $Mittwoch; ?>";
+                    var statusDonnerstag = "<?php echo $Donnerstag; ?>";
+                    var statusFreitag = "<?php echo $Freitag; ?>";
 
-                    days = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag'];
-                    days.forEach(function(day){
-
-                        if(statusMontag == 1){
-                            btnMontag.disabled = true;
-                        }
-                        if(totalPrice > kontostand){
-                            btnMontag.disabled = true;
-                        }else{
-                            if(statusMontag == 0){
-                                btnMontag.disabled = false;
-                            }
+                    var days = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag"];
+                    var tage = [statusMontag, statusDienstag, statusMittwoch, statusDonnerstag, statusFreitag];
+                    for(var i = 0; i < days.length; i++){
+                        for(var j = 0; j < tage.length; j++){
+                            var btnUpdate = document.getElementById(days[i]);
+                            var statusUpdate = tage[j];
                             
-                        }
-
-
-                        if(statusDienstag == 1){
-                            btnDienstag.disabled = true;
-                        }
-                        if(totalPrice > kontostand){
-                            btnDienstag.disabled = true;
-                        }else{
-                            if(statusDienstag == 0){
-                                btnDienstag.disabled = false;
+                            if(statusUpdate == 1 || totalPrice > kontostand){
+                                btnUpdate.disabled = true;
                             }
+                            else{
+                                if(statusUpdate == 0){
+                                    btnUpdate.disabled = false;
+                                    guthabenError.innerHTML = "";
+                                }
+                            }
+                        }
+                    }
+                        // if(statusMontag == 1){
+                        //     btnMontag.disabled = true;
+                        // }
+                        // if(totalPrice > kontostand){
+                        //     btnMontag.disabled = true;
+                        // }else{
+                        //     if(statusMontag == 0){
+                        //         btnMontag.disabled = false;
+                        //         guthabenError.innerHTML = "";
+                        //     }
                             
-                        }
+                        // }
 
 
-                        if(statusMittwoch == 1){
-                            btnMittwoch.disabled = true;
-                        }
-                        if(totalPrice > kontostand){
-                            btnMittwoch.disabled = true;
-                        }else{
-                            if(statusMittwoch == 0){
-                                btnMittwoch.disabled = false;
-                            }
+                        // if(statusDienstag == 1){
+                        //     btnDienstag.disabled = true;
+                        // }
+                        // if(totalPrice > kontostand){
+                        //     btnDienstag.disabled = true;
+                        // }else{
+                        //     if(statusDienstag == 0){
+                        //         btnDienstag.disabled = false;
+                        //         guthabenError.innerHTML = "";
+                        //     }
                             
-                        }
+                        // }
 
 
-                        if(statusDonnerstag == 1){
-                            btnDonnerstag.disabled = true;
-                        }
-                        if(totalPrice > kontostand){
-                            btnDonnerstag.disabled = true;
-                        }else{
-                            if(statusDonnerstag == 0){
-                                btnDonnerstag.disabled = false;
-                            }
+                        // if(statusMittwoch == 1){
+                        //     btnMittwoch.disabled = true;
+                        // }
+                        // if(totalPrice > kontostand){
+                        //     btnMittwoch.disabled = true;
+                        // }else{
+                        //     if(statusMittwoch == 0){
+                        //         btnMittwoch.disabled = false;
+                        //         guthabenError.innerHTML = "";
+                        //     }
+                            
+                        // }
 
-                        }
+
+                        // if(statusDonnerstag == 1){
+                        //     btnDonnerstag.disabled = true;
+                        // }
+                        // if(totalPrice > kontostand){
+                        //     btnDonnerstag.disabled = true;
+                        // }else{
+                        //     if(statusDonnerstag == 0){
+                        //         btnDonnerstag.disabled = false;
+                        //         guthabenError.innerHTML = "";
+                        //     }
+
+                        // }
 
 
-                        if(statusFreitag == 1){
-                            btnFreitag.disabled = true;
-                        }
-                        if(totalPrice > kontostand){
-                            btnFreitag.disabled = true;
-                        }else{
-                            if(statusFreitag == 0){
-                                btnFreitag.disabled = false;
-                            }
-                        }
+                        // if(statusFreitag == 1){
+                        //     btnFreitag.disabled = true;
+                        // }
+                        // if(totalPrice > kontostand){
+                        //     btnFreitag.disabled = true;
+                        // }else{
+                        //     if(statusFreitag == 0){
+                        //         btnFreitag.disabled = false;
+                        //         guthabenError.innerHTML = "";
+                        //     }
+                        // }
                         
                         
 
@@ -700,7 +735,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                         // }
 
                         
-                    });
+                    
 
                 });
             }
