@@ -536,8 +536,21 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                 pri.contentWindow.print();
             }
 
-
             
+
+            var btnMontag = document.getElementById('Montag');
+            var btnDienstag = document.getElementById('Dienstag');
+            var btnMittwoch = document.getElementById('Mittwoch');
+            var btnDonnerstag = document.getElementById('Donnerstag');
+            var btnFreitag = document.getElementById('Freitag');
+
+            var statusMontag = "<?php echo $Montag; ?>";
+            var statusDienstag = "<?php echo $Dienstag; ?>";
+            var statusMittwoch = "<?php echo $Mittwoch; ?>";
+            var statusDonnerstag = "<?php echo $Donnerstag; ?>";
+            var statusFreitag = "<?php echo $Freitag; ?>";
+
+            // var tagStatus = "<?php echo $$day; ?>";
             var kontostand = "<?php echo $kontostand; ?>";
             var btnBestellen = document.getElementById('bestellen');
             var guthabenError = document.getElementById('guthaben');
@@ -552,7 +565,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                 btnBestellen.style.cursor = 'pointer';
                 guthabenError.innerHTML = "";
             }
-            console.log(kontostand);
+            
 
 
 
@@ -604,20 +617,110 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                         btnBestellen.style = 'cursor: pointer; pointer-events: visible;';
                         guthabenError.innerHTML = "";
                     }
+                    
+
+
+                    days = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag'];
+                    days.forEach(function(day){
+
+                        if(statusMontag == 1){
+                            btnMontag.disabled = true;
+                        }
+                        if(totalPrice > kontostand){
+                            btnMontag.disabled = true;
+                        }else{
+                            if(statusMontag == 0){
+                                btnMontag.disabled = false;
+                            }
+                            
+                        }
+
+
+                        if(statusDienstag == 1){
+                            btnDienstag.disabled = true;
+                        }
+                        if(totalPrice > kontostand){
+                            btnDienstag.disabled = true;
+                        }else{
+                            if(statusDienstag == 0){
+                                btnDienstag.disabled = false;
+                            }
+                            
+                        }
+
+
+                        if(statusMittwoch == 1){
+                            btnMittwoch.disabled = true;
+                        }
+                        if(totalPrice > kontostand){
+                            btnMittwoch.disabled = true;
+                        }else{
+                            if(statusMittwoch == 0){
+                                btnMittwoch.disabled = false;
+                            }
+                            
+                        }
+
+
+                        if(statusDonnerstag == 1){
+                            btnDonnerstag.disabled = true;
+                        }
+                        if(totalPrice > kontostand){
+                            btnDonnerstag.disabled = true;
+                        }else{
+                            if(statusDonnerstag == 0){
+                                btnDonnerstag.disabled = false;
+                            }
+
+                        }
+
+
+                        if(statusFreitag == 1){
+                            btnFreitag.disabled = true;
+                        }
+                        if(totalPrice > kontostand){
+                            btnFreitag.disabled = true;
+                        }else{
+                            if(statusFreitag == 0){
+                                btnFreitag.disabled = false;
+                            }
+                        }
+                        
+                        
+
+
+
+
+                        // if(totalPrice > kontostand){
+                        //     btnUpdate.disabled = true;
+                        // }else if(tagStatus == 1){
+                        //     btnUpdate.disabled = true;
+                        // }else{
+                        //     btnUpdate.disabled = false;
+                        // }
+
+                        
+                    });
+
                 });
             }
             
-            
+            // console.log(totalPrice);
 
+
+            // days = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag'];
+            //         days.forEach(function(day){
+            //             console.log(day)
+            //         });
 
 
             if(kontostand < 25){
                 alert('Ihr Guthaben ist sehr niedrig, bitte bald aufladen');
             }
 
-            var tag = "<?php echo $day; ?>";
-            var day = document.getElementById(tag);
-            console.log(day);
+            // var tag = "<?php echo $day; ?>";
+            // var day = document.getElementById(tag);
+            // console.log(day);
 
         </script>
         <script src="../js/popper.min.js"></script>
