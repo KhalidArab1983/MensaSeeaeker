@@ -238,7 +238,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                             foreach($days as $day): ?>
                                 <div class="mb-1" style="height:10vh">
                                     <label for="option_name_<?php echo $day; ?>" style="width:115px; font-weight:bold"><?php echo $day;?>:</label>
-                                    <select class="w-50 h-50" name="option_name_<?php echo $day; ?>" id="option_name_<?php echo $day; ?>" onChange="chImage<?php echo $day;?>(); calculateTotalPrice(this);" onclick="unreichendeKontostand()">
+                                    <select class="w-50 h-50" name="option_name_<?php echo $day; ?>" id="option_name_<?php echo $day; ?>" onChange="chImage<?php echo $day;?>(); calculateTotalPrice(this);">
                                         <!-- <option></option> -->
                                         <?php 
                                             // if($$day == 1){
@@ -536,11 +536,29 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                 pri.contentWindow.print();
             }
 
+
+            
             var kontostand = "<?php echo $kontostand; ?>";
             var btnBestellen = document.getElementById('bestellen');
             var guthabenError = document.getElementById('guthaben');
 
+
+            if(kontostand == 0){
+                btnBestellen.disabled = true;
+                btnBestellen.style.cursor = 'not-allowed';
+                guthabenError.innerHTML = "Ihr aktuelles Guthaben ist 0.00€, bitte laden Sie es auf, um Ihren Einkauf abzuschließen.";
+            }else{
+                btnBestellen.disabled = false;
+                btnBestellen.style.cursor = 'pointer';
+                guthabenError.innerHTML = "";
+            }
             console.log(kontostand);
+
+
+
+
+
+
             // Define an object to store the prices for each day
             var prices = {
                 Montag: 0,
@@ -549,10 +567,6 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                 Donnerstag: 0,
                 Freitag: 0
             };
-
-            // Define a variable to store the total price
-            var totalPrice = 0;
-
             // Define a function to calculate the total price based on the selected options
             function calculateTotalPrice() {
                 totalPrice = 0;
@@ -561,13 +575,10 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                     // Get the selected option for this day
                     var selectList = document.getElementById("option_name_" + day);
                     var selectedOption = selectList.options[selectList.selectedIndex];
-                    
                     // Extract the price from the selected option
                     var price = parseFloat(selectedOption.text.split("-")[2].replace("€", ""));
-                    
                     // Update the price for this day in the prices object
                     prices[day] = price;
-                    
                     // Add the price to the total price
                     totalPrice += price;
                 }
@@ -575,7 +586,6 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                 document.getElementById("totalPrice").innerText = totalPrice.toFixed(2) + "€";
                 // Return the total price
                 return totalPrice;
-                
             }
             // Call the calculateTotalPrice function whenever a new option is selected
             var selectLists = document.querySelectorAll("select");
@@ -585,53 +595,30 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                     price = calculateTotalPrice();
                     // document.cookie = 'totalPrice='+totalPrice;
                     if(totalPrice > kontostand){
+                        btnBestellen.disabled = true;
                         btnBestellen.style = 'cursor: none; pointer-events: none;';
                         guthabenError.innerHTML = "Das Guthaben reicht nicht aus, um den Kauf abzuschließen";
-                    }else{
+                    }
+                    else{
+                        btnBestellen.disabled = false;
                         btnBestellen.style = 'cursor: pointer; pointer-events: visible;';
                         guthabenError.innerHTML = "";
                     }
-
                 });
             }
+            
+            
 
-            
-            function unreichendeKontostand(event){
-                if(kontostand === 0){
-                    event.preventDefault();
-                    alert('Das Guthaben reicht nicht aus, um den Kauf abzuschließen');
-                }
-            }
-            // var btnBestellen = document.getElementById("bestellen");
-            btnBestellen.addEventListener("click", unreichendeKontostand);
-            
-            
+
+
             if(kontostand < 25){
                 alert('Ihr Guthaben ist sehr niedrig, bitte bald aufladen');
             }
-            // else if(kontostand === 0.00){
-            //     btnBestellen.disabled = true;
-            // }
-            // var tag = "<?php echo $day; ?>";
 
-            // var day = document.getElementById(tag);
+            var tag = "<?php echo $day; ?>";
+            var day = document.getElementById(tag);
+            console.log(day);
 
-            // console.log(day);
-
-
-            
-
-            
-
-
-            // function updateTotalPrice(select) {
-            //     var price = select.options[select.selectedIndex].getAttribute('data-price');
-            //     totalPrice += parseFloat(price);
-            //     document.getElementById("totalPrice").innerHTML = totalPrice.toFixed(2) + " €";
-            // }
-
-            
-            
         </script>
         <script src="../js/popper.min.js"></script>
         <script src="../js/bootstrap.min.js"></script>
