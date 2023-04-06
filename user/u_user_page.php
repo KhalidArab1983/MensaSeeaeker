@@ -293,7 +293,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary w-25 btn-bestellen" id="bestellen" name="button" value="bestellen"
                                     <?php 
-                                        if($bestell_status == 1){echo "disabled";}
+                                        // if($bestell_status == 1){echo "disabled";}
                                         // if($totalPrice > $kontostand || $totalPrice == 0.00){
                                         //     echo 'style="cursor: none; pointer-events: none;"';
                                         //     $error = "Das Guthaben reicht nicht aus, um den Kauf abzuschließen";
@@ -538,11 +538,11 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
 
             
 
-            // var btnMontag = document.getElementById('Montag');
-            // var btnDienstag = document.getElementById('Dienstag');
-            // var btnMittwoch = document.getElementById('Mittwoch');
-            // var btnDonnerstag = document.getElementById('Donnerstag');
-            // var btnFreitag = document.getElementById('Freitag');
+            var btnMontag = document.getElementById('Montag');
+            var btnDienstag = document.getElementById('Dienstag');
+            var btnMittwoch = document.getElementById('Mittwoch');
+            var btnDonnerstag = document.getElementById('Donnerstag');
+            var btnFreitag = document.getElementById('Freitag');
 
             
 
@@ -616,7 +616,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                         btnBestellen.disabled = true;
                         btnBestellen.style = 'cursor: none; pointer-events: none;';
                         if(bestellStatus == 1){
-                            guthabenError.innerHTML = "Das Guthaben reicht nicht aus, um den Kauf abzuschließen";
+                            guthabenError.innerHTML = "Das Guthaben reicht nicht aus, um den Kauf abzuschließen oder Bestellungen aktualisieren.";
                         }
                         
                     }
@@ -635,127 +635,94 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                     var statusDonnerstag = "<?php echo $Donnerstag; ?>";
                     var statusFreitag = "<?php echo $Freitag; ?>";
 
-                    var days = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag"];
-                    var tage = [statusMontag, statusDienstag, statusMittwoch, statusDonnerstag, statusFreitag];
-                    for(var i = 0; i < days.length; i++){
-                        for(var j = 0; j < tage.length; j++){
-                            var btnUpdate = document.getElementById(days[i]);
-                            var statusUpdate = tage[j];
+                    // var days = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag"];
+                    // var tage = [statusMontag, statusDienstag, statusMittwoch, statusDonnerstag, statusFreitag];
+                    // for(var i = 0; i < days.length; i++){
+                    //     for(var j = 0; j < tage.length; j++){
+                    //         var btnUpdate = document.getElementById(days[i]);
+                    //         var statusUpdate = tage[j];
                             
-                            if(statusUpdate == 1 || totalPrice > kontostand){
-                                btnUpdate.disabled = true;
-                            }
-                            else{
-                                if(statusUpdate == 0){
-                                    btnUpdate.disabled = false;
-                                    guthabenError.innerHTML = "";
-                                }
+                    //         if(statusUpdate == 1 || totalPrice > kontostand){
+                    //             btnUpdate.disabled = true;
+                    //         }
+                    //         else{
+                    //             if(statusUpdate == 0){
+                    //                 btnUpdate.disabled = false;
+                    //                 guthabenError.innerHTML = "";
+                    //             }
+                    //         }
+                    //     }
+                    // }
+                        if(statusMontag == 1){
+                            btnMontag.disabled = true;
+                        }
+                        if(totalPrice > kontostand){
+                            btnMontag.disabled = true;
+                        }else{
+                            if(statusMontag == 0){
+                                btnMontag.disabled = false;
+                                guthabenError.innerHTML = "";
                             }
                         }
-                    }
-                        // if(statusMontag == 1){
-                        //     btnMontag.disabled = true;
-                        // }
-                        // if(totalPrice > kontostand){
-                        //     btnMontag.disabled = true;
-                        // }else{
-                        //     if(statusMontag == 0){
-                        //         btnMontag.disabled = false;
-                        //         guthabenError.innerHTML = "";
-                        //     }
-                            
-                        // }
 
 
-                        // if(statusDienstag == 1){
-                        //     btnDienstag.disabled = true;
-                        // }
-                        // if(totalPrice > kontostand){
-                        //     btnDienstag.disabled = true;
-                        // }else{
-                        //     if(statusDienstag == 0){
-                        //         btnDienstag.disabled = false;
-                        //         guthabenError.innerHTML = "";
-                        //     }
-                            
-                        // }
+                        if(statusDienstag == 1){
+                            btnDienstag.disabled = true;
+                        }
+                        if(totalPrice > kontostand){
+                            btnDienstag.disabled = true;
+                        }else{
+                            if(statusDienstag == 0){
+                                btnDienstag.disabled = false;
+                                guthabenError.innerHTML = "";
+                            }
+                        }
 
 
-                        // if(statusMittwoch == 1){
-                        //     btnMittwoch.disabled = true;
-                        // }
-                        // if(totalPrice > kontostand){
-                        //     btnMittwoch.disabled = true;
-                        // }else{
-                        //     if(statusMittwoch == 0){
-                        //         btnMittwoch.disabled = false;
-                        //         guthabenError.innerHTML = "";
-                        //     }
-                            
-                        // }
+                        if(statusMittwoch == 1){
+                            btnMittwoch.disabled = true;
+                        }
+                        if(totalPrice > kontostand){
+                            btnMittwoch.disabled = true;
+                        }else{
+                            if(statusMittwoch == 0){
+                                btnMittwoch.disabled = false;
+                                guthabenError.innerHTML = "";
+                            }
+                        }
 
 
-                        // if(statusDonnerstag == 1){
-                        //     btnDonnerstag.disabled = true;
-                        // }
-                        // if(totalPrice > kontostand){
-                        //     btnDonnerstag.disabled = true;
-                        // }else{
-                        //     if(statusDonnerstag == 0){
-                        //         btnDonnerstag.disabled = false;
-                        //         guthabenError.innerHTML = "";
-                        //     }
+                        if(statusDonnerstag == 1){
+                            btnDonnerstag.disabled = true;
+                        }
+                        if(totalPrice > kontostand){
+                            btnDonnerstag.disabled = true;
+                        }else{
+                            if(statusDonnerstag == 0){
+                                btnDonnerstag.disabled = false;
+                                guthabenError.innerHTML = "";
+                            }
+                        }
 
-                        // }
 
-
-                        // if(statusFreitag == 1){
-                        //     btnFreitag.disabled = true;
-                        // }
-                        // if(totalPrice > kontostand){
-                        //     btnFreitag.disabled = true;
-                        // }else{
-                        //     if(statusFreitag == 0){
-                        //         btnFreitag.disabled = false;
-                        //         guthabenError.innerHTML = "";
-                        //     }
-                        // }
+                        if(statusFreitag == 1){
+                            btnFreitag.disabled = true;
+                        }
+                        if(totalPrice > kontostand){
+                            btnFreitag.disabled = true;
+                        }else{
+                            if(statusFreitag == 0){
+                                btnFreitag.disabled = false;
+                                guthabenError.innerHTML = "";
+                            }
+                        }
                         
-                        
-
-
-
-
-                        // if(totalPrice > kontostand){
-                        //     btnUpdate.disabled = true;
-                        // }else if(tagStatus == 1){
-                        //     btnUpdate.disabled = true;
-                        // }else{
-                        //     btnUpdate.disabled = false;
-                        // }
-
-                        
-                    
-
                 });
             }
-            
-            // console.log(totalPrice);
-
-
-            // days = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag'];
-            //         days.forEach(function(day){
-            //             console.log(day)
-            //         });
-
 
             if(kontostand < 25){
                 alert('Ihr Guthaben ist sehr niedrig, bitte bald aufladen');
             }
-
-            // var tag = "<?php echo $day; ?>";
-            // var day = document.getElementById(tag);
-            // console.log(day);
 
         </script>
         <script src="../js/popper.min.js"></script>

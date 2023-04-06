@@ -353,7 +353,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
                                 while($row = mysqli_fetch_assoc($result)){
                                     $user_id = $row['id'];
                                     $userName = $row['userName'];
-                                    echo '<option value="' . $user_id . '">' . $user_id . "-" . $userName . '€</option>';
+                                    echo '<option value="' . $user_id . '">' . $user_id . "-" . $userName . '</option>';
                                 }
                             ?>
                         </select>
