@@ -12,60 +12,22 @@ if (isset($_SESSION['user_id'])) {
 }
 date_default_timezone_set("Europe/Berlin");
 
+
+// Um die Session Dauer zuzeigen
+if(!isset($_SESSION['startzeit'])){
+    $_SESSION['startzeit'] = time();
+}
+$vergangene_zeit = (time() - $_SESSION['startzeit']) / 60;
+$formatierte_zeit = gmdate("H:i:s", $vergangene_zeit * 60);
+
+
+
 // include ('./u_kontoZustand.php');
 include ('./bestell_insert.php');
 include ('./bestell_update.php');
-// include ('./total_preis.php');
-
-
 
 $sonntag = 'Sunday';
 $current_day = date('l');
-
-
-// $guthaben = "Das Guthaben ist unzureichend";
-
-// $totalPrice = "";
-// //um der gesamtpreis aus javaScript in der Variable totalPrice zu speichern
-// if(isset($_SERVER['REQUEST_METHOD'])){
-//     $totalPrice = "";
-// }
-// else{
-//     $totalPrice = number_format($_COOKIE['totalPrice'], 2);
-//     global $totalPrice;
-// }
-
-
-
-// // Speichern des Cookie-Werts in einer Sitzungsvariable
-// $_SESSION['totalPrice'] = $_COOKIE['totalPrice'];
-
-// // Aufrufen der Sitzungsvariable und Anzeigen des Werts auf der Seite
-// $totalPrice = $_SESSION['totalPrice'];
-// echo "Total price: " . $totalPrice;
-
-
-
-// $totalPrice = number_format($_COOKIE['totalPrice'], 2);
-// echo "Total: ".$totalPrice;
-
-
-$stunden = 0;
-$minuten = 0;
-$sekunden = 0;
-if (isset($_SESSION['sessionTime'])) {
-    $sessionTime = strtotime($_SESSION['sessionTime']);
-    $jetzt = time();
-    $zeitunterschied = $jetzt - $sessionTime;
-    $stunden = floor($zeitunterschied / 3600);
-    $minuten = floor(($zeitunterschied - ($stunden * 3600)) / 60);
-    $sekunden = $zeitunterschied - ($stunden * 3600) - ($minuten * 60);
-} else {
-    $_SESSION['sessionTime'] = date('H:i:s');
-}
-
-
-
 
 
 
@@ -84,11 +46,8 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
         $bestellungen[] = $row;
     }
 
-    // $week_count = 14;
-    // echo $week_count;
-
-    $woche_count = ($current_day == $sonntag)?$week_count = date('W') + 1 : $week_count = date('W');   
-        //um die letzte Woche Bestellung abzurufen
+    //um die letzte Woche Bestellung abzurufen
+    $woche_count = ($current_day == $sonntag)?$week_count = date('W') + 1 : $week_count = date('W'); 
     $letzteBestell = "(SELECT b.id, b.user_id, b.option_name, b.option_id, b.day, b.day_datum, b.week_count, b.bestelldatum, o.price
                         FROM tbl_bestellung b INNER JOIN tbl_option o ON o.id = b.option_id
                         WHERE b.user_id = ? AND b.week_count = ? ORDER BY id DESC LIMIT 5) ORDER BY id ASC";
@@ -96,9 +55,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
     mysqli_stmt_bind_param($letzte_bestell_stmt, "ii", $user_id, $woche_count);
     mysqli_stmt_execute($letzte_bestell_stmt);
     $result = mysqli_stmt_get_result($letzte_bestell_stmt);
-    
     $letzte_bestellungen = array();
-
     while ($row = $result->fetch_assoc()){
         $letzte_bestellungen[] = $row;
         
@@ -116,7 +73,6 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
 
 
     // um der gesamte Betrag von Bestellungen in die Tabelle tbl_auszahlung hinzufügen
-    // $current_time = date('Y-m-d H:i:s');
     if(isset($_POST['button']) && $_POST['button'] == 'bestellen'){
         $sql = "INSERT INTO tbl_auszahlung (auszahlung, user_id) VALUES (?, ?)";
         $stmt = $conn->prepare($sql);
@@ -207,8 +163,8 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                 </h3>
             </div>
             <div>
-                <p class="m-3"  id="sessionTime" style="font-size:20px">Seite aktualisieren um Sitzung Zeit zu zeigen:
-                    <span style="font-size:20px; font-weight:bold; color: green"><?php echo "$stunden:$minuten:$sekunden";?></span>
+                <p class="m-3"  id="startzeit" style="font-size:20px">Seite aktualisieren, um die Sitzungszeit anzuzeigen:
+                    <span style="font-size:20px; font-weight:bold; color: green"><?php echo $formatierte_zeit; ?></span>
                 </p>
             </div>
         </div>
@@ -233,13 +189,10 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                         <div class="ms-4" style="font-size:30px; font-weight:bold; color:blue" name="totalPrice" id="totalPrice">0.00€</div>
                     </div>
                     <form id="bestellForm" action="u_user_page.php" method="POST">
-                        <?php 
-                            
-                            foreach($days as $day): ?>
+                        <?php foreach($days as $day): ?>
                                 <div class="mb-1" style="height:10vh">
                                     <label for="option_name_<?php echo $day; ?>" style="width:115px; font-weight:bold"><?php echo $day;?>:</label>
                                     <select class="w-50 h-50" name="option_name_<?php echo $day; ?>" id="option_name_<?php echo $day; ?>" onChange="chImage<?php echo $day;?>(); calculateTotalPrice(this);">
-                                        <!-- <option></option> -->
                                         <?php 
                                             if($$day == 1){
                                                 // Send query to database to get School Classes
@@ -273,7 +226,6 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                     <button type="submit" class="btn btn-warning h-50 mb-2" name="button" id="<?php echo $day;?>" value="<?php echo $day;?>"
                                             <?php 
                                                 if($$day == 1){ echo "disabled";}
-                                                // elseif($totalPrice > $kontostand){echo 'style="cursor: none; pointer-events: none;"';} 
                                             ?> >
                                             <h6 style="color:white;">Ändern</h6>
                                     </button>
@@ -294,10 +246,6 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                             <button type="submit" class="btn btn-primary w-25 btn-bestellen" id="bestellen" name="button" value="bestellen"
                                     <?php 
                                         // if($bestell_status == 1){echo "disabled";}
-                                        // if($totalPrice > $kontostand || $totalPrice == 0.00){
-                                        //     echo 'style="cursor: none; pointer-events: none;"';
-                                        //     $error = "Das Guthaben reicht nicht aus, um den Kauf abzuschließen";
-                                        // }
                                     ?>>
                                     Essen bestellen
                                     
