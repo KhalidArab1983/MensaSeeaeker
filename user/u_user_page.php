@@ -484,16 +484,12 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                 pri.contentWindow.print();
             }
 
-            
 
             var btnMontag = document.getElementById('Montag');
             var btnDienstag = document.getElementById('Dienstag');
             var btnMittwoch = document.getElementById('Mittwoch');
             var btnDonnerstag = document.getElementById('Donnerstag');
             var btnFreitag = document.getElementById('Freitag');
-
-            
-
             
             var kontostand = "<?php echo $kontostand; ?>";
             var btnBestellen = document.getElementById('bestellen');
@@ -577,6 +573,8 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                     }
                     
 
+                    
+
                     var statusMontag = "<?php echo $Montag; ?>";
                     var statusDienstag = "<?php echo $Dienstag; ?>";
                     var statusMittwoch = "<?php echo $Mittwoch; ?>";
@@ -589,7 +587,6 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                     //     for(var j = 0; j < tage.length; j++){
                     //         var btnUpdate = document.getElementById(days[i]);
                     //         var statusUpdate = tage[j];
-                            
                     //         if(statusUpdate == 1 || totalPrice > kontostand){
                     //             btnUpdate.disabled = true;
                     //         }
@@ -664,7 +661,24 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                 guthabenError.innerHTML = "";
                             }
                         }
-                        
+
+
+                        // const days = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag"];
+
+                        // days.forEach(day => {
+                        // const btn = document.getElementById(day);
+                        // const status = "<?php echo "$ + day + "; ?>";
+
+                        // if (status == 1 || totalPrice > kontostand) {
+                        //     btn.disabled = true;
+                        // } else if (status == 0) {
+                        //     btn.disabled = false;
+                        //     guthabenError.innerHTML = "";
+                        // }
+                        // });
+
+
+
                 });
             }
 

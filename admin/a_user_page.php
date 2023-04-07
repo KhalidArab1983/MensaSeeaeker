@@ -136,14 +136,6 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
                                                 FROM tbl_bestellung AS b LEFT JOIN tbl_user AS u ON u.id = b.user_id WHERE u.userName = '$userName' 
                                                 ORDER BY b.bestelldatum DESC;";
                                         $result = mysqli_query($conn, $sql);
-                                        // $rowUser = mysqli_fetch_assoc($result);
-                                        // if($rowUser != null){
-                                        //     echo '<div>';
-                                        //         echo '<h4 style="float:left; margin-right: 5%">'. $rowUser['userName'] . '</h4>';
-                                        //         echo '<h4>'." ID: ". $rowUser['user_id'] . '</h4>';
-                                        //     echo '</div>';
-                                        // }
-                                        
                                         if($result->num_rows > 0){
                                             // Ausgabe der Bestellungen in einer Tabelle
                                             while ($row = mysqli_fetch_assoc($result)) {
@@ -341,24 +333,33 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
                 <div class="tab">
                     <button class="subtablinks active" onclick="openSubTab(event, 'einzahlungen')">Einzahlungen</button>
                     <button class="subtablinks" onclick="openSubTab(event, 'auszahlungen')">Auszahlungen</button>
+                    <button class="subtablinks" onclick="openSubTab(event, 'einzahlungenFiltern')">Einzahlungen des Benutzers</button>
+                    <button class="subtablinks" onclick="openSubTab(event, 'auszahlungenFiltern')">Auszahlungen des Benutzers</button>
                 </div>
                 <div id="einzahlungen" class="subtabcontent" > 
-                    <form method="post">
-                        <label for="einzahlungsbetrag">Betrag:</label>
-                        <input type="number" step="0.01" name="einzahlungsbetrag" id="einzahlungsbetrag">
-                        <select name="userEinzahlung" id="userEinzahlung">
-                            <?php 
-                                $sql = "SELECT id, userName FROM tbl_user";
-                                $result = mysqli_query($conn, $sql);
-                                while($row = mysqli_fetch_assoc($result)){
-                                    $user_id = $row['id'];
-                                    $userName = $row['userName'];
-                                    echo '<option value="' . $user_id . '">' . $user_id . "-" . $userName . '</option>';
-                                }
-                            ?>
-                        </select>
-                        <button type="submit" name="button" value="einzahlen">Einzahlen</button>
-                        
+                    <form method="post" class="col-12">
+                        <div class="m-1 col-4" style="float:left">
+                            <input type="number" class="form-control" style="float:left" step="0.01" name="einzahlungsbetrag" id="einzahlungsbetrag" placeholder="Der zu zahlende Betrag">
+                        </div>
+                        <div class="m-1 col-4" style="float:left">
+                            <input type="text" name="userName" class="form-control" id="searchInput" onkeyup="filterOptions()" placeholder="nach einem Benutzer suchen...">
+                        </div>
+                        <div class="m-2 col-8">
+                            <select class="form-control" name="userEinzahlung" id="userEinzahlung">
+                                <option>Benutzer Name auswählen...</option>
+                                <?php 
+                                    $sql = "SELECT id, userName FROM tbl_user";
+                                    $result = mysqli_query($conn, $sql);
+                                    while($row = mysqli_fetch_assoc($result)){
+                                        $user_id = $row['id'];
+                                        $userName = $row['userName'];
+                                        echo '<option value="' . $user_id . '">' . $user_id . "-" . $userName . '</option>';
+                                    }
+                                ?>
+                            </select>
+                        </div>
+                        <button type="submit" name="button" class="btn btn-warning m-1" value="einzahlen">Einzahlen</button>
+                        <!-- <button type="submit" name="button" class="btn btn-warning" value="filtern">Einzahlungen nach Benutzer filtern</button> -->
                     </form>
                     <h3>Einzahlungen</h3>
                     <table>
@@ -421,6 +422,56 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
                         </tbody>
                     </table>
                 </div>
+                <div id="einzahlungenFiltern" class="subtabcontent" style="display:none">
+                    <div class="container">
+                        <h3>Einzahlungen für einzelnen Benutzer</h3>
+                        <form method="get" style="float:left; margin-right:40%">
+                            <label for="user_id">Benutzername:</label>
+                            <input type="text" name="userName" id="user_id"> 
+                            <input type="submit" value="Suchen" >
+                        </form>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Benutzer Name</th>
+                                    <th>Einzahlungen</th>
+                                    <th>Einzahlungsdatum</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                    // Überprüfen, ob eine Suchanfrage gesendet wurde
+                                    if (isset($_GET['userName'])) {
+                                        // Benutzereingabe bereinigen
+                                        $userName = trim(mysqli_real_escape_string($conn, $_GET['userName']));
+                                        // Abrufen der Bestellungen für den angegebenen Benutzer
+                                        $sql = "SELECT u.userName, e.einzahlung, e.einzahlung_date FROM tbl_einzahlung e
+                                                LEFT JOIN tbl_user u ON u.id = e.user_id WHERE u.userName = '$userName'
+                                                ORDER BY e.einzahlung_date DESC";
+                                        $result = mysqli_query($conn, $sql);
+                                        if($result->num_rows > 0){
+                                            // Ausgabe der Bestellungen in einer Tabelle
+                                            while ($row = mysqli_fetch_assoc($result)) {
+                                                echo '<tr>';
+                                                    echo '<td>' . $row['userName'] . '</td>';
+                                                    echo '<td>' . $row['einzahlung'] . '€</td>';
+                                                    echo '<td>' . $row['einzahlung_date'] . '</td>';
+                                                echo '</tr>';
+                                            }
+                                        }else{
+                                            echo '<tr>';
+                                                echo '<td>Keine Einzahlungen für den Benutzer gefunden.</td>';
+                                            echo '</tr>';
+                                        }
+                                    }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="auszahlungenFiltern" class="subtabcontent" style="display:none">
+                    Auszahlungen für einzelnen Benutzer
+                </div>
             </div>
         </div>
         <div id="ddd" class="tabcontent">
@@ -437,8 +488,23 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
         <footer class="fixed-bottom footer">
             <p class="footer_text"><span>&copy; 2023 created by Khalid Arab</span></p>
         </footer>
+
+
         <script>
-            
+            function filterOptions() {
+                var input = document.getElementById("searchInput");
+                var filter = input.value.toUpperCase();
+                var select = document.getElementById("userEinzahlung");
+                var options = select.getElementsByTagName("option");
+                for (var i = 0; i < options.length; i++) {
+                    var optionText = options[i].text.toUpperCase();
+                    if (optionText.indexOf(filter) > -1) {
+                    options[i].style.display = "";
+                    } else {
+                    options[i].style.display = "none";
+                    }
+                }
+            }
 
         </script>
         <script src="../js/jquery-3.6.0.min.js"></script>

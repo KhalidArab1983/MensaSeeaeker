@@ -200,16 +200,7 @@ function openTab(evt, tabName) {
 
 }
 
-// Beim Laden der Seite den zuletzt aktiven Tab wiederherstellen
-window.onload = function() {
-    var activeTabIndex = localStorage.getItem("activeTabIndex");
-    if (activeTabIndex !== null) {
-        var tablinks = document.getElementsByClassName("tablinks");
-        if (activeTabIndex >= 0 && activeTabIndex < tablinks.length) {
-            tablinks[activeTabIndex].click();
-        }
-    }
-};
+
 
 
   // Funktion, um sub-Tab-Inhalt anzuzeigen
@@ -233,8 +224,26 @@ function openSubTab(evt, subTabName) {
     document.getElementById(subTabName).style.display = "block";
     evt.currentTarget.className += " active";
 
+    // Index des aktiven Tabs in den Browser-Cookies oder im Local Storage speichern
+    var activeSubTabIndex = Array.prototype.indexOf.call(subtablinks, evt.currentTarget);
+    localStorage.setItem("activeSubTabIndex", activeSubTabIndex);
 }
 
+// Beim Laden der Seite den zuletzt aktiven Tab wiederherstellen
+window.onload = function() {
+    var activeTabIndex = localStorage.getItem("activeTabIndex");
+    var activeSubTabIndex = localStorage.getItem("activeSubTabIndex");
 
-
-
+    if (activeTabIndex !== null) {
+        var tablinks = document.getElementsByClassName("tablinks");
+        if (activeTabIndex >= 0 && activeTabIndex < tablinks.length) {
+            tablinks[activeTabIndex].click();
+        }
+    }
+    if (activeSubTabIndex !== null) {
+        var subtablinks = document.getElementsByClassName("subtablinks");
+        if (activeSubTabIndex >= 0 && activeSubTabIndex < subtablinks.length) {
+            subtablinks[activeSubTabIndex].click();
+        }
+    }
+};
