@@ -23,8 +23,11 @@ Code in der reset_bestellstatus.php ist wie folgendes:
     $password = ""; // Database password
     $dbname = "mensa_seeaeker"; // Database name
     $db_port = "3306"; // Database Port
+
+
     // Create connection
     $conn = mysqli_connect($host, $username, $password, $dbname, $db_port);
+
     // Check connection
     if (!$conn) {
         die("Connection failed: " . mysqli_connect_error());
@@ -34,18 +37,21 @@ Code in der reset_bestellstatus.php ist wie folgendes:
     $samstag = 'Saturday';
     $current_day = date('l');
     $bestell_status = 0;
+    $update_status = 0;
             
-    if($current_day == $samstag){
-        // Aktiviere den Bestellbutton für Samstag
-        
-        // Reset user's bestell_status at the start of every week
-        // Add this task to a weekly cron job
-        $sql = "UPDATE tbl_user SET bestell_status = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("s", $bestell_status);
-        $stmt->execute();
-    }
 
+    // Aktiviere bestellButton für alle Benutzer am Sonntag
+    $sql = "UPDATE tbl_user SET bestell_status = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $bestell_status);
+    $stmt->execute();
+
+    // Aktiviere alle UpdateButtons für alle Benutzers am Sonntag
+    $updateSql = "UPDATE tbl_bestellstatus SET montag = ?, dienstag = ?, mittwoch = ?, donnerstag = ?, freitag = ?";
+    $updateStmt = $conn->prepare($updateSql);
+    $updateStmt->bind_param("sssss", $update_status, $update_status, $update_status, $update_status, $update_status);
+    $updateStmt->execute();
+    
 */
 
 
@@ -93,12 +99,12 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
             $stmt->execute();
         }
         
-        //um eine Datensatz für Update in der Tabelle tbl_bestellstatus für neuen Benutzer erstellen
-        $nullWert= 0;
-        $updateSql = "INSERT INTO tbl_bestellstatus (user_id, montag, dienstag, mittwoch, donnerstag, freitag) VALUES (?,?,?,?,?,?)";
-        $updateStmt = $conn->prepare($updateSql);
-        $updateStmt->bind_param("ssssss", $user_id, $nullWert, $nullWert, $nullWert, $nullWert, $nullWert);
-        $updateStmt->execute();
+        // //um eine Datensatz für Update in der Tabelle tbl_bestellstatus für neuen Benutzer erstellen
+        // $nullWert= 0;
+        // $updateSql = "INSERT INTO tbl_bestellstatus (user_id, montag, dienstag, mittwoch, donnerstag, freitag) VALUES (?,?,?,?,?,?)";
+        // $updateStmt = $conn->prepare($updateSql);
+        // $updateStmt->bind_param("ssssss", $user_id, $nullWert, $nullWert, $nullWert, $nullWert, $nullWert);
+        // $updateStmt->execute();
     }
     header("Location: danke.php");
 

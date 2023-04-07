@@ -7,6 +7,15 @@ $current_date = date('Y-m-d');
 $bestell_status_deaktiv = 1;
 
 if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
+
+    //um eine Datensatz für Update in der Tabelle tbl_bestellstatus für neuen Benutzer erstellen
+    $nullWert= 0;
+    $updateSql = "INSERT INTO tbl_bestellstatus (user_id, montag, dienstag, mittwoch, donnerstag, freitag) VALUES (?,?,?,?,?,?)";
+    $updateStmt = $conn->prepare($updateSql);
+    $updateStmt->bind_param("ssssss", $user_id, $nullWert, $nullWert, $nullWert, $nullWert, $nullWert);
+    $updateStmt->execute();
+
+
     if($current_time >= '22:00:00' && $current_day == 0 || $current_day > 0 && $current_day < 5){
         // Update Button für Montag deaktivieren
         $sql = "UPDATE tbl_bestellstatus SET montag = ? WHERE user_id = ?";

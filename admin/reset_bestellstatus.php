@@ -23,13 +23,14 @@ $bestell_status = 0;
 $update_status = 0;
         
 // if($current_day == $samstag){
-    // Aktiviere Alle Buttons am Samstag
 
+    // Aktiviere bestellButton für alle Benutzer am Sonntag
     $sql = "UPDATE tbl_user SET bestell_status = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $bestell_status);
     $stmt->execute();
 
+    // Aktiviere alle UpdateButtons für alle Benutzers am Sonntag
     $updateSql = "UPDATE tbl_bestellstatus SET montag = ?, dienstag = ?, mittwoch = ?, donnerstag = ?, freitag = ?";
     $updateStmt = $conn->prepare($updateSql);
     $updateStmt->bind_param("sssss", $update_status, $update_status, $update_status, $update_status, $update_status);

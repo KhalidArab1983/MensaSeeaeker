@@ -70,6 +70,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
         }else{
             echo "Error: " . "<br>" . mysqli_error($conn);
         }
+        mysqli_close($conn);
     }
     
     if(isset($_POST['ort_submitted'])){
@@ -79,6 +80,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
         }else{
             echo "Error: " . "<br>" . mysqli_error($conn);
         }
+        mysqli_close($conn);
     }
 
 
@@ -94,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
         }else{
             echo "Error: " . "<br>" . mysqli_error($conn);
         }
-
+        mysqli_close($conn);
     }
     if($button == "update"){
         
@@ -185,7 +187,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
         }
     }
 }
-mysqli_close($conn);
+
 
 
 ?>

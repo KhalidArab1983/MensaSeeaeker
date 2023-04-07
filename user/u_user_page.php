@@ -95,6 +95,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
     $statusRow = mysqli_fetch_assoc($statusBestell);
     $bestell_status = $statusRow['bestell_status'];
     
+
     // um die Update Status für jeden Tag aus der Tabelle tbl_bestellstatus abzurufen und es im Button zu benutzen ob 1 ist, dann deaktiviert der Button
     $updateSql = "SELECT montag, dienstag, mittwoch, donnerstag, freitag FROM tbl_bestellstatus WHERE user_id = $user_id";
     $updateResult = mysqli_query($conn, $updateSql);
@@ -483,8 +484,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                 pri.contentWindow.focus();
                 pri.contentWindow.print();
             }
-
-
+            
             var btnMontag = document.getElementById('Montag');
             var btnDienstag = document.getElementById('Dienstag');
             var btnMittwoch = document.getElementById('Mittwoch');
