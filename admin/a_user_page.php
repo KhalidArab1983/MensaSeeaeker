@@ -470,7 +470,51 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
                     </div>
                 </div>
                 <div id="auszahlungenFiltern" class="subtabcontent" style="display:none">
-                    Auszahlungen für einzelnen Benutzer
+                    <div class="container">
+                        <h3>Auszahlungen für einzelnen Benutzer</h3>
+                        <form method="get" style="float:left; margin-right:40%">
+                            <label for="user_id">Benutzername:</label>
+                            <input type="text" name="userName" id="user_id"> 
+                            <input type="submit" value="Suchen" >
+                        </form>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Benutzer Name</th>
+                                    <th>Einzahlungen</th>
+                                    <th>Einzahlungsdatum</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                    // Überprüfen, ob eine Suchanfrage gesendet wurde
+                                    if (isset($_GET['userName'])) {
+                                        // Benutzereingabe bereinigen
+                                        $userName = trim(mysqli_real_escape_string($conn, $_GET['userName']));
+                                        // Abrufen der Bestellungen für den angegebenen Benutzer
+                                        $sql = "SELECT u.userName, a.auszahlung, a.auszahlung_date FROM tbl_auszahlung a
+                                                LEFT JOIN tbl_user u ON u.id = a.user_id WHERE u.userName = '$userName'
+                                                ORDER BY a.auszahlung_date DESC";
+                                        $result = mysqli_query($conn, $sql);
+                                        if($result->num_rows > 0){
+                                            // Ausgabe der Bestellungen in einer Tabelle
+                                            while ($row = mysqli_fetch_assoc($result)) {
+                                                echo '<tr>';
+                                                    echo '<td>' . $row['userName'] . '</td>';
+                                                    echo '<td>' . $row['auszahlung'] . '€</td>';
+                                                    echo '<td>' . $row['auszahlung_date'] . '</td>';
+                                                echo '</tr>';
+                                            }
+                                        }else{
+                                            echo '<tr>';
+                                                echo '<td>Keine Auszahlungen für den Benutzer gefunden.</td>';
+                                            echo '</tr>';
+                                        }
+                                    }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
