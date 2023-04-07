@@ -70,7 +70,6 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
         }else{
             echo "Error: " . "<br>" . mysqli_error($conn);
         }
-        mysqli_close($conn);
     }
     
     if(isset($_POST['ort_submitted'])){
@@ -80,19 +79,22 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
         }else{
             echo "Error: " . "<br>" . mysqli_error($conn);
         }
-        mysqli_close($conn);
     }
+
+
+    // Hash the password
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
     if($button == "insert"){
         $sql = "INSERT INTO tbl_user (klasse, plz, userName, firstName, lastName, email, phone, adresse, ortsteil, birthday, password, admin_id)
-                VALUES ('$klasse', '$plz', '$userName', '$firstName', '$lastName', '$email', '$phone', '$adresse', '$ortsteil', '$birthday', '$password', '{$admin_id}')";
+                VALUES ('$klasse', '$plz', '$userName', '$firstName', '$lastName', '$email', '$phone', '$adresse', '$ortsteil', '$birthday', '$hashed_password', '{$admin_id}')";
         if(mysqli_query($conn, $sql)){
             echo "Schüler ist erfolgreich hinzugefügt";
             header("Location: create_user.php");
         }else{
             echo "Error: " . "<br>" . mysqli_error($conn);
         }
-        mysqli_close($conn);
+
     }
     if($button == "update"){
         
@@ -183,7 +185,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
         }
     }
 }
-
+mysqli_close($conn);
 
 
 ?>

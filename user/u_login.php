@@ -21,6 +21,8 @@ $errors = [
     'passwordError' => '',
     'invalidError' => ''
 ];
+
+
 if (isset($_POST['submit'])){
     if(empty($klasse)){
         $errors['klasseError'] = '* Bitte geben Sie die Klasse ein';
@@ -42,20 +44,30 @@ if (isset($_POST['submit'])){
         $email =        mysqli_real_escape_string($conn, $_POST['email']);
         $password =        mysqli_real_escape_string($conn, $_POST['password']);
 
+        // Hash the password
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
         //Check if the email and password are valid
-        $sql = "SELECT id, userName FROM tbl_user WHERE userName = '$userName' AND klasse = '$klasse' AND email = '$email' AND password = '$password'";
+        $sql = "SELECT id, userName, password FROM tbl_user WHERE userName = '$userName' AND klasse = '$klasse' AND email = '$email'";
         $result = mysqli_query($conn, $sql);
         if(mysqli_num_rows($result) == 1){
             $row= mysqli_fetch_assoc($result);
             $user_id = $row['id'];
             $userName = $row['userName'];
-            //Start a session for the user
-            session_start();
-            $_SESSION['user_id'] = $user_id;
-            $_SESSION['userName'] = $userName;
-            $_SESSION['loggedin'] = true;
-            header("Location: ./u_user_page.php");
-            exit;
+            $db_password = $row['password'];
+
+            // Verify the hashed password
+            if (password_verify($password, $hashed_password)) {
+                
+                //Start a session for the user
+                session_start();
+                $_SESSION['user_id'] = $user_id;
+                $_SESSION['userName'] = $userName;
+                $_SESSION['loggedin'] = true;
+                header("Location: ./u_user_page.php");
+                exit;
+            } else {
+                $errors['invalidError'] = 'Überprüfen Sie das Passwort';
+            }
         }else{
             $errors['invalidError'] = 'Überprüfen Sie die Eintragsinformationen, die Klasse, den Benutzernamen, die E-Mail-Adresse oder das Passwort';
         }

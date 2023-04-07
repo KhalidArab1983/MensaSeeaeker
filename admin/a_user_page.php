@@ -16,8 +16,10 @@ if (isset($_SESSION['admin_id'])) {
 
 date_default_timezone_set("Europe/Berlin");
 
+$sonntag = 'Sunday';
+$current_day = date('l');
 $week_count = date('W');
-
+echo $week_count;
 
 $userSql ="SELECT id FROM tbl_user";
 $result = mysqli_query($conn, $userSql);
@@ -106,11 +108,11 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
 
                 <div id="userBestellung" class="subtabcontent" >
                     <div class="container">
-                        <form method="get" style="float:left; margin-right:40%">
-                            <label for="user_id">Benutzername:</label>
-                            <!-- <input type="text" name="user_id" id="user_id"> -->
-                            <input type="text" name="userName" id="user_id"> 
-                            <input type="submit" value="Suchen" >
+                        <form method="get">
+                            <div class="col-4" style="display:flex">
+                                <input type="text" class="form-control m-1" name="userNameBestell" id="user_id" placeholder="nach einem Benutzer suchen..."> 
+                                <button type="submit" name="button" class="btn btn-warning m-1" value="Suchen">Suchen</button>
+                            </div>
                         </form>
                         <table>
                             <thead>
@@ -128,12 +130,12 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
                             <tbody>
                                 <?php
                                     // Überprüfen, ob eine Suchanfrage gesendet wurde
-                                    if (isset($_GET['userName'])) {
+                                    if (isset($_GET['userNameBestell'])) {
                                         // Benutzereingabe bereinigen
-                                        $userName = trim(mysqli_real_escape_string($conn, $_GET['userName']));
+                                        $userNameBestell = trim(mysqli_real_escape_string($conn, $_GET['userNameBestell']));
                                         // Abrufen der Bestellungen für den angegebenen Benutzer
                                         $sql = "SELECT u.userName, b.id, b.user_id, b.option_name, b.option_id, b.day, b.day_datum, b.bestelldatum 
-                                                FROM tbl_bestellung AS b LEFT JOIN tbl_user AS u ON u.id = b.user_id WHERE u.userName = '$userName' 
+                                                FROM tbl_bestellung AS b LEFT JOIN tbl_user AS u ON u.id = b.user_id WHERE u.userName = '$userNameBestell' 
                                                 ORDER BY b.bestelldatum DESC;";
                                         $result = mysqli_query($conn, $sql);
                                         if($result->num_rows > 0){
@@ -259,6 +261,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
                             </form>
                             <tbody>
                                 <?php
+                                    $woche_count = ($current_day == $sonntag)?$week_count = date('W') + 1 : $week_count = date('W'); 
                                     // Abrufen aller Bestellungen aus der Datenbank
                                     // $sql = "SELECT u.id, u.userName, b.id, b.option_name, b.option_id, b.day, b.day_datum, b.bestelldatum
                                     //         FROM tbl_user u JOIN (SELECT id, user_id, option_name, option_id, day, day_datum, bestelldatum
@@ -266,7 +269,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
                                     //             WHERE t.row_num <= 5) b ON u.id = b.user_id ORDER BY b.bestelldatum DESC;";
                                     $sql = "SELECT u.id, u.userName, b.id, b.option_name, b.option_id, b.day, b.day_datum, b.bestelldatum
                                             FROM tbl_user u INNER JOIN tbl_bestellung b ON u.id = b.user_id
-                                            WHERE b.week_count = $week_count";
+                                            WHERE b.week_count = $woche_count";
                                     $result = mysqli_query($conn, $sql);
                                     // Ausgabe der Bestellungen in einer Tabelle
                                     while ($row = mysqli_fetch_assoc($result)) {
@@ -303,6 +306,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
                             </form>
                             <tbody>
                                 <?php
+                                    $woche_count = ($current_day == $sonntag)?$week_count = date('W') + 1 : $week_count = date('W'); 
                                     // Abrufen aller Bestellungen aus der Datenbank
                                     // $sql = "SELECT b.option_id, b.option_name, COUNT(*) AS anzahl
                                     //         FROM (
@@ -310,7 +314,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
                                     //             FROM tbl_bestellung) AS b WHERE b.row_num <= 5 GROUP BY b.option_name ORDER BY `b`.`option_name` ASC;";
 
                                     $sql = "SELECT option_id, option_name, COUNT(*) AS anzahl
-                                            FROM tbl_bestellung WHERE week_count = $week_count GROUP BY option_name ORDER BY option_name ASC";
+                                            FROM tbl_bestellung WHERE week_count = $woche_count GROUP BY option_name ORDER BY option_name ASC";
                                     $result = mysqli_query($conn, $sql);
                                     // Ausgabe der Bestellungen in einer Tabelle
                                     while ($row = mysqli_fetch_assoc($result)) {
@@ -338,14 +342,10 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
                 </div>
                 <div id="einzahlungen" class="subtabcontent" > 
                     <form method="post" class="col-12">
-                        <div class="m-1 col-4" style="float:left">
-                            <input type="number" class="form-control" style="float:left" step="0.01" name="einzahlungsbetrag" id="einzahlungsbetrag" placeholder="Der zu zahlende Betrag">
-                        </div>
-                        <div class="m-1 col-4" style="float:left">
-                            <input type="text" name="userName" class="form-control" id="searchInput" onkeyup="filterOptions()" placeholder="nach einem Benutzer suchen...">
-                        </div>
-                        <div class="m-2 col-8">
-                            <select class="form-control" name="userEinzahlung" id="userEinzahlung">
+                        <div class="m-1" style="display:flex">
+                            <input type="number" class="form-control m-1" style="float:left" step="0.01" name="einzahlungsbetrag" id="einzahlungsbetrag" placeholder="Der zu zahlende Betrag">
+                            <input type="text" name="userName" class="form-control m-1" id="searchInput" onkeyup="filterOptions()" placeholder="nach einem Benutzer suchen...">
+                            <select class="form-control m-1" name="userEinzahlung" id="userEinzahlung">
                                 <option>Benutzer Name auswählen...</option>
                                 <?php 
                                     $sql = "SELECT id, userName FROM tbl_user";
@@ -357,9 +357,8 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
                                     }
                                 ?>
                             </select>
+                            <button type="submit" name="button" class="btn btn-warning m-1" value="einzahlen">Einzahlen</button>
                         </div>
-                        <button type="submit" name="button" class="btn btn-warning m-1" value="einzahlen">Einzahlen</button>
-                        <!-- <button type="submit" name="button" class="btn btn-warning" value="filtern">Einzahlungen nach Benutzer filtern</button> -->
                     </form>
                     <h3>Einzahlungen</h3>
                     <table>
@@ -425,10 +424,11 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
                 <div id="einzahlungenFiltern" class="subtabcontent" style="display:none">
                     <div class="container">
                         <h3>Einzahlungen für einzelnen Benutzer</h3>
-                        <form method="get" style="float:left; margin-right:40%">
-                            <label for="user_id">Benutzername:</label>
-                            <input type="text" name="userName" id="user_id"> 
-                            <input type="submit" value="Suchen" >
+                        <form method="get">
+                            <div class="col-4" style="display:flex">
+                                <input type="text" class="form-control m-1" name="userNameEinzahl" id="user_id" placeholder="nach einem Benutzer suchen..."> 
+                                <button type="submit" name="button" class="btn btn-warning m-1" value="einzahlungSuchen">Suchen</button>
+                            </div>
                         </form>
                         <table>
                             <thead>
@@ -441,12 +441,12 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
                             <tbody>
                                 <?php
                                     // Überprüfen, ob eine Suchanfrage gesendet wurde
-                                    if (isset($_GET['userName'])) {
+                                    if (isset($_GET['userNameEinzahl'])) {
                                         // Benutzereingabe bereinigen
-                                        $userName = trim(mysqli_real_escape_string($conn, $_GET['userName']));
+                                        $userNameEinzahl = trim(mysqli_real_escape_string($conn, $_GET['userNameEinzahl']));
                                         // Abrufen der Bestellungen für den angegebenen Benutzer
                                         $sql = "SELECT u.userName, e.einzahlung, e.einzahlung_date FROM tbl_einzahlung e
-                                                LEFT JOIN tbl_user u ON u.id = e.user_id WHERE u.userName = '$userName'
+                                                LEFT JOIN tbl_user u ON u.id = e.user_id WHERE u.userName = '$userNameEinzahl'
                                                 ORDER BY e.einzahlung_date DESC";
                                         $result = mysqli_query($conn, $sql);
                                         if($result->num_rows > 0){
@@ -472,10 +472,11 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
                 <div id="auszahlungenFiltern" class="subtabcontent" style="display:none">
                     <div class="container">
                         <h3>Auszahlungen für einzelnen Benutzer</h3>
-                        <form method="get" style="float:left; margin-right:40%">
-                            <label for="user_id">Benutzername:</label>
-                            <input type="text" name="userName" id="user_id"> 
-                            <input type="submit" value="Suchen" >
+                        <form method="get">
+                            <div class="col-4" style="display:flex">
+                                <input type="text" class="form-control m-1" name="userNameAuszahl" id="user_id" placeholder="nach einem Benutzer suchen..."> 
+                                <button type="submit" name="button" class="btn btn-warning m-1" value="auszahlungSuchen">Suchen</button>
+                            </div>
                         </form>
                         <table>
                             <thead>
@@ -488,12 +489,12 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
                             <tbody>
                                 <?php
                                     // Überprüfen, ob eine Suchanfrage gesendet wurde
-                                    if (isset($_GET['userName'])) {
+                                    if (isset($_GET['userNameAuszahl'])) {
                                         // Benutzereingabe bereinigen
-                                        $userName = trim(mysqli_real_escape_string($conn, $_GET['userName']));
+                                        $userNameAuszahl = trim(mysqli_real_escape_string($conn, $_GET['userNameAuszahl']));
                                         // Abrufen der Bestellungen für den angegebenen Benutzer
                                         $sql = "SELECT u.userName, a.auszahlung, a.auszahlung_date FROM tbl_auszahlung a
-                                                LEFT JOIN tbl_user u ON u.id = a.user_id WHERE u.userName = '$userName'
+                                                LEFT JOIN tbl_user u ON u.id = a.user_id WHERE u.userName = '$userNameAuszahl'
                                                 ORDER BY a.auszahlung_date DESC";
                                         $result = mysqli_query($conn, $sql);
                                         if($result->num_rows > 0){

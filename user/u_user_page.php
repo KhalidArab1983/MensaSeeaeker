@@ -510,11 +510,6 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                     guthabenError.innerHTML = "";
                 }
             }
-            
-
-
-
-
 
 
             // Define an object to store the prices for each day
@@ -562,7 +557,6 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                         if(bestellStatus == 1){
                             guthabenError.innerHTML = "Das Guthaben reicht nicht aus, um den Kauf abzuschließen oder Bestellungen aktualisieren.";
                         }
-                        
                     }
                     else{
                         if(bestellStatus == 0){
@@ -676,8 +670,6 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                         //     guthabenError.innerHTML = "";
                         // }
                         // });
-
-
 
                 });
             }
