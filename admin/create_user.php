@@ -10,6 +10,8 @@ if (isset($_SESSION['admin_id'])) {
 	exit;
 }
 
+$aktiv_ab = date('d.m.Y');
+
 if ($_SERVER["REQUEST_METHOD"]=="POST"){
     if (isset($_POST['userName1'])) {
         $userName1 = $_POST['userName1'];
@@ -89,8 +91,8 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
     $hashed_password = hash('sha256', $password);
 
     if($button == "insert"){
-        $sql = "INSERT INTO tbl_user (klasse, plz, userName, firstName, lastName, email, phone, adresse, ortsteil, birthday, password, admin_id)
-                VALUES ('$klasse', '$plz', '$userName', '$firstName', '$lastName', '$email', '$phone', '$adresse', '$ortsteil', '$birthday', '$hashed_password', '{$admin_id}')";
+        $sql = "INSERT INTO tbl_user (klasse, plz, userName, firstName, lastName, email, phone, adresse, ortsteil, birthday, aktiv_ab, password, admin_id)
+                VALUES ('$klasse', '$plz', '$userName', '$firstName', '$lastName', '$email', '$phone', '$adresse', '$ortsteil', '$birthday', '$aktiv_ab', '$hashed_password', '{$admin_id}')";
         if(mysqli_query($conn, $sql)){
             echo "Schüler ist erfolgreich hinzugefügt";
             header("Location: create_user.php");
@@ -178,8 +180,11 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
         }
     }
     if($button == "delete"){
-        $sql = "DELETE u, b FROM tbl_user u
+        $sql = "DELETE u, b, s, e, a FROM tbl_user u
                 LEFT JOIN tbl_bestellung b ON u.id = b.user_id
+                LEFT JOIN tbl_bestellstatus s ON u.id = s.user_id
+                LEFT JOIN tbl_einzahlung e ON u.id = e.user_id
+                LEFT JOIN tbl_auszahlung a ON u.id = a.user_id
                 WHERE u.id = '{$user_id}'";
         if(mysqli_query($conn, $sql)){
             header("Location: create_user.php");

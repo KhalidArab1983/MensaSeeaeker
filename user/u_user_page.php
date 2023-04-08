@@ -22,6 +22,7 @@ $formatierte_zeit = gmdate("H:i:s", $vergangene_zeit * 60);
 
 
 
+
 // include ('./u_kontoZustand.php');
 include ('./bestell_insert.php');
 include ('./bestell_update.php');
@@ -63,9 +64,13 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
 
     //SQL-Abfrage ausführen, um die Preise aus Datenbank in der Spalte zu summieren
     $query = "SELECT SUM(o.price) as total 
-    FROM 
-        ( SELECT b.option_id FROM tbl_bestellung b WHERE b.user_id = $user_id ORDER BY b.bestelldatum DESC LIMIT 5 ) as b 
-    JOIN tbl_option o ON o.id = b.option_id;";
+            FROM 
+                (SELECT b.option_id 
+                FROM tbl_bestellung b 
+                WHERE b.user_id = $user_id 
+                ORDER BY b.bestelldatum 
+                DESC LIMIT 5 ) as b 
+            JOIN tbl_option o ON o.id = b.option_id;";
     $result = mysqli_query($conn, $query);
     $row = mysqli_fetch_assoc($result);
     $gesamtPreis = $row['total'];
@@ -277,8 +282,14 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
         
         <div id="userData" class="tabcontent">
             <h3>Meine Daten</h3>
-            <p>Das ist der Inhalt von Tab 1.</p>
-                
+            <div style="display:flex">
+                <div class="card col-8">
+                    <h4>Allgemeine Daten</h4>
+                </div>
+                <div class="card col-4">
+                    <h4>Passwort</h4>
+                </div>
+            </div>
         </div>
 
         <div id="kontoZustand" class="tabcontent">
