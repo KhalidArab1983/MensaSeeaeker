@@ -144,7 +144,11 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
     // Kontostand zu berechnen
     $kontostand = $sumEinzahlung - $sumAuszahlung;
 
-    global $day;
+
+
+
+
+
 ?>
 
 
@@ -186,7 +190,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
         </div>
 
         <div id="essenBestellung" class="tabcontent" style="display:block">
-            <h4>Essen bestellen</h4>
+            <h3 style="text-decoration:underline">Essen bestellen:</h3>
             
             <div class="col-lg-8" style="float:left; margin-top:20px;">
                 <div>
@@ -281,19 +285,79 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
         </div>
         
         <div id="userData" class="tabcontent">
-            <h3>Meine Daten</h3>
+            <h3 style="text-decoration:underline">Meine Daten:</h3>
             <div style="display:flex">
-                <div class="card col-8">
-                    <h4>Allgemeine Daten</h4>
+                <div class="card col-4 m-3">
+                    <h4 class="mb-5">Allgemeine Daten</h4>
+                    <div class="m-1" style="display:flex">
+                        <label style="font-weight:bold; width:200px">Benutzername :</label>
+                        <input type="text" name="userName" id="userName" class="form-control" readonly>
+                    </div>
+                    <div class="m-1" style="display:flex">
+                        <label style="font-weight:bold; width:200px">Nachname :</label>
+                        <input type="text" name="lastName" id="lastName" class="form-control" readonly>
+                    </div>
+                    <div class="m-1" style="display:flex">
+                        <label style="font-weight:bold; width:200px">Vorname :</label>
+                        <input type="text" name="firstName" id="firstName" class="form-control" readonly>
+                    </div>
+                    <div class="m-1" style="display:flex">
+                        <label style="font-weight:bold; width:200px">Geburtsdatum :</label>
+                        <input type="text" name="birthday" id="birthday" class="form-control" readonly>
+                    </div>
+                    <div class="m-1" style="display:flex">
+                        <label style="font-weight:bold; width:200px">Aktiv ab :</label>
+                        <input type="text" name="aktiv_ab" id="aktiv_ab" class="form-control" readonly>
+                    </div>
+                    <div class="m-1" style="display:flex">
+                        <label style="font-weight:bold; width:200px">Klasse :</label>
+                        <input type="text" name="klasse" id="klasse" class="form-control" readonly>
+                    </div>
+                    <div class="m-1" style="display:flex">
+                        <label style="font-weight:bold; width:200px">Adresse :</label>
+                        <input type="text" name="adresse" id="adresse" class="form-control">
+                    </div>
+                    <div class="m-1" style="display:flex">
+                        <label style="font-weight:bold; width:200px">PLZ :</label>
+                        <input type="text" name="plz" id="plz" class="form-control">
+                    </div>
+                    <div class="m-1" style="display:flex">
+                        <label style="font-weight:bold; width:200px">Ort :</label>
+                        <input type="text" name="ort" id="ort" class="form-control">
+                    </div>
+                    <div class="m-1" style="display:flex">
+                        <label style="font-weight:bold; width:200px">Ortsteil :</label>
+                        <input type="text" name="ortsteil" id="ortsteil" class="form-control">
+                    </div>
+                    <div class="justify-content-center" style="display:flex">
+                        <button type="submit" class="btn btn-warning m-2" name="button" value="save">Speichern</button>
+                        <button type="submit" class="btn btn-warning m-2" name="button" value="cancel">Abrechen</button>
+                    </div>
                 </div>
-                <div class="card col-4">
-                    <h4>Passwort</h4>
+                <div class="card col-4 m-3">
+                    <h4 class="mb-5">Passwort</h4>
+                    <div class="m-1" style="display:flex">
+                        <label style="font-weight:bold; width:400px">bisheriges Passwort:</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="m-1" style="display:flex">
+                        <label style="font-weight:bold; width:400px">Neues Passwort:</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="m-1" style="display:flex">
+                        <label style="font-weight:bold; width:400px">Passwort bestätigen:</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="justify-content-center" style="display:flex">
+                        <button type="submit" class="btn btn-warning m-2" name="button" value="passSave">Speichern</button>
+                        <button type="submit" class="btn btn-warning m-2" name="button" value="passCancel">Abrechen</button>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div id="kontoZustand" class="tabcontent">
-            <h1>Banktransaktionen und Kontostand</h1>
+            <h3 style="text-decoration:underline">Banktransaktionen und Kontostand:</h3>
             <div class="container">                        
                 <h2 class="text-center">Ihr Kontostand ist: 
                     <?php

@@ -411,7 +411,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
                     
                     <div class="mb-1">
                         <!-- <label for="adresse">Anschrift:</label> -->
-                        <input type="text" class="form-control" name="adresse" id="adresse" placeholder="Straße + Haus Nr." >
+                        <input type="text" class="form-control" name="adresse" id="adresse" placeholder="Straße, Haus Nr." >
                     </div>
                     <div class="mb-1">
                         <!-- <label for="ortsteil">Ortsteil:</label> -->
@@ -423,7 +423,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
                     </div>
                     <div class="mb-1">
                         <!-- <label for="password">Kennwort:</label> -->
-                        <input type="password" class="form-control" name="password" id="password" placeholder="Kennwort" readonly>
+                        <input type="password" class="form-control" name="password" id="password" placeholder="Kennwort wird automatisch ausgefüllt" readonly>
                     </div>
                     <button type="submit" class="btn btn-warning" name="button" value="insert">Hinzufügen</button>
                     <button type="submit" class="btn btn-warning" name="button" value="update">Aktualisieren</button>
