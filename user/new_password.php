@@ -27,6 +27,11 @@ if(isset($_POST['confirm_code'])) {
     if(empty($code)){
         $errors['codeError'] = '* Bitte geben Sie den Code ein, den Sie per E-Mail erhalten haben.';
     }
+    // // Add password validation here
+    // $password_pattern = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/";
+    // if(!preg_match($password_pattern, $new_password)){
+    //     $errors['newPassError'] = '* Das Passwort muss mindestens 8 Zeichen lang sein und mindestens einen Kleinbuchstaben, einen Großbuchstaben, eine Zahl und ein Sonderzeichen enthalten.';
+    // }
     if(empty($new_password)){
         $errors['newPassError'] = '* Bitte geben Sie das Password ein.';
     }
@@ -39,6 +44,9 @@ if(isset($_POST['confirm_code'])) {
         $new_password =      mysqli_real_escape_string($conn, $_POST['new_password']);
         $confirm_password =  mysqli_real_escape_string($conn, $_POST['confirm_password']);
 
+
+        // Hash the password
+        $hashed_password = hash('sha256', $new_password);
 
         // Hier wird der Code einfach aus der Session-Variable gelesen
         session_start();
@@ -55,7 +63,7 @@ if(isset($_POST['confirm_code'])) {
                 if($result->num_rows > 0){
                     $sql ="UPDATE tbl_user SET password = ? WHERE email = ?";
                     $stmt = mysqli_prepare($conn, $sql);
-                    mysqli_stmt_bind_param($stmt, "ss", $new_password, $saved_email);
+                    mysqli_stmt_bind_param($stmt, "ss", $hashed_password, $saved_email);
                     if(mysqli_stmt_execute($stmt)){
                         header("Location: u_login.php");
                     }else{

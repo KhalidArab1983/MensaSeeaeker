@@ -84,8 +84,9 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
     }
 
 
+
     // Hash the password
-    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+    $hashed_password = hash('sha256', $password);
 
     if($button == "insert"){
         $sql = "INSERT INTO tbl_user (klasse, plz, userName, firstName, lastName, email, phone, adresse, ortsteil, birthday, password, admin_id)

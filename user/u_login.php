@@ -39,35 +39,27 @@ if (isset($_POST['submit'])){
         $errors['passwordError'] = '* Bitte geben Sie das Passwort ein';
     }
     if(!array_filter($errors)){
-        $klasse =    mysqli_real_escape_string($conn, $_POST['klasse']);
-        $userName =     mysqli_real_escape_string($conn, $_POST['userName']);
-        $email =        mysqli_real_escape_string($conn, $_POST['email']);
-        $password =        mysqli_real_escape_string($conn, $_POST['password']);
 
         // Hash the password
-        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        $hashed_password = hash('sha256', $password);
+
         //Check if the email and password are valid
-        $sql = "SELECT id, userName, password FROM tbl_user WHERE userName = '$userName' AND klasse = '$klasse' AND email = '$email'";
+        $sql = "SELECT * FROM tbl_user WHERE userName = '$userName' AND klasse = '$klasse' AND email = '$email' AND password = '$hashed_password'";
         $result = mysqli_query($conn, $sql);
         if(mysqli_num_rows($result) == 1){
             $row= mysqli_fetch_assoc($result);
             $user_id = $row['id'];
             $userName = $row['userName'];
-            $db_password = $row['password'];
 
-            // Verify the hashed password
-            if (password_verify($password, $hashed_password)) {
-                
-                //Start a session for the user
-                session_start();
-                $_SESSION['user_id'] = $user_id;
-                $_SESSION['userName'] = $userName;
-                $_SESSION['loggedin'] = true;
-                header("Location: ./u_user_page.php");
-                exit;
-            } else {
-                $errors['invalidError'] = 'Überprüfen Sie das Passwort';
-            }
+
+            //Start a session for the user
+            session_start();
+            $_SESSION['user_id'] = $user_id;
+            $_SESSION['userName'] = $userName;
+            $_SESSION['loggedin'] = true;
+            header("Location: ./u_user_page.php");
+            exit;
+
         }else{
             $errors['invalidError'] = 'Überprüfen Sie die Eintragsinformationen, die Klasse, den Benutzernamen, die E-Mail-Adresse oder das Passwort';
         }
@@ -91,7 +83,7 @@ if (isset($_POST['submit'])){
     </head>
     <body>
         <div>
-            <!-- <img src="../images/banner1.jpg" width=100%> -->
+            <img src="../images/banner1.jpg" width=100%>
             <div>
                 <div class="left_side">
                     <img class="u_login_bild" src="../images/u_login_bild.jpg" width="100%" height="100%" style="border:1px 1px 3px 2px solid black;">
