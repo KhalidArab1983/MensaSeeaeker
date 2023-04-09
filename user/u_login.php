@@ -83,7 +83,7 @@ if (isset($_POST['submit'])){
     </head>
     <body>
         <div>
-            <img src="../images/banner1.jpg" width=100%>
+            <img class="u_login_bild" src="../images/banner1.jpg" width=100%>
             <div>
                 <div class="left_side">
                     <img class="u_login_bild" src="../images/u_login_bild.jpg" width="100%" height="100%" style="border:1px 1px 3px 2px solid black;">
@@ -118,11 +118,11 @@ if (isset($_POST['submit'])){
                             </div>
                             <div class="form-text error"><?php echo $errors['invalidError'] ?></div>
                             <div class="text-center">
-                                <input type="submit" name="submit" class="btn btn-primary m-2 w-25" value="Anmelden">
+                                <input type="submit" name="submit" class="btn btn-warning m-2 w-25" value="Anmelden">
                             </div>
                         </form>
                     </div>
-                    <a href="forget_password.php"><h6 class="text-center mt-4" style="text-decoration:underline;">Passwort vergessen?</h6></a>
+                    <h6 class="text-center mt-4" style="text-decoration:underline;"><a href="forget_password.php">Passwort vergessen?</a></h6>
                 </div>
             </div>
         </div>

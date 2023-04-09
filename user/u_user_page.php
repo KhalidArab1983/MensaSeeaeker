@@ -145,7 +145,69 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
     $kontostand = $sumEinzahlung - $sumAuszahlung;
 
 
+    if ($_SERVER["REQUEST_METHOD"]=="POST"){
+        $adresseP = $_POST['adresse'];
+        $plzP = $_POST['plz'];
+        $ortP = $_POST['ort'];
+        $ortsteilP = $_POST['ortsteil'];
+        $phoneP = $_POST['phone'];
+        $emailP = $_POST['email'];
+        $current_password = $_POST['current_password'];
+        $new_password = $_POST['new_password'];
+        $confirm_password = $_POST['confirm_password'];
+    }else{
+        $adresseP =  "";
+        $plzP =  "";
+        $ortP =  "";
+        $ortsteilP = "";
+        $phoneP = "";
+        $emailP = "";
+        $current_password = "";
+        $new_password = "";
+        $confirm_password = "";
+    }
 
+    $sql = "SELECT * FROM tbl_user u  
+            INNER JOIN tbl_ort o ON u.plz = o.plz
+            WHERE id = $user_id";
+    $result = mysqli_query($conn, $sql);
+    $row = mysqli_fetch_assoc($result);
+    $userName = $row['userName'];
+    $lastName = $row['lastName'];
+    $firstName = $row['firstName'];
+    $birthday = $row['birthday'];
+    $aktiv_ab = $row['aktiv_ab'];
+    $klasse = $row['klasse'];
+    $adresse = $row['adresse'];
+    $plz = $row['plz'];
+    $ort = $row['ort'];
+    $ortsteil = $row['ortsteil'];
+    $phone = $row['phone'];
+    $email = $row['email'];
+    
+
+
+    $errors = [
+        'currentPassError' => '',
+        'newPassError' => '',
+        'confirmPassError' => ''
+    ];
+    if ($_SERVER["REQUEST_METHOD"]=="POST"){
+        if($_POST['button'] == 'save'){
+
+            $sql = "UPDATE tbl_user SET plz = ?, email = ?, phone = ?, adresse = ?, ortsteil = ? WHERE id = ?";
+            $stmt = mysqli_prepare($conn, $sql);
+            mysqli_stmt_bind_param($stmt, "ssssss", $plzP, $emailP, $phoneP, $adresseP, $ortsteilP, $user_id);
+            if(mysqli_stmt_execute($stmt)){
+                header("Location: u_user_page.php");
+            }else{
+                echo "Error: " . "<br>" . mysqli_error($conn);
+            }
+            mysqli_close($conn);
+        }
+
+        
+    }
 
 
 
@@ -284,55 +346,58 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
             </div>
         </div>
         
-        <div id="userData" class="tabcontent">
+        <!-- <div id="userData" class="tabcontent">
             <h3 style="text-decoration:underline">Meine Daten:</h3>
             <div style="display:flex">
                 <div class="card col-4 m-3">
                     <h4 class="mb-5">Allgemeine Daten</h4>
                     <div class="m-1" style="display:flex">
                         <label style="font-weight:bold; width:200px">Benutzername :</label>
-                        <input type="text" name="userName" id="userName" class="form-control" readonly>
+                        <input type="text" name="userName" id="userName" class="form-control" value="<?php echo $userName; ?>" readonly>
                     </div>
                     <div class="m-1" style="display:flex">
                         <label style="font-weight:bold; width:200px">Nachname :</label>
-                        <input type="text" name="lastName" id="lastName" class="form-control" readonly>
+                        <input type="text" name="lastName" id="lastName" class="form-control" value="<?php echo $lastName; ?>" readonly>
                     </div>
                     <div class="m-1" style="display:flex">
                         <label style="font-weight:bold; width:200px">Vorname :</label>
-                        <input type="text" name="firstName" id="firstName" class="form-control" readonly>
+                        <input type="text" name="firstName" id="firstName" class="form-control" value="<?php echo $firstName; ?>" readonly>
                     </div>
                     <div class="m-1" style="display:flex">
                         <label style="font-weight:bold; width:200px">Geburtsdatum :</label>
-                        <input type="text" name="birthday" id="birthday" class="form-control" readonly>
+                        <input type="text" name="birthday" id="birthday" class="form-control" value="<?php echo $birthday; ?>" readonly>
                     </div>
                     <div class="m-1" style="display:flex">
                         <label style="font-weight:bold; width:200px">Aktiv ab :</label>
-                        <input type="text" name="aktiv_ab" id="aktiv_ab" class="form-control" readonly>
+                        <input type="text" name="aktiv_ab" id="aktiv_ab" class="form-control" value="<?php echo $aktiv_ab; ?>" readonly>
                     </div>
                     <div class="m-1" style="display:flex">
                         <label style="font-weight:bold; width:200px">Klasse :</label>
-                        <input type="text" name="klasse" id="klasse" class="form-control" readonly>
+                        <input type="text" name="klasse" id="klasse" class="form-control" value="<?php echo $klasse; ?>" readonly>
                     </div>
                     <div class="m-1" style="display:flex">
                         <label style="font-weight:bold; width:200px">Adresse :</label>
-                        <input type="text" name="adresse" id="adresse" class="form-control">
+                        <input type="text" name="adresse" id="adresse" class="form-control" value="<?php echo $adresse; ?>">
                     </div>
                     <div class="m-1" style="display:flex">
                         <label style="font-weight:bold; width:200px">PLZ :</label>
-                        <input type="text" name="plz" id="plz" class="form-control">
+                        <input type="text" name="plz" id="plz" class="form-control" value="<?php echo $plz; ?>">
                     </div>
                     <div class="m-1" style="display:flex">
                         <label style="font-weight:bold; width:200px">Ort :</label>
-                        <input type="text" name="ort" id="ort" class="form-control">
+                        <input type="text" name="ort" id="ort" class="form-control" value="<?php echo $ort; ?>">
                     </div>
                     <div class="m-1" style="display:flex">
                         <label style="font-weight:bold; width:200px">Ortsteil :</label>
-                        <input type="text" name="ortsteil" id="ortsteil" class="form-control">
+                        <input type="text" name="ortsteil" id="ortsteil" class="form-control" value="<?php echo $ortsteil; ?>">
                     </div>
                     <div class="justify-content-center" style="display:flex">
                         <button type="submit" class="btn btn-warning m-2" name="button" value="save">Speichern</button>
-                        <button type="submit" class="btn btn-warning m-2" name="button" value="cancel">Abrechen</button>
+                        <button type="submit" class="btn btn-warning m-2" name="button" value="cancel" onClick="location.href='<?php echo $_SERVER["PHP_SELF"] ?>'">Abrechen</button>
                     </div>
+                </div>
+                <div class="card col-4 m-3">
+                    <h4 class="mb-5">Adresse</h4>
                 </div>
                 <div class="card col-4 m-3">
                     <h4 class="mb-5">Passwort</h4>
@@ -350,12 +415,102 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                     </div>
                     <div class="justify-content-center" style="display:flex">
                         <button type="submit" class="btn btn-warning m-2" name="button" value="passSave">Speichern</button>
-                        <button type="submit" class="btn btn-warning m-2" name="button" value="passCancel">Abrechen</button>
+                        <button type="submit" class="btn btn-warning m-2" name="button" value="passCancel" onClick="location.href='<?php echo $_SERVER["PHP_SELF"] ?>'">Abrechen</button>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <div id="userData" class="tabcontent">
+            <h3 style="text-decoration:underline">Meine Daten:</h3>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="card col-sm-12 col-md-4 m-1">
+                        <h4 class="mb-5">Allgemeine Daten</h4>
+                        <div class="form-group">
+                            <label for="userName" style="font-weight:bold;">Benutzername:</label>
+                            <input type="text" name="userName" id="userName" class="form-control" value="<?php echo $userName; ?>" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName" style="font-weight:bold;">Nachname:</label>
+                            <input type="text" name="lastName" id="lastName" class="form-control" value="<?php echo $lastName; ?>" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="firstName" style="font-weight:bold;">Vorname:</label>
+                            <input type="text" name="firstName" id="firstName" class="form-control" value="<?php echo $firstName; ?>" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="birthday" style="font-weight:bold;">Geburtsdatum:</label>
+                            <input type="text" name="birthday" id="birthday" class="form-control" value="<?php echo $birthday; ?>" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="aktiv_ab" style="font-weight:bold;">Aktiv ab:</label>
+                            <input type="text" name="aktiv_ab" id="aktiv_ab" class="form-control" value="<?php echo $aktiv_ab; ?>" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="klasse" style="font-weight:bold;">Klasse:</label>
+                            <input type="text" name="klasse" id="klasse" class="form-control" value="<?php echo $klasse; ?>" readonly>
+                        </div>
+                    </div>
+                    <div class="card col-sm-12 col-md-3 m-1">
+                        <h4 class="mb-5">Adresse</h4>
+                        <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
+                            <div class="form-group">                                    
+                                <label style="font-weight:bold; width:200px">Adresse :</label>
+                                <input type="text" name="adresse" id="adresse" class="form-control" value="<?php echo $adresse; ?>">
+                            </div>
+                            <div class="form-group">                                    
+                                <label style="font-weight:bold; width:200px">PLZ :</label>
+                                <input type="text" name="plz" id="plz" class="form-control" value="<?php echo $plz; ?>">
+                            </div>
+                            <div class="form-group">                                    
+                                <label style="font-weight:bold; width:200px">Ort :</label>
+                                <input type="text" name="ort" id="ort" class="form-control" value="<?php echo $ort; ?>">
+                            </div>
+                            <div class="form-group">                                    
+                                <label style="font-weight:bold; width:200px">Ortsteil :</label>
+                                <input type="text" name="ortsteil" id="ortsteil" class="form-control" value="<?php echo $ortsteil; ?>">
+                            </div>
+                            <div class="form-group">                                    
+                                <label style="font-weight:bold; width:200px">Handy :</label>
+                                <input type="text" name="phone" id="phone" class="form-control" value="<?php echo $phone; ?>">
+                            </div>
+                            <div class="form-group">                                    
+                                <label style="font-weight:bold; width:200px">Email-Adresse :</label>
+                                <input type="text" name="email" id="email" class="form-control" value="<?php echo $email; ?>">
+                            </div>
+                            <div class="form-group">                                    
+                                <button type="submit" class="btn btn-warning m-2" name="button" value="save">Speichern</button>
+                                <button type="submit" class="btn btn-warning m-2" name="button" value="cancel" onClick="location.href='<?php echo $_SERVER["PHP_SELF"] ?>'">Abrechen</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card col-sm-12 col-md-4 m-1">
+                        <h4 class="mb-5">Passwort</h4>
+                        <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
+                            <div class="form-group">                                    
+                                <label style="font-weight:bold; width:400px">bisheriges Passwort:</label>
+                                <input type="text" name="current_password" id="current_password" class="form-control">
+                                <div class="form-text error"><?php echo $errors['currentPassError'] ?></div>
+                            </div>
+                            <div class="form-group">                                    
+                                <label style="font-weight:bold; width:400px">Neues Passwort:</label>
+                                <input type="text" name="new_password" id="new_password" class="form-control">
+                                <div class="form-text error"><?php echo $errors['newPassError'] ?></div>
+                            </div>
+                            <div class="form-group">                                    
+                                <label style="font-weight:bold; width:400px">Neues Passwort bestätigen:</label>
+                                <input type="text" name="confirm_password" id="confirm_password" class="form-control">
+                                <div class="form-text error"><?php echo $errors['confirmPassError'] ?></div>
+                            </div>
+                            <div class="form-group">                                    
+                                <button type="submit" class="btn btn-warning m-2" name="button" value="passSave">Speichern</button>
+                                <button type="submit" class="btn btn-warning m-2" name="button" value="passCancel" onClick="location.href='<?php echo $_SERVER["PHP_SELF"] ?>'">Abrechen</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
-
         <div id="kontoZustand" class="tabcontent">
             <h3 style="text-decoration:underline">Banktransaktionen und Kontostand:</h3>
             <div class="container">                        

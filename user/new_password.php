@@ -33,10 +33,10 @@ if(isset($_POST['confirm_code'])) {
     //     $errors['newPassError'] = '* Das Passwort muss mindestens 8 Zeichen lang sein und mindestens einen Kleinbuchstaben, einen Großbuchstaben, eine Zahl und ein Sonderzeichen enthalten.';
     // }
     if(empty($new_password)){
-        $errors['newPassError'] = '* Bitte geben Sie das Password ein.';
+        $errors['newPassError'] = '* Bitte geben Sie das Passwort ein.';
     }
     if(empty($confirm_password)){
-        $errors['confirmPassError'] = '* Bitte bestätigen Sie das Password.';
+        $errors['confirmPassError'] = '* Bitte bestätigen Sie das Passwort.';
     }
     if(!array_filter($errors)){
         
