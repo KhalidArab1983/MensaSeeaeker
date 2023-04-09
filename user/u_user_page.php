@@ -152,9 +152,9 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
         $ortsteilP = $_POST['ortsteil'];
         $phoneP = $_POST['phone'];
         $emailP = $_POST['email'];
-        $current_password = $_POST['current_password'];
-        $new_password = $_POST['new_password'];
-        $confirm_password = $_POST['confirm_password'];
+        // $current_password = $_POST['current_password'];
+        // $new_password = $_POST['new_password'];
+        // $confirm_password = $_POST['confirm_password'];
     }else{
         $adresseP =  "";
         $plzP =  "";
@@ -162,10 +162,17 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
         $ortsteilP = "";
         $phoneP = "";
         $emailP = "";
-        $current_password = "";
-        $new_password = "";
-        $confirm_password = "";
+        // $current_password = "";
+        // $new_password = "";
+        // $confirm_password = "";
     }
+
+    $errors = [
+        'currentPassError' => '',
+        'newPassError' => '',
+        'confirmPassError' => ''
+    ];
+
 
     $sql = "SELECT * FROM tbl_user u  
             INNER JOIN tbl_ort o ON u.plz = o.plz
@@ -185,16 +192,8 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
     $phone = $row['phone'];
     $email = $row['email'];
     
-
-
-    $errors = [
-        'currentPassError' => '',
-        'newPassError' => '',
-        'confirmPassError' => ''
-    ];
     if ($_SERVER["REQUEST_METHOD"]=="POST"){
-        if($_POST['button'] == 'save'){
-
+        if(isset($_POST['button']) && $_POST['button'] == 'save'){
             $sql = "UPDATE tbl_user SET plz = ?, email = ?, phone = ?, adresse = ?, ortsteil = ? WHERE id = ?";
             $stmt = mysqli_prepare($conn, $sql);
             mysqli_stmt_bind_param($stmt, "ssssss", $plzP, $emailP, $phoneP, $adresseP, $ortsteilP, $user_id);
@@ -203,13 +202,47 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
             }else{
                 echo "Error: " . "<br>" . mysqli_error($conn);
             }
-            mysqli_close($conn);
+            // mysqli_close($conn);
         }
-
-        
     }
 
 
+
+    if ($_SERVER["REQUEST_METHOD"]=="POST"){
+        $current_password = $_POST['current_password'];
+        $new_password = $_POST['new_password'];
+        $confirm_password = $_POST['confirm_password'];
+    }else{
+        $current_password = "";
+        $new_password = "";
+        $confirm_password = "";
+    }
+
+    // $current_password = isset($_POST['current_password']) ? $_POST['current_password'] : '';
+    // $new_password = isset($_POST['new_password']) ? $_POST['new_password'] : '';
+    // $confirm_password = isset($_POST['confirm_password']) ? $_POST['confirm_password'] : '';
+
+
+    if($_SERVER["REQUEST_METHOD"]=="POST"){
+        if(isset($_POST['button']) && $_POST['button'] == 'passSave'){
+            if(empty($current_password)){
+                echo "current_password";
+                // $errors['currentPassError'] = "* Bitte geben Sie das aktuelles Passwort ein.";
+            }
+            if(empty($new_password)){
+                echo "new_password";
+                // $errors['newPassError'] = '* Bitte geben Sie das neues Passwort ein.';
+            }
+            if(empty($confirm_password)){
+                echo "confirm_password";
+                // $errors['confirmPassError'] = '* Bitte bestätigen Sie das neues Passwort.';
+            }
+            if(!array_filter($errors)){
+                echo "success";
+                header("Location: u_user_page.php");
+            }
+        }
+    }
 
 ?>
 
@@ -488,19 +521,20 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                         <h4 class="mb-5">Passwort</h4>
                         <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
                             <div class="form-group">                                    
-                                <label style="font-weight:bold; width:400px">bisheriges Passwort:</label>
-                                <input type="text" name="current_password" id="current_password" class="form-control">
-                                <div class="form-text error"><?php echo $errors['currentPassError'] ?></div>
+                                <label style="font-weight:bold; width:300px">bisheriges Passwort:</label>
+                                <input type="password" name="current_password" id="current_password" class="form-control" value="<?php echo $current_password; ?>">
+                                <div class="form-text mb-3 error"><?php echo $errors['currentPassError'] ?></div>
+                                
                             </div>
                             <div class="form-group">                                    
-                                <label style="font-weight:bold; width:400px">Neues Passwort:</label>
-                                <input type="text" name="new_password" id="new_password" class="form-control">
-                                <div class="form-text error"><?php echo $errors['newPassError'] ?></div>
+                                <label style="font-weight:bold; width:300px">Neues Passwort:</label>
+                                <input type="password" name="new_password" id="new_password" class="form-control" value="<?php echo $new_password; ?>">
+                                <div class="form-text mb-3 error"><?php echo $errors['newPassError'] ?></div>
                             </div>
                             <div class="form-group">                                    
-                                <label style="font-weight:bold; width:400px">Neues Passwort bestätigen:</label>
-                                <input type="text" name="confirm_password" id="confirm_password" class="form-control">
-                                <div class="form-text error"><?php echo $errors['confirmPassError'] ?></div>
+                                <label style="font-weight:bold; width:300px">Neues Passwort bestätigen:</label>
+                                <input type="password" name="confirm_password" id="confirm_password" class="form-control" value="<?php echo $confirm_password; ?>">
+                                <div class="form-text mb-3 error"><?php echo $errors['confirmPassError'] ?></div>
                             </div>
                             <div class="form-group">                                    
                                 <button type="submit" class="btn btn-warning m-2" name="button" value="passSave">Speichern</button>
