@@ -106,7 +106,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
         // $updateStmt->bind_param("ssssss", $user_id, $nullWert, $nullWert, $nullWert, $nullWert, $nullWert);
         // $updateStmt->execute();
     }
-    header("Location: danke.php");
+    // header("Location: danke.php");
 
 }
 
