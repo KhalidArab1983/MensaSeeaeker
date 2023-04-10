@@ -1,9 +1,9 @@
 <?php 
-include ('../conn/db_conn.php');
+// include ('../conn/db_conn.php');
+
 
 $current_day = date('w');
 $current_time = date('H:i:s');
-$current_date = date('Y-m-d');
 $bestell_status_deaktiv = 1;
 
 if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
@@ -81,5 +81,6 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
         
     }
     header('Location: u_user_page.php');
+    exit();
 }
 ?>
