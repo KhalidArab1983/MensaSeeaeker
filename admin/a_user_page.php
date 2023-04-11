@@ -186,7 +186,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Bestell-ID</th>
+                                    <th>Bestell-ID</th> 
                                     <th>User ID</th>
                                     <th>UserName</th>
                                     <th>Gerichtsname</th>
@@ -198,18 +198,19 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                             </thead>
                             <tbody>
                                 <?php
-                                    if(isset($_GET['button'])){
-                                        // $start_date = $_GET['start_date'];
-                                        // $end_date = $_GET['end_date'];
+                                    if(isset($_GET['alleBestellungen'])){
+                                        echo '<tr>';
+                                            echo '<h4>Alle Bestellungen für alle Benutzer.</h4>';
+                                        echo '</tr>';
                                         // Abrufen aller Bestellungen aus der Datenbank
                                         $sql = "SELECT b.id, b.user_id, u.userName, b.option_name, b.option_id, b.day, b.day_datum, b.bestelldatum 
                                                 FROM tbl_bestellung AS b INNER JOIN tbl_user AS u ON u.id = b.user_id 
-                                                WHERE b.bestelldatum >= '{$start_date}' AND b.bestelldatum <= '{$end_date}'
                                                 ORDER BY userName";
                                         $result = mysqli_query($conn, $sql);
                                         // Ausgabe der Bestellungen in einer Tabelle
                                         while ($row = mysqli_fetch_assoc($result)) {
                                             echo '<tr>';
+                                                // echo 'Alle Bestellungen';
                                                 echo '<td>' . $row['id'] . '</td>';
                                                 echo '<td>' . $row['user_id'] . '</td>';
                                                 echo '<td>' . $row['userName'] . '</td>';
@@ -220,12 +221,15 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                                                 echo '<td>' . $row['bestelldatum'] . '</td>';
                                             echo '</tr>';
                                         }
-                                    }elseif(isset($_GET['alleBestellungen'])){
-                                        $start_date = "";
-                                        $end_date = "";
+                                    }
+                                    elseif(isset($_GET['button'])){
+                                        echo '<tr>';
+                                            echo "<h4>Die Bestellungen für alle Benutzer von {$start_date} bis {$end_date}.</h4>";
+                                        echo '</tr>';
                                         // Abrufen aller Bestellungen aus der Datenbank
                                         $sql = "SELECT b.id, b.user_id, u.userName, b.option_name, b.option_id, b.day, b.day_datum, b.bestelldatum 
                                                 FROM tbl_bestellung AS b INNER JOIN tbl_user AS u ON u.id = b.user_id 
+                                                WHERE b.bestelldatum >= '{$start_date}' AND b.bestelldatum <= '{$end_date}'
                                                 ORDER BY userName";
                                         $result = mysqli_query($conn, $sql);
                                         // Ausgabe der Bestellungen in einer Tabelle
