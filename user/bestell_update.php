@@ -80,7 +80,13 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
         }
         
     }
+    /*
+    Es gab einen Konflikt zwischen der Methode GET und POST bezüglich des Codes zum Ändern des Passworts 
+    in "Meine Daten" Seite und des Codes zum Update hier in dieser Datei, und nach dem Suchen und 
+    Überprüfen lag der Konflikt an den folgenden zwei Zeilen in dieser Position wo diesen Kommentar geschrieben hat:
     header('Location: u_user_page.php');
     exit();
+    */ 
+    
 }
 ?>
