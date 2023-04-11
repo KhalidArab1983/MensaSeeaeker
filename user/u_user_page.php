@@ -28,6 +28,7 @@ $errors = [
     'confirmPassError' => '',
     'otherError' => ''
 ];
+$success = '';
 
 $current_password = "";
 $new_password = "";
@@ -74,9 +75,36 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
             $errors['confirmPassError'] = '* Bitte bestätigen Sie das neues Passwort.';
         }
         if(!array_filter($errors)){
-            echo "success";
-            // $errors['otherError'] = '* success';
-            header("Location: u_user_page.php");
+            $current_password =  mysqli_real_escape_string($conn, $_POST['current_password']);
+            $new_password =      mysqli_real_escape_string($conn, $_POST['new_password']);
+            $confirm_password =  mysqli_real_escape_string($conn, $_POST['confirm_password']);
+
+            $currentPassHashed = hash('sha256', $current_password);
+            $newPassHashed = hash('sha256', $new_password);
+
+            $sql = "SELECT password FROM tbl_user WHERE id = $user_id";
+            $result = mysqli_query($conn, $sql);
+            $row = mysqli_fetch_assoc($result);
+            $db_password = $row['password'];
+
+            if($currentPassHashed == $db_password){
+                if($new_password == $confirm_password){
+                    $sql ="UPDATE tbl_user SET password = ? WHERE id = ?";
+                    $stmt = mysqli_prepare($conn, $sql);
+                    mysqli_stmt_bind_param($stmt, "ss", $newPassHashed, $user_id);
+                    if(mysqli_stmt_execute($stmt)){
+                        $success = "Das Passwort wurde erfolgreich geändert.";
+                        header("Location: u_user_page.php");
+                    }else{
+                        echo "Error: " . "<br>" . mysqli_error($conn);
+                    }
+                    
+                }else{
+                    $errors['otherError'] = "Die Passwörter stimmen nicht überein!";
+                }
+            }else{
+                $errors['otherError'] = "Das aktuelles Passwort ist falsch";
+            }
         }
     }
     if(isset($_POST['adresseForm'])){
@@ -460,6 +488,8 @@ $email = $row['email'];
                                 <button type="submit" class="btn btn-warning m-2" name="passwordForm" value="passSave">Speichern</button>
                                 <button type="reset" class="btn btn-warning m-2" name="button" value="passCancel">Abrechen</button>
                             </div>
+                            <div class="form-text m-5 error"><?php echo $errors['otherError'] ?></div>
+                            <div class="form-text m-5 success"><?php echo $success ?></div>
                         </form>
                     </div>
                 </div>

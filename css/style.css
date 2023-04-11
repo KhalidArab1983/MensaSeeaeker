@@ -250,6 +250,10 @@ th {
     font-size: 1rem;
 }
 
+.success{
+    color: green;
+    font-size: 1.5rem;
+}
 
 /* .btn{
     border: none;
