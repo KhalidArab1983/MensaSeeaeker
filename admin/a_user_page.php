@@ -26,7 +26,6 @@ $user_id = $userRow['id'];
 
 
 
-
 if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
     $einzahlungsbetrag = $_POST['einzahlungsbetrag'];
     $userEinzahlung = $_POST['userEinzahlung'];
@@ -38,8 +37,18 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
             echo "Error: " . "<br>" . mysqli_error($conn);
         }
     }
-    
 }
+
+
+
+if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
+    $start_date = isset($_GET['start_date']) ? $_GET['start_date'] : "";
+    $end_date = isset($_GET['end_date']) ? $_GET['end_date'] : "";
+}else{
+    $start_date = "";
+    $end_date = "";
+}
+
 ?>
 
 
@@ -164,75 +173,75 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
                 
                 <div id="bestellungen" class="subtabcontent" style="display:none">
                     <div class="container">
+                        <form method="get" class="col-sm-12">
+                            <div class="m-1" style="display:flex">
+                                <h3>Von: </h3>
+                                <input type="date" name="start_date" class="col-sm-10 col-md-3 m-2" value="<?php echo $start_date; ?>">
+                                <h3>Bis: </h3>
+                                <input type="date" name="end_date" class="col-sm-10 col-md-3 m-2" value="<?php echo $end_date; ?>">
+                                <button type="submit" class="btn btn-warning m-1" name="button">Suchen</button>
+                                <button type="submit" class="btn btn-warning m-1" name="alleBestellungen">Alle Bestellungen</button>
+                            </div>
+                        </form>
                         <table>
-                            <form method="POST">
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            <input type="checkbox" id="checkboxId" name="checkboxId">
-                                            Bestell-ID
-                                        </th>
-                                        <th>User ID</th>
-                                        <th>
-                                            <input type="checkbox" id="checkboxUserName" name="checkboxUserName" >
-                                            UserName
-                                        </th>
-                                        <th>Gerichtsname</th>
-                                        <th>GerichtID</th>
-                                        <th>Der Tag</th>
-                                        <th>Datum des Tages</th>
-                                        <th>
-                                            <input type="checkbox" id="checkboxBestellDatum" name="checkboxBestellDatum" >
-                                            Bestell Datum
-                                        </th>
-                                    </tr>
-                                </thead>
-                            </form>
+                            <thead>
+                                <tr>
+                                    <th>Bestell-ID</th>
+                                    <th>User ID</th>
+                                    <th>UserName</th>
+                                    <th>Gerichtsname</th>
+                                    <th>GerichtID</th>
+                                    <th>Der Tag</th>
+                                    <th>Datum des Tages</th>
+                                    <th>Bestell Datum</th>
+                                </tr>
+                            </thead>
                             <tbody>
                                 <?php
-                                    function isCheckboxChecked($checkboxName) {
-                                        return isset($_POST[$checkboxName]) && $_POST[$checkboxName] == 'checked';
+                                    if(isset($_GET['button'])){
+                                        // $start_date = $_GET['start_date'];
+                                        // $end_date = $_GET['end_date'];
+                                        // Abrufen aller Bestellungen aus der Datenbank
+                                        $sql = "SELECT b.id, b.user_id, u.userName, b.option_name, b.option_id, b.day, b.day_datum, b.bestelldatum 
+                                                FROM tbl_bestellung AS b INNER JOIN tbl_user AS u ON u.id = b.user_id 
+                                                WHERE b.bestelldatum >= '{$start_date}' AND b.bestelldatum <= '{$end_date}'
+                                                ORDER BY userName";
+                                        $result = mysqli_query($conn, $sql);
+                                        // Ausgabe der Bestellungen in einer Tabelle
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                            echo '<tr>';
+                                                echo '<td>' . $row['id'] . '</td>';
+                                                echo '<td>' . $row['user_id'] . '</td>';
+                                                echo '<td>' . $row['userName'] . '</td>';
+                                                echo '<td>' . $row['option_name'] . '</td>';
+                                                echo '<td>' . $row['option_id'] . '</td>';
+                                                echo '<td>' . $row['day'] . '</td>';
+                                                echo '<td>' . $row['day_datum'] . '</td>';
+                                                echo '<td>' . $row['bestelldatum'] . '</td>';
+                                            echo '</tr>';
+                                        }
+                                    }elseif(isset($_GET['alleBestellungen'])){
+                                        $start_date = "";
+                                        $end_date = "";
+                                        // Abrufen aller Bestellungen aus der Datenbank
+                                        $sql = "SELECT b.id, b.user_id, u.userName, b.option_name, b.option_id, b.day, b.day_datum, b.bestelldatum 
+                                                FROM tbl_bestellung AS b INNER JOIN tbl_user AS u ON u.id = b.user_id 
+                                                ORDER BY userName";
+                                        $result = mysqli_query($conn, $sql);
+                                        // Ausgabe der Bestellungen in einer Tabelle
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                            echo '<tr>';
+                                                echo '<td>' . $row['id'] . '</td>';
+                                                echo '<td>' . $row['user_id'] . '</td>';
+                                                echo '<td>' . $row['userName'] . '</td>';
+                                                echo '<td>' . $row['option_name'] . '</td>';
+                                                echo '<td>' . $row['option_id'] . '</td>';
+                                                echo '<td>' . $row['day'] . '</td>';
+                                                echo '<td>' . $row['day_datum'] . '</td>';
+                                                echo '<td>' . $row['bestelldatum'] . '</td>';
+                                            echo '</tr>';
+                                        }
                                     }
-                                    // Überprüfen, ob Checkboxen angeklickt wurden
-                                    if (isCheckboxChecked('checkboxId')) {
-                                        $sort_column = "b.id";
-                                        $_POST['checkboxUserName'] = $isDisabled;
-                                        $_POST['checkboxBestellDatum'] = $isDisabled;
-
-
-                                    } elseif (isCheckboxChecked('checkboxUserName')) {
-                                        $sort_column = "u.userName";
-                                        $_POST['checkboxId'] = $isDisabled;
-                                        $_POST['checkboxBestellDatum'] = $isDisabled;
-
-
-                                    } elseif (isCheckboxChecked('checkboxBestellDatum')) {
-                                        $sort_column = "b.bestelldatum";
-                                        $_POST['checkboxId'] = $isDisabled;
-                                        $_POST['checkboxUserName'] = $isDisabled;
-
-                                        
-                                    } else {
-                                        $sort_column = "b.bestelldatum"; // Standard-Sortierspalte
-                                    }
-                                    // Abrufen aller Bestellungen aus der Datenbank
-                                    $sql = "SELECT b.id, b.user_id, u.userName, b.option_name, b.option_id, b.day, b.day_datum, b.bestelldatum 
-                                            FROM tbl_bestellung AS b INNER JOIN tbl_user AS u ON u.id = b.user_id ORDER BY userName";
-                                    $result = mysqli_query($conn, $sql);
-                                    // Ausgabe der Bestellungen in einer Tabelle
-                                    while ($row = mysqli_fetch_assoc($result)) {
-                                        echo '<tr>';
-                                            echo '<td>' . $row['id'] . '</td>';
-                                            echo '<td>' . $row['user_id'] . '</td>';
-                                            echo '<td>' . $row['userName'] . '</td>';
-                                            echo '<td>' . $row['option_name'] . '</td>';
-                                            echo '<td>' . $row['option_id'] . '</td>';
-                                            echo '<td>' . $row['day'] . '</td>';
-                                            echo '<td>' . $row['day_datum'] . '</td>';
-                                            echo '<td>' . $row['bestelldatum'] . '</td>';
-                                        echo '</tr>';
-                                    }
-                                    // mysqli_close($conn);
                                 ?>
                             </tbody>
                         </table>

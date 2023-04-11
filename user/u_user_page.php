@@ -13,13 +13,17 @@ if (isset($_SESSION['user_id'])) {
 date_default_timezone_set("Europe/Berlin");
 
 
-
 // Um die Session Dauer zuzeigen
 if(!isset($_SESSION['startzeit'])){
     $_SESSION['startzeit'] = time();
 }
 $vergangene_zeit = (time() - $_SESSION['startzeit']) / 60;
 $formatierte_zeit = gmdate("H:i:s", $vergangene_zeit * 60);
+
+
+
+
+
 
 
 $errors = [
@@ -119,6 +123,30 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
         // mysqli_close($conn);
     }
 }
+
+// Um Benutzerdaten abzurufen und in den Eingabefeldern anzuzeigen
+$sql = "SELECT * FROM tbl_user u  
+        INNER JOIN tbl_ort o ON u.plz = o.plz
+        WHERE id = $user_id";
+$result = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($result);
+$userName = $row['userName'];
+$lastName = $row['lastName'];
+$firstName = $row['firstName'];
+$birthday = $row['birthday'];
+$aktiv_ab = $row['aktiv_ab'];
+$klasse = $row['klasse'];
+$adresse = $row['adresse'];
+$plz = $row['plz'];
+$ort = $row['ort'];
+$ortsteil = $row['ortsteil'];
+$phone = $row['phone'];
+$email = $row['email'];
+
+
+
+
+
 
 
 // include ('./u_kontoZustand.php');
@@ -244,25 +272,6 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
 
 
 
-
-
-$sql = "SELECT * FROM tbl_user u  
-        INNER JOIN tbl_ort o ON u.plz = o.plz
-        WHERE id = $user_id";
-$result = mysqli_query($conn, $sql);
-$row = mysqli_fetch_assoc($result);
-$userName = $row['userName'];
-$lastName = $row['lastName'];
-$firstName = $row['firstName'];
-$birthday = $row['birthday'];
-$aktiv_ab = $row['aktiv_ab'];
-$klasse = $row['klasse'];
-$adresse = $row['adresse'];
-$plz = $row['plz'];
-$ort = $row['ort'];
-$ortsteil = $row['ortsteil'];
-$phone = $row['phone'];
-$email = $row['email'];
 
 
 
