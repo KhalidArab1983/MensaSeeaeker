@@ -85,8 +85,6 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
         mysqli_close($conn);
     }
 
-
-
     // Hash the password
     $hashed_password = hash('sha256', $password);
 
@@ -196,6 +194,9 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
 
 
 
+
+
+
 ?>
 
 
@@ -214,9 +215,9 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
             border-bottom: 2px dotted black;
             cursor: pointer;
             color: black;
-            }
+        }
 
-            .hint {
+        .hint {
             display: none;
             position: absolute;
             z-index: 1;
@@ -225,11 +226,11 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            width: 300px;
+            width: 400px;
             text-align: center;
-            }
+        }
 
-            .hint::before {
+        .hint::before {
             content: "";
             position: absolute;
             top: 50%;
@@ -238,7 +239,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
             border-width: 5px;
             border-style: solid;
             border-color: transparent #f9f9f9 transparent transparent;
-            }
+        }
                     
     </style>
 </head>
@@ -343,14 +344,13 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
                             <option>Benutzer Name auswählen...</option>
                             <?php
                                 // Send query to database to get users
-                                    $sql = "SELECT id, userName FROM tbl_user";
-                                    $result = mysqli_query($conn, $sql);
-
+                                $sql = "SELECT id, userName FROM tbl_user";
+                                $result = mysqli_query($conn, $sql);
                                 // Include each result as an option tag in the drop-down list
-                                    while($row = mysqli_fetch_assoc($result)){
-                                        echo "<option value= '" . $row['id']."'>" .$row['id']. "_".$row['userName'] . "</option>";
-                                    }
-                                ?>
+                                while($row = mysqli_fetch_assoc($result)){
+                                    echo "<option value= '" . $row['id']."'>" .$row['id']. "_".$row['userName'] . "</option>";
+                                }
+                            ?>
                         </select>
                     </div>
                     <div class="mb-1">
@@ -358,11 +358,10 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
                         <select class="form-control" name="klasse" id="klasse">
                             <option></option>
                             <?php
-                            // Send query to database to get School Classes
+                                // Send query to database to get School Classes
                                 $sql = "SELECT * FROM tbl_klasse";
                                 $result = mysqli_query($conn, $sql);
-
-                            // Include each result as an option tag in the drop-down list
+                                // Include each result as an option tag in the drop-down list
                                 while($row = mysqli_fetch_assoc($result)){
                                     echo "<option value= '" . $row['klasse']."'>" . $row['klasse'] . "</option>";
                                 }
@@ -376,11 +375,10 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
                             <option></option>
                             <?php 
                                 include ('../conn/db_conn.php');
-                            // Send query to database to get postal code and cities
+                                // Send query to database to get postal code and cities
                                 $sql = "SELECT * FROM tbl_ort";
                                 $result = mysqli_query($conn, $sql);
-                            
-                            // Include each result as an option tag in the drop-down list
+                                // Include each result as an option tag in the drop-down list
                                 while($row = mysqli_fetch_assoc($result)){
                                     echo "<option value= '" . $row['plz']."'>" . $row['plz'] . " - " . $row['ort'] . "</option>";
                                 }
@@ -402,20 +400,20 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
                     </div>
                     <div class="mb-1">
                         <!-- <label for="email">Email:</label> -->
-                        <input type="email" class="form-control" name="email" id="email" placeholder="Email Adresse" >
+                        <input type="email" class="form-control" name="email" id="email" placeholder="Email Adresse">
                     </div>
                     <div class="mb-1">
                         <!-- <label for="phone">Handy:</label> -->
-                        <input type="text" class="form-control" name="phone" id="phone" placeholder="Handynummer" >
+                        <input type="text" class="form-control" name="phone" id="phone" placeholder="Handynummer">
                     </div>
                     
                     <div class="mb-1">
                         <!-- <label for="adresse">Anschrift:</label> -->
-                        <input type="text" class="form-control" name="adresse" id="adresse" placeholder="Straße, Haus Nr." >
+                        <input type="text" class="form-control" name="adresse" id="adresse" placeholder="Straße, Haus Nr.">
                     </div>
                     <div class="mb-1">
                         <!-- <label for="ortsteil">Ortsteil:</label> -->
-                        <input type="text" class="form-control" name="ortsteil" id="ortsteil" placeholder="Ortsteil" >
+                        <input type="text" class="form-control" name="ortsteil" id="ortsteil" placeholder="Ortsteil">
                     </div>
                     <div class="mb-1">
                         <!-- <label for="birthday">Geburtsdatum:</label> -->
