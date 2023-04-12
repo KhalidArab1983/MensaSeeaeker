@@ -59,7 +59,6 @@ function updateInputUser(){
     var firstNameValue = document.getElementById("firstName").value;
     var lastNameValue = document.getElementById("lastName").value;
     var birthdayValue = document.getElementById("birthday").value;
-    var klasseValue = document.getElementById("klasse").value;
 
     var benutzerNameValue = lastNameValue.substr().toLowerCase() +"-"+ firstNameValue.substr(0,2).toUpperCase() + birthdayValue.substr(8,4);
     var kennwortValue = lastNameValue.substr().toLowerCase() +"-"+ firstNameValue.substr(0,2).toUpperCase() + birthdayValue.substr(8,4);

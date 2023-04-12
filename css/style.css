@@ -185,6 +185,7 @@
     border-radius: 5px;
     width: 400px;
     text-align: center;
+    font-size: 15px;
 }
 .hint::before {
     content: "";
