@@ -10,6 +10,19 @@ if (isset($_SESSION['admin_id'])) {
 	exit;
 }
 
+// Benötigte Dateien einbinden
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
+
+require_once('../vendor/phpmailer/phpmailer/src/PHPMailer.php');
+require_once('../vendor/phpmailer/phpmailer/src/SMTP.php');
+require_once('../vendor/phpmailer/phpmailer/src/Exception.php');
+
+require '../vendor/autoload.php';
+
+
+
 $aktiv_ab = date('d.m.Y');
 
 $error = "";
@@ -94,8 +107,39 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
         $sql = "INSERT INTO tbl_user (klasse, plz, userName, firstName, lastName, email, phone, adresse, ortsteil, birthday, aktiv_ab, password, admin_id)
                 VALUES ('$klasse', '$plz', '$userName', '$firstName', '$lastName', '$email', '$phone', '$adresse', '$ortsteil', '$birthday', '$aktiv_ab', '$hashed_password', '{$admin_id}')";
         if(mysqli_query($conn, $sql)){
-            echo "Schüler ist erfolgreich hinzugefügt";
-            header("Location: create_user.php");
+            
+            $mail = new PHPMailer();
+            try {
+                // $mail->SMTPDebug = 2; 
+                $mail->isSMTP();
+                $mail->Host = 'smtp.gmail.com';  // SMTP-Host deines E-Mail-Providers
+                $mail->Port = 587;  // Port deines SMTP-Servers
+                $mail->SMTPAuth = true;
+                $mail->SMTPSecure = 'tls';
+                $mail->Username = 'rojdaf8@gmail.com';  // Deine E-Mail-Adresse
+                $mail->Password = 'covyppaonfovaywk';  // Dein E-Mail-Passwort
+                $mail->setFrom('rojdaf8@gmail.com', 'noReply');  // Absender-Adresse und Name
+                $mail->addAddress($email);  // Empfänger-Adresse
+                // $mail->addAttachment('../images/logo.jpg');
+                $mail->isHTML(true);
+                $mail->CharSet = 'UTF-8';
+                $mail->Subject = 'Anmeldedaten';  // Betreff der E-Mail
+                $mail->Body = "<h3>Ihre Zugangsdaten für die Essensbestellplattform der Seeäckerschule lauten wie folgt:</h3><br>
+                                klasse: <h3 style='color:blue'> $klasse</h3><br>
+                                Benutzername: <h3 style='color:blue'> $userName</h3><br>
+                                Email: <h3 style='color:blue'> $email</h3><br>
+                                passwort: <h3 style='color:blue'> $password</h3><br>
+                                Geben Sie die Daten im Anmeldeformular über den folgenden Link ein <a>abowisam.com</a><br>
+                                Bitte ändern Sie Ihr Passwort sofort nach der ersten Anmeldung.";  // Inhalt der E-Mail
+
+                // E-Mail senden
+                $mail->send();
+                echo 'Email sent successfully';
+                header("Location: create_user.php");
+            } catch (Exception $e) {
+                echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
+            }
+
         }else{
             echo "Error: " . "<br>" . mysqli_error($conn);
         }
