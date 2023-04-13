@@ -12,6 +12,8 @@ if (isset($_SESSION['admin_id'])) {
 
 $aktiv_ab = date('d.m.Y');
 
+$error = "";
+
 if ($_SERVER["REQUEST_METHOD"]=="POST"){
     if (isset($_POST['userName1'])) {
         $userName1 = $_POST['userName1'];
@@ -100,74 +102,78 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
         mysqli_close($conn);
     }
     if($button == "update"){
-        if(empty($klasse)) {
-            $query = "SELECT klasse FROM tbl_user WHERE id= '{$user_id}'";
-            $result = mysqli_query($conn, $query);
-            $row = mysqli_fetch_assoc($result);
-            $klasse = $row['klasse'];
-        }
-        if(empty($plz)) {
-            $query = "SELECT plz FROM tbl_user WHERE id= '{$user_id}'";
-            $result = mysqli_query($conn, $query);
-            $row = mysqli_fetch_assoc($result);
-            $plz = $row['plz'];
-        }
-        if(empty($userName)) {
-            $query = "SELECT userName FROM tbl_user WHERE id= '{$user_id}'";
-            $result = mysqli_query($conn, $query);
-            $row = mysqli_fetch_assoc($result);
-            $userName = $row['userName'];
-        }
-        if(empty($firstName)) {
-            $query = "SELECT firstName FROM tbl_user WHERE id= '{$user_id}'";
-            $result = mysqli_query($conn, $query);
-            $row = mysqli_fetch_assoc($result);
-            $firstName = $row['firstName'];
-        }
-        if(empty($lastName)) {
-            $query = "SELECT lastName FROM tbl_user WHERE id= '{$user_id}'";
-            $result = mysqli_query($conn, $query);
-            $row = mysqli_fetch_assoc($result);
-            $lastName = $row['lastName'];
-        }
-        if(empty($email)){
-            $query = "SELECT email FROM tbl_user WHERE id = '{$user_id}'";
-            $result = mysqli_query($conn, $query);
-            $row = mysqli_fetch_assoc($result);
-            $email = $row['email'];
-        }
-        if(empty($phone)){
-            $query = "SELECT phone FROM tbl_user WHERE id = '{$user_id}'";
-            $result = mysqli_query($conn, $query);
-            $row = mysqli_fetch_assoc($result);
-            $phone = $row['phone'];
-        }
-        if(empty($adresse)){
-            $query = "SELECT adresse FROM tbl_user WHERE id = '{$user_id}'";
-            $result = mysqli_query($conn, $query);
-            $row = mysqli_fetch_assoc($result);
-            $adresse = $row['adresse'];
-        }
-        if(empty($ortsteil)){
-            $query = "SELECT ortsteil FROM tbl_user WHERE id = '{$user_id}'";
-            $result = mysqli_query($conn, $query);
-            $row = mysqli_fetch_assoc($result);
-            $ortsteil = $row['ortsteil'];
-        }
-        if(empty($password)){
-            $query = "SELECT password FROM tbl_user WHERE id = '{$user_id}'";
-            $result = mysqli_query($conn, $query);
-            $row = mysqli_fetch_assoc($result);
-            $password = $row['password'];
-        }
-        
-        $sql = "UPDATE tbl_user SET klasse = ?, plz = ?, firstName = ?, lastName = ?, email = ?, phone = ?, adresse = ?, ortsteil = ?, admin_id = ? WHERE id = ?";
-        $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "ssssssssss", $klasse, $plz, $firstName, $lastName, $email, $phone, $adresse, $ortsteil, $admin_id, $user_id);
-        if(mysqli_stmt_execute($stmt)){
-            header("Location: create_user.php");
+        if(empty($user_id) || $user_id == "Benutzer Name auswählen..."){
+            $error = "Wählen Sie bitte einen Benutzer aus!";
         }else{
-            echo "Error: " . "<br>" . mysqli_error($conn);
+            if(empty($klasse)) {
+                $query = "SELECT klasse FROM tbl_user WHERE id= '{$user_id}'";
+                $result = mysqli_query($conn, $query);
+                $row = mysqli_fetch_assoc($result);
+                $klasse = $row['klasse'];
+            }
+            if(empty($plz)) {
+                $query = "SELECT plz FROM tbl_user WHERE id= '{$user_id}'";
+                $result = mysqli_query($conn, $query);
+                $row = mysqli_fetch_assoc($result);
+                $plz = $row['plz'];
+            }
+            if(empty($userName)) {
+                $query = "SELECT userName FROM tbl_user WHERE id= '{$user_id}'";
+                $result = mysqli_query($conn, $query);
+                $row = mysqli_fetch_assoc($result);
+                $userName = $row['userName'];
+            }
+            if(empty($firstName)) {
+                $query = "SELECT firstName FROM tbl_user WHERE id= '{$user_id}'";
+                $result = mysqli_query($conn, $query);
+                $row = mysqli_fetch_assoc($result);
+                $firstName = $row['firstName'];
+            }
+            if(empty($lastName)) {
+                $query = "SELECT lastName FROM tbl_user WHERE id= '{$user_id}'";
+                $result = mysqli_query($conn, $query);
+                $row = mysqli_fetch_assoc($result);
+                $lastName = $row['lastName'];
+            }
+            if(empty($email)){
+                $query = "SELECT email FROM tbl_user WHERE id = '{$user_id}'";
+                $result = mysqli_query($conn, $query);
+                $row = mysqli_fetch_assoc($result);
+                $email = $row['email'];
+            }
+            if(empty($phone)){
+                $query = "SELECT phone FROM tbl_user WHERE id = '{$user_id}'";
+                $result = mysqli_query($conn, $query);
+                $row = mysqli_fetch_assoc($result);
+                $phone = $row['phone'];
+            }
+            if(empty($adresse)){
+                $query = "SELECT adresse FROM tbl_user WHERE id = '{$user_id}'";
+                $result = mysqli_query($conn, $query);
+                $row = mysqli_fetch_assoc($result);
+                $adresse = $row['adresse'];
+            }
+            if(empty($ortsteil)){
+                $query = "SELECT ortsteil FROM tbl_user WHERE id = '{$user_id}'";
+                $result = mysqli_query($conn, $query);
+                $row = mysqli_fetch_assoc($result);
+                $ortsteil = $row['ortsteil'];
+            }
+            if(empty($password)){
+                $query = "SELECT password FROM tbl_user WHERE id = '{$user_id}'";
+                $result = mysqli_query($conn, $query);
+                $row = mysqli_fetch_assoc($result);
+                $password = $row['password'];
+            }
+            
+            $sql = "UPDATE tbl_user SET klasse = ?, plz = ?, firstName = ?, lastName = ?, email = ?, phone = ?, adresse = ?, ortsteil = ?, admin_id = ? WHERE id = ?";
+            $stmt = mysqli_prepare($conn, $sql);
+            mysqli_stmt_bind_param($stmt, "ssssssssss", $klasse, $plz, $firstName, $lastName, $email, $phone, $adresse, $ortsteil, $admin_id, $user_id);
+            if(mysqli_stmt_execute($stmt)){
+                header("Location: create_user.php");
+            }else{
+                echo "Error: " . "<br>" . mysqli_error($conn);
+            }
         }
     }
     if($button == "delete"){
@@ -281,7 +287,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
 
             <!-- Form to add a new student -->
             <div class="createUserForm">
-                <h4>Neu SchülerInnen hinzufügen </h4>
+                <h4>SchülerInnen Hinzufügen, Aktualisieren oder Löschen </h4>
                 <span class="tooltips" onclick="showHint()">info?</span>
                 <div class="hint" id="hint">
                     1. Suchen Sie nach dem Benutzer, indem Sie seinen Namen in das erste Feld eingeben.(Sie können einen beliebigen Teil des Benutzernamentextes eingeben)<br>
@@ -311,11 +317,12 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
                                 }
                             ?>
                         </select>
+                        <div class="form-text error"><?php echo $error;?></div>
                     </div>
                     <div class="mb-1">
                         <!-- <label for="klasse">Klasse:</label> -->
                         <select class="form-control" name="klasse" id="klasse">
-                            <option>*</option>
+                            <option></option>
                             <?php
                                 // Send query to database to get School Classes
                                 $sql = "SELECT * FROM tbl_klasse";
@@ -331,7 +338,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
                     <div class="mb-1">
                         <!-- <label for="plz">PLZ:</label> -->
                         <select class="form-control" name="plz" id="plz">
-                            <option>*</option>
+                            <option></option>
                             <?php 
                                 include ('../conn/db_conn.php');
                                 // Send query to database to get postal code and cities

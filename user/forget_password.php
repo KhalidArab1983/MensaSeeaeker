@@ -33,7 +33,6 @@ if(isset($_POST['send_code'])) {
             // Generieren eines zufälligen Codes
             $code = rand(100000, 999999);
 
-            // Speichern des Codes in der Datenbank oder einer Datei
             // Hier wird der Code einfach in einer Session-Variable gespeichert
             session_start();
             $_SESSION['forgot_password_code'] = $code;
