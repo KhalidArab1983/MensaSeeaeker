@@ -116,7 +116,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
                 $mail->SMTPAuth = true;
                 $mail->SMTPSecure = 'tls';
                 $mail->Username = 'rojdaf8@gmail.com';  // Deine E-Mail-Adresse
-                $mail->Password = 'covyppaonfovaywk';  // Dein E-Mail-Passwort
+                $mail->Password = 'mawvchdvumwunbgp';  // Dein E-Mail-Passwort
                 $mail->setFrom('rojdaf8@gmail.com', 'noReply');  // Absender-Adresse und Name
                 $mail->addAddress($email);  // Empfänger-Adresse
                 // $mail->addAttachment('../images/logo.jpg');

@@ -145,7 +145,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                                         // Abrufen der Bestellungen für den angegebenen Benutzer
                                         $sql = "SELECT u.userName, b.id, b.user_id, b.option_name, b.option_id, b.day, b.day_datum, b.bestelldatum 
                                                 FROM tbl_bestellung AS b LEFT JOIN tbl_user AS u ON u.id = b.user_id WHERE u.userName = '$userNameBestell' 
-                                                ORDER BY b.bestelldatum DESC;";
+                                                ORDER BY b.id;";
                                         $result = mysqli_query($conn, $sql);
                                         if($result->num_rows > 0){
                                             // Ausgabe der Bestellungen in einer Tabelle
@@ -226,13 +226,13 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                                     }
                                     elseif(isset($_GET['button'])){
                                         echo '<tr>';
-                                            echo "<h4>Die Bestellungen für alle Benutzer von {$start_date} bis {$end_date}.</h4>";
+                                            echo "<h4>Die Bestellungen für alle Benutzer von <span style='color:blue'>{$start_date}</span> bis <span style='color:blue'>{$end_date}</span>.</h4>";
                                         echo '</tr>';
                                         // Abrufen aller Bestellungen aus der Datenbank
                                         $sql = "SELECT b.id, b.user_id, u.userName, b.option_name, b.option_id, b.day, b.day_datum, b.bestelldatum 
                                                 FROM tbl_bestellung AS b INNER JOIN tbl_user AS u ON u.id = b.user_id 
                                                 WHERE b.bestelldatum >= '{$start_date}' AND b.bestelldatum <= '{$end_date}'
-                                                ORDER BY userName";
+                                                ORDER BY b.bestelldatum";
                                         $result = mysqli_query($conn, $sql);
                                         // Ausgabe der Bestellungen in einer Tabelle
                                         while ($row = mysqli_fetch_assoc($result)) {
@@ -550,81 +550,88 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                         INNER JOIN tbl_ort o ON u.plz = o.plz
                         WHERE u.userName = '$userNameTable'";
                         $result = mysqli_query($conn, $sql);
-                        $row = mysqli_fetch_assoc($result);
-                        $userName = $row['userName'];
-                        $lastName = $row['lastName'];
-                        $firstName = $row['firstName'];
-                        $birthday = $row['birthday'];
-                        $aktiv_ab = $row['aktiv_ab'];
-                        $klasse = $row['klasse'];
-                        $adresse = $row['adresse'];
-                        $plz = $row['plz'];
-                        $ort = $row['ort'];
-                        $ortsteil = $row['ortsteil'];
-                        $phone = $row['phone'];
-                        $email = $row['email'];
+                        if($result->num_rows > 0){
+                            $row = mysqli_fetch_assoc($result);
+                            $userName = $row['userName'];
+                            $lastName = $row['lastName'];
+                            $firstName = $row['firstName'];
+                            $birthday = $row['birthday'];
+                            $aktiv_ab = $row['aktiv_ab'];
+                            $klasse = $row['klasse'];
+                            $adresse = $row['adresse'];
+                            $plz = $row['plz'];
+                            $ort = $row['ort'];
+                            $ortsteil = $row['ortsteil'];
+                            $phone = $row['phone'];
+                            $email = $row['email'];
                 ?>
-                <div name="userDataTable" class="row">
-                    <div class="card col-sm-12 col-md-4 m-1">
-                        <h4 class="mb-5">Allgemeine Daten:</h4>
-                        <div class="form-group">
-                            <label for="userName" style="font-weight:bold;">Benutzername:</label>
-                            <input type="text" name="userName" id="userName" class="form-control" value="<?php echo $userName; ?>" readonly>
+                    <div name="userDataTable" class="row">
+                        <div class="card col-sm-12 col-md-4 m-1">
+                            <h4 class="mb-5">Allgemeine Daten:</h4>
+                            <div class="form-group">
+                                <label for="userName" style="font-weight:bold;">Benutzername:</label>
+                                <input type="text" name="userName" id="userName" class="form-control" value="<?php echo $userName; ?>" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName" style="font-weight:bold;">Nachname:</label>
+                                <input type="text" name="lastName" id="lastName" class="form-control" value="<?php echo $lastName; ?>" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="firstName" style="font-weight:bold;">Vorname:</label>
+                                <input type="text" name="firstName" id="firstName" class="form-control" value="<?php echo $firstName; ?>" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="birthday" style="font-weight:bold;">Geburtsdatum:</label>
+                                <input type="text" name="birthday" id="birthday" class="form-control" value="<?php echo $birthday; ?>" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="aktiv_ab" style="font-weight:bold;">Aktiv ab:</label>
+                                <input type="text" name="aktiv_ab" id="aktiv_ab" class="form-control" value="<?php echo $aktiv_ab; ?>" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="klasse" style="font-weight:bold;">Klasse:</label>
+                                <input type="text" name="klasse" id="klasse" class="form-control" value="<?php echo $klasse; ?>">
+                            </div>
+                            <p>* Die Daten in diesen Tabellen dienen nur zur Anzeige und können nicht geändert werden.</p>
                         </div>
-                        <div class="form-group">
-                            <label for="lastName" style="font-weight:bold;">Nachname:</label>
-                            <input type="text" name="lastName" id="lastName" class="form-control" value="<?php echo $lastName; ?>" readonly>
+                        <div class="card col-sm-12 col-md-4 m-1">
+                            <h4 class="mb-5">Adresse:</h4>
+                            <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST">
+                                <div class="form-group">                                    
+                                    <label style="font-weight:bold; width:200px">Adresse :</label>
+                                    <input type="text" name="adresse" id="adresse" class="form-control" value="<?php echo $adresse; ?>">
+                                </div>
+                                <div class="form-group">                                    
+                                    <label style="font-weight:bold; width:200px">PLZ :</label>
+                                    <input type="text" name="plz" id="plz" class="form-control" value="<?php echo $plz; ?>">
+                                </div>
+                                <div class="form-group">                                    
+                                    <label style="font-weight:bold; width:200px">Ort :</label>
+                                    <input type="text" name="ort" id="ort" class="form-control" value="<?php echo $ort; ?>">
+                                </div>
+                                <div class="form-group">                                    
+                                    <label style="font-weight:bold; width:200px">Ortsteil :</label>
+                                    <input type="text" name="ortsteil" id="ortsteil" class="form-control" value="<?php echo $ortsteil; ?>">
+                                </div>
+                                <div class="form-group">                                    
+                                    <label style="font-weight:bold; width:200px">Handy :</label>
+                                    <input type="text" name="phone" id="phone" class="form-control" value="<?php echo $phone; ?>">
+                                </div>
+                                <div class="form-group">                                    
+                                    <label style="font-weight:bold; width:200px">Email-Adresse :</label>
+                                    <input type="text" name="email" id="email" class="form-control" value="<?php echo $email; ?>">
+                                </div>
+                                <p>Um die Daten des Benutzers zu ändern, wenden Sie sich an "Neu Benutzer" Seite.</p>
+                            </form>
                         </div>
-                        <div class="form-group">
-                            <label for="firstName" style="font-weight:bold;">Vorname:</label>
-                            <input type="text" name="firstName" id="firstName" class="form-control" value="<?php echo $firstName; ?>" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="birthday" style="font-weight:bold;">Geburtsdatum:</label>
-                            <input type="text" name="birthday" id="birthday" class="form-control" value="<?php echo $birthday; ?>" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="aktiv_ab" style="font-weight:bold;">Aktiv ab:</label>
-                            <input type="text" name="aktiv_ab" id="aktiv_ab" class="form-control" value="<?php echo $aktiv_ab; ?>" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="klasse" style="font-weight:bold;">Klasse:</label>
-                            <input type="text" name="klasse" id="klasse" class="form-control" value="<?php echo $klasse; ?>">
-                        </div>
-                        <p>* Die Daten in diesen Tabellen dienen nur zur Anzeige und können nicht geändert werden.</p>
                     </div>
-                    <div class="card col-sm-12 col-md-4 m-1">
-                        <h4 class="mb-5">Adresse:</h4>
-                        <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST">
-                            <div class="form-group">                                    
-                                <label style="font-weight:bold; width:200px">Adresse :</label>
-                                <input type="text" name="adresse" id="adresse" class="form-control" value="<?php echo $adresse; ?>">
-                            </div>
-                            <div class="form-group">                                    
-                                <label style="font-weight:bold; width:200px">PLZ :</label>
-                                <input type="text" name="plz" id="plz" class="form-control" value="<?php echo $plz; ?>">
-                            </div>
-                            <div class="form-group">                                    
-                                <label style="font-weight:bold; width:200px">Ort :</label>
-                                <input type="text" name="ort" id="ort" class="form-control" value="<?php echo $ort; ?>">
-                            </div>
-                            <div class="form-group">                                    
-                                <label style="font-weight:bold; width:200px">Ortsteil :</label>
-                                <input type="text" name="ortsteil" id="ortsteil" class="form-control" value="<?php echo $ortsteil; ?>">
-                            </div>
-                            <div class="form-group">                                    
-                                <label style="font-weight:bold; width:200px">Handy :</label>
-                                <input type="text" name="phone" id="phone" class="form-control" value="<?php echo $phone; ?>">
-                            </div>
-                            <div class="form-group">                                    
-                                <label style="font-weight:bold; width:200px">Email-Adresse :</label>
-                                <input type="text" name="email" id="email" class="form-control" value="<?php echo $email; ?>">
-                            </div>
-                            <p>Um die Daten des Benutzers zu ändern, wenden Sie sich an "Neu Benutzer" Seite.</p>
-                        </form>
-                    </div>
-                </div>
-                <?php }?>
+                <?php 
+                    }else{
+                        echo "<h4>Die Benutzername <span style='font-weight:bold'>{$userNameTable}</span> nicht gefunden.</h4>";
+                    }
+                }
+                ?>
+
             </div>
         </div>
         <div id="sss" class="tabcontent">
