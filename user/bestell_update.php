@@ -16,35 +16,35 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
     $updateStmt->execute();
 
 
-    if($current_time >= '22:00:00' && $current_day == 0 || $current_day > 0 && $current_day < 5){
+    if($current_time >= '22:00:00' && $current_day == 0 || $current_day > 0 && $current_day <= 6){
         // Update Button für Montag deaktivieren
         $sql = "UPDATE tbl_bestellstatus SET montag = ? WHERE user_id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ss", $bestell_status_deaktiv, $user_id);
         $stmt->execute();
     }
-    if($current_time >= '22:00:00' && $current_day == 1 || $current_day > 1 && $current_day < 5){
+    if($current_time >= '22:00:00' && $current_day == 1 || $current_day > 1 && $current_day <= 6){
         // Update Button für Dienstag deaktivieren
         $sql = "UPDATE tbl_bestellstatus SET dienstag = ? WHERE user_id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ss", $bestell_status_deaktiv, $user_id);
         $stmt->execute();
     }
-    if($current_time >= '22:00:00' && $current_day == 2 || $current_day > 2 && $current_day < 5){
+    if($current_time >= '22:00:00' && $current_day == 2 || $current_day > 2 && $current_day <= 6){
         // Update Button für Mittwoch deaktivieren
         $sql = "UPDATE tbl_bestellstatus SET mittwoch = ? WHERE user_id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ss", $bestell_status_deaktiv, $user_id);
         $stmt->execute();
     }
-    if($current_time >= '22:00:00' && $current_day == 3 || $current_day > 3 && $current_day < 5){
+    if($current_time >= '22:00:00' && $current_day == 3 || $current_day > 3 && $current_day <= 6){
         // Update Button für Donnerstag deaktivieren
         $sql = "UPDATE tbl_bestellstatus SET donnerstag = ? WHERE user_id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ss", $bestell_status_deaktiv, $user_id);
         $stmt->execute();
     }
-    if($current_time >= '22:00:00' && $current_day == 4 || $current_day > 4 && $current_day < 5){
+    if($current_time >= '22:00:00' && $current_day == 4 || $current_day > 4 && $current_day <= 6){
         // Update Button für Freitag deaktivieren
         $sql = "UPDATE tbl_bestellstatus SET freitag = ? WHERE user_id = ?";
         $stmt = $conn->prepare($sql);
@@ -77,9 +77,11 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
                     SET tbl_bestellung.option_name = (SELECT option_name FROM tbl_option WHERE id = $option_id), 
                     tbl_bestellung.option_id= $option_id WHERE tbl_bestellung.id =$bestellung_id";
             $result = mysqli_query($conn, $sql);
+            header('Location: u_user_page.php');
         }
         
     }
+    
     /*
     Es gab einen Konflikt zwischen der Methode GET und POST bezüglich des Codes zum Ändern des Passworts 
     in "Meine Daten" Seite und des Codes zum Update hier in dieser Datei, und nach dem Suchen und 

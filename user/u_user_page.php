@@ -22,10 +22,6 @@ $formatierte_zeit = gmdate("H:i:s", $vergangene_zeit * 60);
 
 
 
-
-
-
-
 $errors = [
     'currentPassError' => '',
     'newPassError' => '',
@@ -150,9 +146,9 @@ $email = $row['email'];
 
 
 // include ('./u_kontoZustand.php');
-include ('./bestell_update.php');
-include ('./bestell_insert.php');
 
+include ('./bestell_insert.php');
+include ('./bestell_update.php');
 
 
 $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');

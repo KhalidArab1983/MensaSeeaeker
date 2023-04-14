@@ -19,6 +19,7 @@ $current_day = date('l');
 $week_count = date('W');
 
 
+
 $userSql ="SELECT id FROM tbl_user";
 $result = mysqli_query($conn, $userSql);
 $userRow = mysqli_fetch_assoc($result);
