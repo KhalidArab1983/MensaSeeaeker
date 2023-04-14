@@ -232,7 +232,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                                         // Abrufen aller Bestellungen aus der Datenbank
                                         $sql = "SELECT b.id, b.user_id, u.userName, b.option_name, b.option_id, b.day, b.day_datum, b.bestelldatum 
                                                 FROM tbl_bestellung AS b INNER JOIN tbl_user AS u ON u.id = b.user_id 
-                                                WHERE b.bestelldatum >= '{$start_date}' AND b.bestelldatum <= '{$end_date}'
+                                                WHERE b.bestelldatum >= '{$start_date}' AND b.bestelldatum <= '{$end_date}' + INTERVAL 1 DAY
                                                 ORDER BY b.bestelldatum";
                                         $result = mysqli_query($conn, $sql);
                                         // Ausgabe der Bestellungen in einer Tabelle
@@ -628,7 +628,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                     </div>
                 <?php 
                     }else{
-                        echo "<h4>Die Benutzername <span style='font-weight:bold'>{$userNameTable}</span> nicht gefunden.</h4>";
+                        echo "<h4>Die Benutzername <span style='font-weight:bold; color:blue'>{$userNameTable}</span> nicht gefunden.</h4>";
                     }
                 }
                 ?>
