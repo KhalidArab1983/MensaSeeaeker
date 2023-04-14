@@ -35,7 +35,7 @@ if (isset($_FILES['image']) && is_uploaded_file($_FILES['image']['tmp_name'])) {
         $stmt->execute();
     }
     if($btn == "update"){
-        $sql = "UPDATE tbl_option SET option_name = ?, option_image = ?, image_filename = ?, data = ?, day = ?, date = ?, price = ?, admin_id = ? WHERE id = ?";
+        $sql = "UPDATE tbl_option SET option_name = ?, option_image = ?, image_filename = ?, data = ?, day = ?, date = ?, price = ?, admin_id_update = ? WHERE id = ?";
         $stmt = mysqli_prepare($conn, $sql);
         mysqli_stmt_bind_param($stmt, "sssssssss", $option_name, $option_image, $image_filename, $data, $day, $date, $price, $admin_id, $option_id);
         if(mysqli_stmt_execute($stmt)){
@@ -83,7 +83,7 @@ if (isset($_FILES['image']) && is_uploaded_file($_FILES['image']['tmp_name'])) {
             $price = $row['price'];
         }
 
-        $sql = "UPDATE tbl_option SET option_name = ?, option_image = ?, image_filename = ?, data = ?, day = ?, date = ?, price = ?, admin_id = ? WHERE id = ?";
+        $sql = "UPDATE tbl_option SET option_name = ?, option_image = ?, image_filename = ?, data = ?, day = ?, date = ?, price = ?, admin_id_update = ? WHERE id = ?";
         $stmt = mysqli_prepare($conn, $sql);
         mysqli_stmt_bind_param($stmt, "sssssssss", $option_name, $option_image, $image_filename, $data, $day, $date, $price, $admin_id, $option_id);
         if(mysqli_stmt_execute($stmt)){
@@ -93,7 +93,7 @@ if (isset($_FILES['image']) && is_uploaded_file($_FILES['image']['tmp_name'])) {
         }
     }
     if($btn == "dateUpdate"){
-        $sql = "UPDATE tbl_option SET date = ?, admin_id = ? WHERE day = ?";
+        $sql = "UPDATE tbl_option SET date = ?, admin_id_update = ? WHERE day = ?";
         $stmt = mysqli_prepare($conn, $sql);
         mysqli_stmt_bind_param($stmt, "sss", $date, $admin_id, $day);
         if(mysqli_stmt_execute($stmt)){

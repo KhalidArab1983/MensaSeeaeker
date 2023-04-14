@@ -207,7 +207,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                                         // Abrufen aller Bestellungen aus der Datenbank
                                         $sql = "SELECT b.id, b.user_id, u.userName, b.option_name, b.option_id, b.day, b.day_datum, b.bestelldatum 
                                                 FROM tbl_bestellung AS b INNER JOIN tbl_user AS u ON u.id = b.user_id 
-                                                ORDER BY userName";
+                                                ORDER BY b.bestelldatum";
                                         $result = mysqli_query($conn, $sql);
                                         // Ausgabe der Bestellungen in einer Tabelle
                                         while ($row = mysqli_fetch_assoc($result)) {
