@@ -325,7 +325,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                         <?php foreach($days as $day): ?>
                                 <div class="mb-1" style="height:10vh">
                                     <label for="option_name_<?php echo $day; ?>" style="width:115px; font-weight:bold"><?php echo $day;?>:</label>
-                                    <select class="w-50 h-50" name="option_name_<?php echo $day; ?>" id="option_name_<?php echo $day; ?>" onChange="chImage<?php echo $day;?>(); calculateTotalPrice(this);">
+                                    <select class="w-50 h-50 tableRow" name="option_name_<?php echo $day; ?>" id="option_name_<?php echo $day; ?>" onChange="chImage<?php echo $day;?>(); calculateTotalPrice(this);">
                                         <?php 
                                             if($$day == 1){
                                                 // Send query to database to get School Classes
@@ -415,27 +415,27 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                         <h4 class="mb-5">Allgemeine Daten:</h4>
                         <div class="form-group">
                             <label for="userName" style="font-weight:bold;">Benutzername:</label>
-                            <input type="text" name="userName" id="userName" class="form-control" value="<?php echo $userName; ?>" readonly>
+                            <input type="text" name="userName" id="userName" class="form-control tableRow" value="<?php echo $userName; ?>" readonly>
                         </div>
                         <div class="form-group">
                             <label for="lastName" style="font-weight:bold;">Nachname:</label>
-                            <input type="text" name="lastName" id="lastName" class="form-control" value="<?php echo $lastName; ?>" readonly>
+                            <input type="text" name="lastName" id="lastName" class="form-control tableRow" value="<?php echo $lastName; ?>" readonly>
                         </div>
                         <div class="form-group">
                             <label for="firstName" style="font-weight:bold;">Vorname:</label>
-                            <input type="text" name="firstName" id="firstName" class="form-control" value="<?php echo $firstName; ?>" readonly>
+                            <input type="text" name="firstName" id="firstName" class="form-control tableRow" value="<?php echo $firstName; ?>" readonly>
                         </div>
                         <div class="form-group">
                             <label for="birthday" style="font-weight:bold;">Geburtsdatum:</label>
-                            <input type="text" name="birthday" id="birthday" class="form-control" value="<?php echo $birthday; ?>" readonly>
+                            <input type="text" name="birthday" id="birthday" class="form-control tableRow" value="<?php echo $birthday; ?>" readonly>
                         </div>
                         <div class="form-group">
                             <label for="aktiv_ab" style="font-weight:bold;">Aktiv ab:</label>
-                            <input type="text" name="aktiv_ab" id="aktiv_ab" class="form-control" value="<?php echo $aktiv_ab; ?>" readonly>
+                            <input type="text" name="aktiv_ab" id="aktiv_ab" class="form-control tableRow" value="<?php echo $aktiv_ab; ?>" readonly>
                         </div>
                         <div class="form-group">
                             <label for="klasse" style="font-weight:bold;">Klasse:</label>
-                            <input type="text" name="klasse" id="klasse" class="form-control" value="<?php echo $klasse; ?>" readonly>
+                            <input type="text" name="klasse" id="klasse" class="form-control tableRow" value="<?php echo $klasse; ?>" readonly>
                         </div>
                         <p>* Die Daten in dieser Tabelle dienen nur zur Anzeige und können nicht geändert werden.</p>
                     </div>
@@ -444,27 +444,27 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                         <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST">
                             <div class="form-group">                                    
                                 <label style="font-weight:bold; width:200px">Adresse :</label>
-                                <input type="text" name="adresse" id="adresse" class="form-control" value="<?php echo $adresse; ?>">
+                                <input type="text" name="adresse" id="adresse" class="form-control tableRow" value="<?php echo $adresse; ?>">
                             </div>
                             <div class="form-group">                                    
                                 <label style="font-weight:bold; width:200px">PLZ :</label>
-                                <input type="text" name="plz" id="plz" class="form-control" value="<?php echo $plz; ?>">
+                                <input type="text" name="plz" id="plz" class="form-control tableRow" value="<?php echo $plz; ?>">
                             </div>
                             <div class="form-group">                                    
                                 <label style="font-weight:bold; width:200px">Ort :</label>
-                                <input type="text" name="ort" id="ort" class="form-control" value="<?php echo $ort; ?>">
+                                <input type="text" name="ort" id="ort" class="form-control tableRow" value="<?php echo $ort; ?>">
                             </div>
                             <div class="form-group">                                    
                                 <label style="font-weight:bold; width:200px">Ortsteil :</label>
-                                <input type="text" name="ortsteil" id="ortsteil" class="form-control" value="<?php echo $ortsteil; ?>">
+                                <input type="text" name="ortsteil" id="ortsteil" class="form-control tableRow" value="<?php echo $ortsteil; ?>">
                             </div>
                             <div class="form-group">                                    
                                 <label style="font-weight:bold; width:200px">Handy :</label>
-                                <input type="text" name="phone" id="phone" class="form-control" value="<?php echo $phone; ?>">
+                                <input type="text" name="phone" id="phone" class="form-control tableRow" value="<?php echo $phone; ?>">
                             </div>
                             <div class="form-group">                                    
                                 <label style="font-weight:bold; width:200px">Email-Adresse :</label>
-                                <input type="text" name="email" id="email" class="form-control" value="<?php echo $email; ?>">
+                                <input type="text" name="email" id="email" class="form-control tableRow" value="<?php echo $email; ?>">
                             </div>
                             <div class="form-group">                                    
                                 <button type="submit" class="btn btn-warning m-2" name="adresseForm" value="save">Speichern</button>
@@ -477,17 +477,17 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                         <form method="POST" action="<?php echo $_SERVER['PHP_SELF'];?>">
                             <div class="form-group">                                    
                                 <label style="font-weight:bold; width:300px">bisheriges Passwort:</label>
-                                <input type="password" name="current_password" id="current_password" class="form-control" value="<?php echo $current_password; ?>">
+                                <input type="password" name="current_password" id="current_password" class="form-control tableRow" value="<?php echo $current_password; ?>">
                                 <div class="form-text mb-3 error"><?php echo $errors['currentPassError'] ?></div>
                             </div>
                             <div class="form-group">                                    
                                 <label style="font-weight:bold; width:300px">Neues Passwort:</label>
-                                <input type="password" name="new_password" id="new_password" class="form-control" value="<?php echo $new_password; ?>">
+                                <input type="password" name="new_password" id="new_password" class="form-control tableRow" value="<?php echo $new_password; ?>">
                                 <div class="form-text mb-3 error"><?php echo $errors['newPassError'] ?></div>
                             </div>
                             <div class="form-group">                                    
                                 <label style="font-weight:bold; width:300px">Neues Passwort bestätigen:</label>
-                                <input type="password" name="confirm_password" id="confirm_password" class="form-control" value="<?php echo $confirm_password; ?>">
+                                <input type="password" name="confirm_password" id="confirm_password" class="form-control tableRow" value="<?php echo $confirm_password; ?>">
                                 <div class="form-text mb-3 error"><?php echo $errors['confirmPassError'] ?></div>
                             </div>
                             <div class="form-group">                                    
@@ -543,7 +543,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                             <?php 
                                 if(count($einzahlungen) > 0){
                                     foreach($einzahlungen as $einzahl){
-                                        echo '<tr>';
+                                        echo '<tr class="tableRow">';
                                             echo '<td>'.$einzahl['einzahlung'].'€</td>';
                                             echo '<td>'.$einzahl['einzahlung_date'].'</td>';
                                         echo '</tr>';
@@ -571,7 +571,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                             <?php 
                                 if(count($auszahlungen) > 0){
                                     foreach($auszahlungen as $auszahl){
-                                        echo '<tr>';
+                                        echo '<tr class="tableRow">';
                                             echo '<td>'.$auszahl['auszahlung'].'€</td>';
                                             echo '<td>'.$auszahl['auszahlung_date'].'</td>';
                                         echo '</tr>';
@@ -615,7 +615,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                             <?php 
                                 if(count($letzte_bestellungen) > 0){
                                     foreach($letzte_bestellungen as $letzte_bestellung){
-                                        echo '<tr>';
+                                        echo '<tr class="tableRow">';
                                             echo '<td>'.$letzte_bestellung['id'].'</td>';
                                             echo '<td>'.$letzte_bestellung['option_name'].'</td>';
                                             echo '<td>'.$letzte_bestellung['price']. '€</td>';
@@ -661,7 +661,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                             <?php 
                                 if(count($bestellungen) > 0){
                                     foreach($bestellungen as $bestellung){
-                                        echo '<tr>';
+                                        echo '<tr class="tableRow">';
                                             echo '<td>'.$bestellung['id']. '</td>';
                                             echo '<td>'.$bestellung['option_name']. '</td>';
                                             echo '<td>'.$bestellung['price'].'€</td>';

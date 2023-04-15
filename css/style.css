@@ -312,3 +312,8 @@ th {
     background-color: #d6a140;
     color: white;
 }
+
+.tableRow:hover{
+    background-color: #d6a140;
+    color:black;
+}

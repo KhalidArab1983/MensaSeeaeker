@@ -151,7 +151,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                                         if($result->num_rows > 0){
                                             // Ausgabe der Bestellungen in einer Tabelle
                                             while ($row = mysqli_fetch_assoc($result)) {
-                                                echo '<tr>';
+                                                echo '<tr class="tableRow">';
                                                     echo '<td>' . $row['id'] . '</td>';
                                                     echo '<td>' . $row['user_id'] . '</td>';
                                                     echo '<td>' . $row['userName'] . '</td>';
@@ -212,7 +212,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                                         $result = mysqli_query($conn, $sql);
                                         // Ausgabe der Bestellungen in einer Tabelle
                                         while ($row = mysqli_fetch_assoc($result)) {
-                                            echo '<tr>';
+                                            echo '<tr class="tableRow">';
                                                 // echo 'Alle Bestellungen';
                                                 echo '<td>' . $row['id'] . '</td>';
                                                 echo '<td>' . $row['user_id'] . '</td>';
@@ -237,7 +237,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                                         $result = mysqli_query($conn, $sql);
                                         // Ausgabe der Bestellungen in einer Tabelle
                                         while ($row = mysqli_fetch_assoc($result)) {
-                                            echo '<tr>';
+                                            echo '<tr class="tableRow">';
                                                 echo '<td>' . $row['id'] . '</td>';
                                                 echo '<td>' . $row['user_id'] . '</td>';
                                                 echo '<td>' . $row['userName'] . '</td>';
@@ -287,7 +287,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                                     $result = mysqli_query($conn, $sql);
                                     // Ausgabe der Bestellungen in einer Tabelle
                                     while ($row = mysqli_fetch_assoc($result)) {
-                                        echo '<tr>';
+                                        echo '<tr class="tableRow">';
                                             echo '<td>' . $row['id'] . '</td>';
                                             // echo '<td>' . $row['user_id'] . '</td>';
                                             echo '<td>' . $row['userName'] . '</td>';
@@ -332,7 +332,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                                     $result = mysqli_query($conn, $sql);
                                     // Ausgabe der Bestellungen in einer Tabelle
                                     while ($row = mysqli_fetch_assoc($result)) {
-                                        echo '<tr>';
+                                        echo '<tr class="tableRow">';
                                             echo '<td>' . $row['option_id'] . '</td>';
                                             echo '<td>' . $row['option_name'] . '</td>';
                                             echo '<td>' . $row['anzahl'] . '</td>';
@@ -393,7 +393,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                                 $result = mysqli_query($conn, $sql);
                                 // Ausgabe der Bestellungen in einer Tabelle
                                 while ($row = mysqli_fetch_assoc($result)) {
-                                    echo '<tr>';
+                                    echo '<tr class="tableRow">';
                                         echo '<td>' . $row['userName'] . '</td>';
                                         echo '<td>' . $row['einzahlung'] . '€</td>';
                                         echo '<td>' . $row['einzahlung_date'] . '</td>';
@@ -424,7 +424,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                                 $result = mysqli_query($conn, $sql);
                                 // Ausgabe der Bestellungen in einer Tabelle
                                 while ($row = mysqli_fetch_assoc($result)) {
-                                    echo '<tr>';
+                                    echo '<tr class="tableRow">';
                                         echo '<td>' . $row['userName'] . '</td>';
                                         echo '<td>' . $row['auszahlung'] . '€</td>';
                                         echo '<td>' . $row['auszahlung_date'] . '</td>';
@@ -466,7 +466,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                                         if($result->num_rows > 0){
                                             // Ausgabe der Bestellungen in einer Tabelle
                                             while ($row = mysqli_fetch_assoc($result)) {
-                                                echo '<tr>';
+                                                echo '<tr class="tableRow">';
                                                     echo '<td>' . $row['userName'] . '</td>';
                                                     echo '<td>' . $row['einzahlung'] . '€</td>';
                                                     echo '<td>' . $row['einzahlung_date'] . '</td>';
@@ -514,7 +514,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                                         if($result->num_rows > 0){
                                             // Ausgabe der Bestellungen in einer Tabelle
                                             while ($row = mysqli_fetch_assoc($result)) {
-                                                echo '<tr>';
+                                                echo '<tr class="tableRow">';
                                                     echo '<td>' . $row['userName'] . '</td>';
                                                     echo '<td>' . $row['auszahlung'] . '€</td>';
                                                     echo '<td>' . $row['auszahlung_date'] . '</td>';
@@ -571,27 +571,27 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                             <h4 class="mb-5">Allgemeine Daten:</h4>
                             <div class="form-group">
                                 <label for="userName" style="font-weight:bold;">Benutzername:</label>
-                                <input type="text" name="userName" id="userName" class="form-control" value="<?php echo $userName; ?>" readonly>
+                                <input type="text" name="userName" id="userName" class="form-control tableRow" value="<?php echo $userName; ?>" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="lastName" style="font-weight:bold;">Nachname:</label>
-                                <input type="text" name="lastName" id="lastName" class="form-control" value="<?php echo $lastName; ?>" readonly>
+                                <input type="text" name="lastName" id="lastName" class="form-control tableRow" value="<?php echo $lastName; ?>" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="firstName" style="font-weight:bold;">Vorname:</label>
-                                <input type="text" name="firstName" id="firstName" class="form-control" value="<?php echo $firstName; ?>" readonly>
+                                <input type="text" name="firstName" id="firstName" class="form-control tableRow" value="<?php echo $firstName; ?>" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="birthday" style="font-weight:bold;">Geburtsdatum:</label>
-                                <input type="text" name="birthday" id="birthday" class="form-control" value="<?php echo $birthday; ?>" readonly>
+                                <input type="text" name="birthday" id="birthday" class="form-control tableRow" value="<?php echo $birthday; ?>" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="aktiv_ab" style="font-weight:bold;">Aktiv ab:</label>
-                                <input type="text" name="aktiv_ab" id="aktiv_ab" class="form-control" value="<?php echo $aktiv_ab; ?>" readonly>
+                                <input type="text" name="aktiv_ab" id="aktiv_ab" class="form-control tableRow" value="<?php echo $aktiv_ab; ?>" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="klasse" style="font-weight:bold;">Klasse:</label>
-                                <input type="text" name="klasse" id="klasse" class="form-control" value="<?php echo $klasse; ?>">
+                                <input type="text" name="klasse" id="klasse" class="form-control tableRow" value="<?php echo $klasse; ?>">
                             </div>
                             <p>* Die Daten in diesen Tabellen dienen nur zur Anzeige und können nicht geändert werden.</p>
                         </div>
@@ -600,27 +600,27 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                             <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST">
                                 <div class="form-group">                                    
                                     <label style="font-weight:bold; width:200px">Adresse :</label>
-                                    <input type="text" name="adresse" id="adresse" class="form-control" value="<?php echo $adresse; ?>">
+                                    <input type="text" name="adresse" id="adresse" class="form-control tableRow" value="<?php echo $adresse; ?>">
                                 </div>
                                 <div class="form-group">                                    
                                     <label style="font-weight:bold; width:200px">PLZ :</label>
-                                    <input type="text" name="plz" id="plz" class="form-control" value="<?php echo $plz; ?>">
+                                    <input type="text" name="plz" id="plz" class="form-control tableRow" value="<?php echo $plz; ?>">
                                 </div>
                                 <div class="form-group">                                    
                                     <label style="font-weight:bold; width:200px">Ort :</label>
-                                    <input type="text" name="ort" id="ort" class="form-control" value="<?php echo $ort; ?>">
+                                    <input type="text" name="ort" id="ort" class="form-control tableRow" value="<?php echo $ort; ?>">
                                 </div>
                                 <div class="form-group">                                    
                                     <label style="font-weight:bold; width:200px">Ortsteil :</label>
-                                    <input type="text" name="ortsteil" id="ortsteil" class="form-control" value="<?php echo $ortsteil; ?>">
+                                    <input type="text" name="ortsteil" id="ortsteil" class="form-control tableRow" value="<?php echo $ortsteil; ?>">
                                 </div>
                                 <div class="form-group">                                    
                                     <label style="font-weight:bold; width:200px">Handy :</label>
-                                    <input type="text" name="phone" id="phone" class="form-control" value="<?php echo $phone; ?>">
+                                    <input type="text" name="phone" id="phone" class="form-control tableRow" value="<?php echo $phone; ?>">
                                 </div>
                                 <div class="form-group">                                    
                                     <label style="font-weight:bold; width:200px">Email-Adresse :</label>
-                                    <input type="text" name="email" id="email" class="form-control" value="<?php echo $email; ?>">
+                                    <input type="text" name="email" id="email" class="form-control tableRow" value="<?php echo $email; ?>">
                                 </div>
                                 <p>Um die Daten des Benutzers zu ändern, wenden Sie sich an "Neu Benutzer" Seite.</p>
                             </form>
