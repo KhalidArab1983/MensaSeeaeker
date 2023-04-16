@@ -14,6 +14,7 @@ require '../vendor/autoload.php';
 $errors = [
     'emailExistError' => '',
     'emailEmptyError' => '',
+    'mailerError' => '',
 ];
 // Prüfen, ob das Formular gesendet wurde
 if(isset($_POST['send_code'])) {
@@ -42,7 +43,6 @@ if(isset($_POST['send_code'])) {
             // E-Mail-Einstellungen konfigurieren
             $mail = new PHPMailer();
             try {
-                // $mail->SMTPDebug = 2; 
                 $mail->isSMTP();
                 $mail->Host = 'smtp.gmail.com';  // SMTP-Host deines E-Mail-Providers
                 $mail->Port = 587;  // Port deines SMTP-Servers
@@ -56,18 +56,18 @@ if(isset($_POST['send_code'])) {
                 $mail->isHTML(true);
                 $mail->CharSet = 'UTF-8';
                 $mail->Subject = 'Bestätigungscode zum Zurücksetzen des Passworts';  // Betreff der E-Mail
-                $mail->Body = "<h3>Ihr Bestätigungscode zum Zurücksetzen des Passworts lautet:</h3><h1 style='color:blue'> $code</h1>";  // Inhalt der E-Mail
+                $mail->Body = "<h3>Ihr Bestätigungscode zum Zurücksetzen des Passworts lautet:</h3><h1 class='code'> $code</h1>";  // Inhalt der E-Mail
 
                 // E-Mail senden
                 $mail->send();
                 echo 'Email sent successfully';
                 header('Location: new_password.php');
             } catch (Exception $e) {
-                echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
+                $errors['mailerError'] = 'Message could not be sent. Mailer Error: '. $mail->ErrorInfo;
             }
         }else{
             // E-Mail-Adresse existiert nicht in der Datenbank
-            $errors['emailExistError'] = "Die E-Mail-Adresse <span style='color:green; font-weight:bold'> $email</span> ist nicht registriert.";
+            $errors['emailExistError'] = "Die E-Mail-Adresse <span class='not_exist_email'> $email</span> ist nicht registriert.";
         }
     }
 }
@@ -87,7 +87,6 @@ if(isset($_POST['send_code'])) {
         
     </head>
     <body>
-
         <div class="text-center container">
             <div class="welcomme">
                 <img src="../images/logo.jpg" width="20%" class="mb-4">
@@ -101,15 +100,14 @@ if(isset($_POST['send_code'])) {
                         <label for="email">Email-Adresse</label>
                     </div>
                     <div class="form-text error"><?php echo $errors['emailExistError'] ?></div>
-                    
+                    <div class="form-text error"><?php echo $errors['emailEmptyError'] ?></div>
+                    <div class="form-text error"><?php echo $errors['mailerError'] ?></div>
                     <div class="text-center">
                         <button type="submit" name="send_code" class="btn btn-warning m-2 w-25">Code senden</button>
                     </div>
-                    <div class="form-text error"><?php echo $errors['emailEmptyError'] ?></div>
                 </form>
             </div>
         </div>
-
         <script src="../js/popper.min.js"></script>
         <script src="../js/bootstrap.min.js"></script>
         <script src="../js/jquery-3.6.0.min.js"></script>
