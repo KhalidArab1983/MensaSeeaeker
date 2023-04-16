@@ -1,8 +1,6 @@
 <?php
 include ('../conn/db_conn.php');
 
-
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     $code = $_POST['code'];
     $new_password = $_POST['new_password'];
@@ -12,14 +10,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     $new_password = "";
     $confirm_password = "";
 }
-
 $errors = [
     'codeError' => '',
     'newPassError' => '',
     'confirmPassError' => '',
     'otherError' => ''
 ];
-
 // Prüfen, ob das Formular gesendet wurde
 if(isset($_POST['confirm_code'])) {
     // Bestätigungscode und neue Passwörter aus dem Formular erhalten
@@ -27,11 +23,11 @@ if(isset($_POST['confirm_code'])) {
     if(empty($code)){
         $errors['codeError'] = '* Bitte geben Sie den Code ein, den Sie per E-Mail erhalten haben.';
     }
-    // // Add password validation here
-    // $password_pattern = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/";
-    // if(!preg_match($password_pattern, $new_password)){
-    //     $errors['newPassError'] = '* Das Passwort muss mindestens 8 Zeichen lang sein und mindestens einen Kleinbuchstaben, einen Großbuchstaben, eine Zahl und ein Sonderzeichen enthalten.';
-    // }
+    // Add password validation here
+    $password_pattern = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/";
+    if(!preg_match($password_pattern, $new_password)){
+        $errors['newPassError'] = '* Das Passwort muss mindestens 8 Zeichen lang sein und mindestens einen Kleinbuchstaben, einen Großbuchstaben, eine Zahl und ein Sonderzeichen enthalten.';
+    }
     if(empty($new_password)){
         $errors['newPassError'] = '* Bitte geben Sie das Passwort ein.';
     }
@@ -43,7 +39,6 @@ if(isset($_POST['confirm_code'])) {
         $code =              mysqli_real_escape_string($conn, $_POST['code']);
         $new_password =      mysqli_real_escape_string($conn, $_POST['new_password']);
         $confirm_password =  mysqli_real_escape_string($conn, $_POST['confirm_password']);
-
 
         // Hash the password
         $hashed_password = hash('sha256', $new_password);
@@ -88,7 +83,6 @@ if(isset($_POST['confirm_code'])) {
 
 ?>
 
-
 <!doctype html>
 <html lang="de">
     <head>
@@ -97,7 +91,6 @@ if(isset($_POST['confirm_code'])) {
         <link href="../css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="../css/style.css">
         <title>Mensa</title>
-        
     </head>
     <body>
         <div class="text-center container">
