@@ -1,7 +1,7 @@
 <?php 
 // include ('../conn/db_conn.php');
 
-
+$user_id = $_SESSION['user_id'];
 $current_day = date('w');
 $current_time = date('H:i:s');
 $bestell_status_deaktiv = 1;
@@ -63,7 +63,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
     $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
     foreach ($days as $day) {
 
-        $bestellung_id_query = "SELECT id FROM tbl_bestellung WHERE day = '".$day."' ORDER BY id DESC LIMIT 5";
+        $bestellung_id_query = "SELECT id FROM tbl_bestellung WHERE day = '".$day."' AND user_id = $user_id ORDER BY id DESC LIMIT 5";
         $bestell_result = mysqli_query($conn, $bestellung_id_query);
         $bestell_id_row = mysqli_fetch_assoc($bestell_result);
         $bestellung_id = $bestell_id_row['id'];
@@ -75,7 +75,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
             // $date = $_POST['option_name_' .$day];
             $sql = "UPDATE tbl_bestellung INNER JOIN tbl_option ON tbl_bestellung.option_id = tbl_option.id
                     SET tbl_bestellung.option_name = (SELECT option_name FROM tbl_option WHERE id = $option_id), 
-                    tbl_bestellung.option_id= $option_id WHERE tbl_bestellung.id =$bestellung_id";
+                    tbl_bestellung.option_id= $option_id WHERE tbl_bestellung.id = $bestellung_id AND tbl_bestellung.user_id = $user_id";
             $result = mysqli_query($conn, $sql);
             header('Location: u_user_page.php');
         }

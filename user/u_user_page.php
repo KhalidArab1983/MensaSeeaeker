@@ -22,6 +22,8 @@ $formatierte_zeit = gmdate("H:i:s", $vergangene_zeit * 60);
 
 
 
+
+// Meine Daten Seite
 $errors = [
     'currentPassError' => '',
     'newPassError' => '',
@@ -138,7 +140,7 @@ $ort = $row['ort'];
 $ortsteil = $row['ortsteil'];
 $phone = $row['phone'];
 $email = $row['email'];
-
+// Ende Meine Daten Seite
 
 
 
@@ -236,7 +238,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
 
     
     // Um die Einzahlungen mit Datums in der Tabelle anzeigen
-    $einzahlungSql = "SELECT einzahlung, einzahlung_date FROM tbl_einzahlung WHERE user_id = $user_id";
+    $einzahlungSql = "SELECT einzahlung, einzahlung_date FROM tbl_einzahlung WHERE user_id = $user_id ORDER BY einzahlung_date DESC";
     $result = mysqli_query($conn, $einzahlungSql);
     $einzahlungen = array();
     while($einzahlungRow = mysqli_fetch_assoc($result)){
@@ -245,7 +247,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
     
 
     // Um die Auszahlungen mit Datums in der Tabelle anzeigen
-    $auszahlungSql = "SELECT auszahlung, auszahlung_date FROM tbl_auszahlung WHERE user_id = $user_id";
+    $auszahlungSql = "SELECT auszahlung, auszahlung_date FROM tbl_auszahlung WHERE user_id = $user_id ORDER BY auszahlung_date DESC";
     $result = mysqli_query($conn, $auszahlungSql);
     $auszahlungen = array();
     while($auszahlungRow = mysqli_fetch_assoc($result)){
