@@ -24,7 +24,7 @@ if(isset($_POST['confirm_code'])) {
         $errors['codeError'] = '* Bitte geben Sie den Code ein, den Sie per E-Mail erhalten haben.';
     }
     // Add password validation here
-    $password_pattern = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/";
+    $password_pattern = '/^(?=.*\d)(?=.*[@#\-_$%^&+=§!\?])(?=.*[a-z])(?=.*[A-Z])[0-9A-Za-z@#\-_$%^&+=§!\?]{8,20}$/';
     if(!preg_match($password_pattern, $new_password)){
         $errors['newPassError'] = '* Das Passwort muss mindestens 8 Zeichen lang sein und mindestens einen Kleinbuchstaben, einen Großbuchstaben, eine Zahl und ein Sonderzeichen enthalten.';
     }

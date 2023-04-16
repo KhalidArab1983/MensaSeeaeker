@@ -28,7 +28,8 @@ $errors = [
     'currentPassError' => '',
     'newPassError' => '',
     'confirmPassError' => '',
-    'otherError' => ''
+    'otherError' => '',
+    'passRegexError' => ''
 ];
 $success = '';
 
@@ -73,6 +74,11 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
         if(empty($new_password)){
             $errors['newPassError'] = '* Bitte geben Sie das neues Passwort ein.';
         }
+        // Add password validation
+        $password_pattern = '/^(?=.*\d)(?=.*[@#\-_$%^&+=§!\?])(?=.*[a-z])(?=.*[A-Z])[0-9A-Za-z@#\-_$%^&+=§!\?]{8,20}$/';
+        if(!preg_match($password_pattern, $new_password)){
+            $errors['passRegexError'] = '* Das Passwort muss mindestens 8 Zeichen lang sein und mindestens einen Kleinbuchstaben, einen Großbuchstaben, eine Zahl und ein Sonderzeichen enthalten.';
+        }
         if(empty($confirm_password)){
             $errors['confirmPassError'] = '* Bitte bestätigen Sie das neues Passwort.';
         }
@@ -102,10 +108,10 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
                     }
                     
                 }else{
-                    $errors['otherError'] = "Die Passwörter stimmen nicht überein!";
+                    $errors['otherError'] = "* Die Passwörter stimmen nicht überein!";
                 }
             }else{
-                $errors['otherError'] = "Das aktuelles Passwort ist falsch";
+                $errors['otherError'] = "* Das aktuelles Passwort ist falsch";
             }
         }
     }
@@ -487,17 +493,19 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                 <label style="font-weight:bold; width:300px">Neues Passwort:</label>
                                 <input type="password" name="new_password" id="new_password" class="form-control tableRow" value="<?php echo $new_password; ?>">
                                 <div class="form-text mb-3 error"><?php echo $errors['newPassError'] ?></div>
+                                <div class="form-text mb-3 error"><?php echo $errors['passRegexError'] ?></div>
+                                
                             </div>
                             <div class="form-group">                                    
                                 <label style="font-weight:bold; width:300px">Neues Passwort bestätigen:</label>
                                 <input type="password" name="confirm_password" id="confirm_password" class="form-control tableRow" value="<?php echo $confirm_password; ?>">
                                 <div class="form-text mb-3 error"><?php echo $errors['confirmPassError'] ?></div>
+                                <div class="form-text mb-3 error"><?php echo $errors['otherError'] ?></div>
                             </div>
                             <div class="form-group">                                    
                                 <button type="submit" class="btn btn-warning m-2" name="passwordForm" value="passSave">Speichern</button>
                                 <button type="reset" class="btn btn-warning m-2" name="button" value="passCancel">Abrechen</button>
                             </div>
-                            <div class="form-text m-5 error"><?php echo $errors['otherError'] ?></div>
                             <div class="form-text m-5 success"><?php echo $success ?></div>
                         </form>
                     </div>
