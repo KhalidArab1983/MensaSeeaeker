@@ -439,7 +439,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                             <label for="klasse" style="font-weight:bold;">Klasse:</label>
                             <input type="text" name="klasse" id="klasse" class="form-control tableRow" value="<?php echo $klasse; ?>" readonly>
                         </div>
-                        <p>* Die Daten in dieser Tabelle dienen nur zur Anzeige und können nicht geändert werden.</p>
+                        <p class="para">* Die Daten in dieser Tabelle dienen nur zur Anzeige und können nicht geändert werden.</p>
                     </div>
                     <div class="card col-sm-12 col-md-3 m-1">
                         <h4 class="mb-5">Adresse:</h4>
@@ -454,7 +454,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                             </div>
                             <div class="form-group">                                    
                                 <label style="font-weight:bold; width:200px">Ort :</label>
-                                <input type="text" name="ort" id="ort" class="form-control tableRow" value="<?php echo $ort; ?>">
+                                <input type="text" name="ort" id="ort" class="form-control tableRow" value="<?php echo $ort; ?>" readonly>
                             </div>
                             <div class="form-group">                                    
                                 <label style="font-weight:bold; width:200px">Ortsteil :</label>
@@ -468,6 +468,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                 <label style="font-weight:bold; width:200px">Email-Adresse :</label>
                                 <input type="text" name="email" id="email" class="form-control tableRow" value="<?php echo $email; ?>">
                             </div>
+                            <p class="para">* Geben Sie die PLZ ein und das Ort wird automatisch geändert.</p>
                             <div class="form-group">                                    
                                 <button type="submit" class="btn btn-warning m-2" name="adresseForm" value="save">Speichern</button>
                                 <button type="reset" class="btn btn-warning m-2" name="button" value="cancel" onClick="location.href='<?php echo $_SERVER["PHP_SELF"] ?>'">Abrechen</button>

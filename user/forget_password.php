@@ -103,7 +103,7 @@ if(isset($_POST['send_code'])) {
                     <div class="form-text error"><?php echo $errors['emailEmptyError'] ?></div>
                     <div class="form-text error"><?php echo $errors['mailerError'] ?></div>
                     <div class="text-center">
-                        <button type="submit" name="send_code" class="btn btn-warning m-2 w-25">Code senden</button>
+                        <button type="submit" name="send_code" class="btn btn-warning m-2">Code senden</button>
                     </div>
                 </form>
             </div>

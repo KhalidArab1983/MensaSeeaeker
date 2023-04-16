@@ -118,7 +118,7 @@ if (isset($_POST['submit'])){
                             </div>
                             <div class="form-text error"><?php echo $errors['invalidError'] ?></div>
                             <div class="text-center">
-                                <input type="submit" name="submit" class="btn btn-warning m-2 w-25" value="Anmelden">
+                                <input type="submit" name="submit" class="btn btn-warning m-2" value="Anmelden">
                             </div>
                         </form>
                     </div>

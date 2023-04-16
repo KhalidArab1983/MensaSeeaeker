@@ -147,8 +147,16 @@
 }
 
 /******************************************************************* u_user_page Tabs Style ********************************************************/
+/***************** Header  *****************/
 
-/* CSS für die Tabs */
+
+/**************** Meine Daten Seite  ******************/
+.para{
+    font-size: 12px;
+    color: peru
+}
+
+/******************* CSS für die Tabs *********************/
 .tab {
     overflow: hidden;
     border: 1px solid #ccc;
@@ -179,7 +187,7 @@
 }
 
 
-/* CSS für Tooltip */
+/******************* CSS für Tooltip ******************/
 .tooltips {
     position: relative;
     display: inline-block;

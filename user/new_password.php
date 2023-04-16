@@ -119,7 +119,7 @@ if(isset($_POST['confirm_code'])) {
                         <div class="form-text error"><?php echo $errors['confirmPassError'] ?></div>
                         <div class="form-text error"><?php echo $errors['otherError'] ?></div>
                     </div>
-                    <button type="submit"  class="btn btn-warning m-2 w-25" name="confirm_code" >Bestätigen</button>
+                    <button type="submit"  class="btn btn-warning m-2" name="confirm_code" >Bestätigen</button>
                 </form>
             </div>
         </div>
