@@ -2,6 +2,61 @@
     padding: 0;
     margin: 0;
 }
+
+.font12{
+    font-size:12px;
+}
+.font20{
+    font-size:20px;
+}
+.font30{
+    font-size:30px;
+}
+.font40{
+    font-size:40px;
+}
+.colorRed{
+    color: red;
+}
+.colorBlue{
+    color: blue;
+}
+.colorGreen{
+    color: green;
+}
+.colorYellow{
+    color: yellow;
+}
+.colorOrange{
+    color: orange;
+}
+.disFlex{
+    display:flex;
+}
+.disBlock{
+    display: block;
+}
+.disGrid{
+    display: grid;
+}
+.disNone{
+    display: none;
+}
+.fontBold{
+    font-weight: bold;
+}
+.floatRight{
+    float: right;
+}
+.floatLeft{
+    float: left;
+}
+.textDeco{
+    text-decoration: underline;
+}
+
+
+
 @media (max-width: 2100px){
     .form_width{
         width: 40%;
@@ -52,7 +107,7 @@
         display: none;
     }
     .logo{
-        width: 20%;
+        display: none;
     }
     
 }
@@ -69,6 +124,12 @@
     }
     .pass_vergessen{
         margin-bottom: 150px;
+    }
+    .tab{
+        display: grid;
+    }
+    .logo{
+        display: none;
     }
 }
 
@@ -103,7 +164,9 @@
     margin: 0 auto;
     margin: 15px;
 }
-
+.spaceFooter{
+    margin-bottom: 100px;
+}
 
 /********************************************************************* u_login Seite ***********************************************************/
 .left_side{
@@ -146,11 +209,34 @@
     font-weight:bold;
 }
 
-/******************************************************************* u_user_page Tabs Style ********************************************************/
+/******************************************************************* u_user_page ********************************************************/
 /***************** Header  *****************/
+.watchDate{
+    font-weight: bold; 
+    color: green; 
+    width: 280px;
+    
+}
+.watchDiv{
+    float: right;
+}
 
+/****************** Bestelung Tab ********************/
+.imageContainer{
+    float:left; 
+    box-shadow: -4px 1px 4px #888; 
+    height:100vh; 
+    margin-top:10px
+}
+.form_height{
+    height: 10vh;
+}
+.dayLabel{
+    width:100px; 
+    font-weight:bold;
+}
 
-/**************** Meine Daten Seite  ******************/
+/**************** Meine Daten Tab  ******************/
 .para{
     font-size: 12px;
     color: peru
@@ -200,7 +286,7 @@
     position: absolute;
     z-index: 1;
     background-color: #f9f9f9;
-    color:  navy; 
+    color:  blue; 
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -265,20 +351,7 @@
     justify-content: center;
 }
 
-.btn-warning{
-    background-color: #c2460d;
-    color:white;
-    
-}
 
-
-.nav-pills .nav-link.active,.nav-pills .show>.nav-link{color:#fff;background-color:#c2460d; padding: 5px 10px 5px 10px;}
-
-.btn-bestellen.disabled{
-    opacity: 0.5;
-    pointer-events: none;
-    
-}
 
 
 /******************************************************************** Tabellen *************************************************************/
@@ -299,7 +372,10 @@ th {
 .selected {
     background-color: yellow;
 }
-
+.tableRow:hover{
+    background-color: #d6a140;
+    color:black;
+}
 
 .error{
     color : red;
@@ -309,6 +385,21 @@ th {
 .success{
     color: green;
     font-size: 1.5rem;
+}
+
+
+/****************************** Buttons **********************************/
+/* .btn-warning{
+    background-color: #c2460d;
+    color:white; 
+} */
+
+.nav-pills .nav-link.active,.nav-pills .show>.nav-link{color:#fff;background-color:#c2460d; padding: 5px 10px 5px 10px;}
+
+.btn-bestellen.disabled{
+    opacity: 0.5;
+    pointer-events: none;
+    
 }
 
 .btn{
@@ -334,7 +425,3 @@ th {
     color: white;
 }
 
-.tableRow:hover{
-    background-color: #d6a140;
-    color:black;
-}

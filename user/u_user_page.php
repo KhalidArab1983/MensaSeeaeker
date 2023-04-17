@@ -294,23 +294,25 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
     </head>
     <body>
         <div class="nav_besonder">
-            <h4 class="mt-3 ms-3">Herzlich Willkommen </h4>
-            <h4 class="mt-3 ms-3" style="color:red;"><?php echo $_SESSION['userName'];?></h4>
-            <a class="nav-link ms-2 mt-1 btn-outline-danger" href="./u_logout.php"><h3>Abmelden</h3></a>
-            <div >
+            <div class="disFlex">
+                <h4 class="mt-3 ms-3">Herzlich Willkommen: </h4>
+                <h4 class="mt-3 ms-3 colorRed"><?php echo $_SESSION['userName'];?></h4>
+            </div>
+            <a class="nav-link m-2 btn btn-warning" href="./u_logout.php"><h5>Abmelden</h5></a>
+            <div>
                 <h3 class="m-3">
-                    <input style="font-weight: bold; color: green; width: 280px" 
-                            class="text-center" id="system-time" name="system-time" value="<?php echo date('H:i:s'); ?>" readonly>
+                    <input class="text-center watchDate" id="system-time" name="system-time" value="<?php echo date('H:i:s'); ?>" readonly>
                 </h3>
             </div>
             <div>
-                <p class="m-3"  id="startzeit" style="font-size:20px">Seite aktualisieren, um die Sitzungszeit anzuzeigen:
-                    <span style="font-size:20px; font-weight:bold; color: green"><?php echo $formatierte_zeit; ?></span>
+                <p class="m-3 font20"  id="startzeit">Seite aktualisieren, um die Sitzungszeit anzuzeigen:
+                    <span class="font20 fontBold colorGreen"><?php echo $formatierte_zeit; ?></span>
                 </p>
             </div>
+            
         </div>
         <div>
-            <img class="logo" src="../images/logo.png" alt="Seeäkerschule Logo" width=6% style="float:right;">
+            <img class="logo floatRight" src="../images/logo.png" alt="Seeäckerschule Logo" width=6%>
         </div>
         
         <div class="tab">
@@ -320,19 +322,30 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
             <button class="tablinks" onclick="openTab(event, 'bestellendeEssen')">Bestellende Essen</button>
         </div>
 
-        <div id="essenBestellung" class="tabcontent" style="display:block">
-            <h3 style="text-decoration:underline">Essen bestellen:</h3>
+        <div id="essenBestellung" class="tabcontent disBlock">
+            <h3 class="textDeco">Essen bestellen:</h3>
             
-            <div class="col-lg-8" style="float:left; margin-top:20px;">
+            <div class="col-ms-12 col-lg-8 mt-4 floatLeft">
                 <div>
-                    <div class="mb-3 text-center" style="display:flex; text-align:center">
+                    <div class="mb-3 text-center disFlex">
                         <h2>Gesamt Preis: </h2>
-                        <div class="ms-4" style="font-size:30px; font-weight:bold; color:blue" name="totalPrice" id="totalPrice">0.00€</div>
+                        <div class="ms-4 font30 fontBold colorBlue" name="totalPrice" id="totalPrice">0.00€</div>
                     </div>
                     <form id="bestellForm" action="u_user_page.php" method="POST">
                         <?php foreach($days as $day): ?>
-                                <div class="mb-1" style="height:10vh">
-                                    <label for="option_name_<?php echo $day; ?>" style="width:115px; font-weight:bold"><?php echo $day;?>:</label>
+                                <div class="mb-1 form_height">
+                                    <div class="disGrid floatLeft">
+                                        <label class="dayLabel" for="option_name_<?php echo $day; ?>"><?php echo $day;?>:</label>
+                                        <label id="monday" name="<?php echo $day; ?>">
+                                            <?php 
+                                                $sql = "SELECT date FROM tbl_option WHERE day = '". $day."'";
+                                                $result = mysqli_query($conn, $sql);
+                                                $row = mysqli_fetch_assoc($result);
+                                                $day_datum = $row['date'];
+                                                echo $day_datum;
+                                            ?>
+                                        </label>
+                                    </div>
                                     <select class="w-50 h-50 tableRow" name="option_name_<?php echo $day; ?>" id="option_name_<?php echo $day; ?>" onChange="chImage<?php echo $day;?>(); calculateTotalPrice(this);">
                                         <?php 
                                             if($$day == 1){
@@ -368,27 +381,18 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                             <?php 
                                                 if($$day == 1){ echo "disabled";}
                                             ?> >
-                                            <h6 style="color:white;">Ändern</h6>
+                                            <h6>Ändern</h6>
                                     </button>
-                                    <br>
-                                    <label style="width:100px" id="monday" name="<?php echo $day; ?>">
-                                        <?php 
-                                            $sql = "SELECT date FROM tbl_option WHERE day = '". $day."'";
-                                            $result = mysqli_query($conn, $sql);
-                                            $row = mysqli_fetch_assoc($result);
-                                            $day_datum = $row['date'];
-                                            echo $day_datum;
-                                        ?>
-                                    </label>
+                                    
                                 </div>
                         <?php endforeach; ?>
                         
                         <div class="text-center">
-                            <button type="submit" class="btn btn-warning w-25 btn-bestellen" id="bestellen" name="button" value="bestellen"
+                            <button type="submit" class="btn btn-warning btn-bestellen" id="bestellen" name="button" value="bestellen"
                                     <?php 
                                         // if($bestell_status == 1){echo "disabled";}
                                     ?>>
-                                    Essen bestellen
+                                    <h6>Essen bestellen</h6>
                                     
                             </button>
                             <div name="guthaben" id="guthaben" class="error" ></div>
@@ -396,7 +400,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                     </form>
                 </div>
             </div>
-            <div class="col-lg-4" style="float:left; box-shadow: -4px 1px 4px #888; height:100vh; margin-top:10px">
+            <div class="col-ms-12 col-lg-4 imageContainer">
                 <div id="imageContainerMontag">
                     
                 </div>
@@ -416,62 +420,62 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
         </div>
 
         <div id="userData" class="tabcontent">
-            <h3 style="text-decoration:underline">Meine Daten:</h3>
+            <h3 class="textDeco">Meine Daten:</h3>
             <div class="container-fluid">
                 <div class="row">
-                    <div class="card col-sm-12 col-md-4 m-1">
+                    <div class="card col-sm-12 col-md-12 col-lg-4 m-2">
                         <h4 class="mb-5">Allgemeine Daten:</h4>
                         <div class="form-group">
-                            <label for="userName" style="font-weight:bold;">Benutzername:</label>
+                            <label for="userName" class="fontBold">Benutzername:</label>
                             <input type="text" name="userName" id="userName" class="form-control tableRow" value="<?php echo $userName; ?>" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="lastName" style="font-weight:bold;">Nachname:</label>
+                            <label for="lastName" class="fontBold">Nachname:</label>
                             <input type="text" name="lastName" id="lastName" class="form-control tableRow" value="<?php echo $lastName; ?>" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="firstName" style="font-weight:bold;">Vorname:</label>
+                            <label for="firstName" class="fontBold">Vorname:</label>
                             <input type="text" name="firstName" id="firstName" class="form-control tableRow" value="<?php echo $firstName; ?>" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="birthday" style="font-weight:bold;">Geburtsdatum:</label>
+                            <label for="birthday" class="fontBold">Geburtsdatum:</label>
                             <input type="text" name="birthday" id="birthday" class="form-control tableRow" value="<?php echo $birthday; ?>" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="aktiv_ab" style="font-weight:bold;">Aktiv ab:</label>
+                            <label for="aktiv_ab" class="fontBold">Aktiv ab:</label>
                             <input type="text" name="aktiv_ab" id="aktiv_ab" class="form-control tableRow" value="<?php echo $aktiv_ab; ?>" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="klasse" style="font-weight:bold;">Klasse:</label>
+                            <label for="klasse" class="fontBold">Klasse:</label>
                             <input type="text" name="klasse" id="klasse" class="form-control tableRow" value="<?php echo $klasse; ?>" readonly>
                         </div>
                         <p class="para">* Die Daten in dieser Tabelle dienen nur zur Anzeige und können nicht geändert werden.</p>
                     </div>
-                    <div class="card col-sm-12 col-md-3 m-1">
+                    <div class="card col-sm-12 col-md-12 col-lg-4 m-2">
                         <h4 class="mb-5">Adresse:</h4>
                         <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST">
                             <div class="form-group">                                    
-                                <label style="font-weight:bold; width:200px">Adresse :</label>
+                                <label class="fontBold">Adresse :</label>
                                 <input type="text" name="adresse" id="adresse" class="form-control tableRow" value="<?php echo $adresse; ?>">
                             </div>
                             <div class="form-group">                                    
-                                <label style="font-weight:bold; width:200px">PLZ :</label>
+                                <label class="fontBold">PLZ :</label>
                                 <input type="text" name="plz" id="plz" class="form-control tableRow" value="<?php echo $plz; ?>">
                             </div>
                             <div class="form-group">                                    
-                                <label style="font-weight:bold; width:200px">Ort :</label>
+                                <label class="fontBold">Ort :</label>
                                 <input type="text" name="ort" id="ort" class="form-control tableRow" value="<?php echo $ort; ?>" readonly>
                             </div>
                             <div class="form-group">                                    
-                                <label style="font-weight:bold; width:200px">Ortsteil :</label>
+                                <label class="fontBold">Ortsteil :</label>
                                 <input type="text" name="ortsteil" id="ortsteil" class="form-control tableRow" value="<?php echo $ortsteil; ?>">
                             </div>
                             <div class="form-group">                                    
-                                <label style="font-weight:bold; width:200px">Handy :</label>
+                                <label class="fontBold">Handy :</label>
                                 <input type="text" name="phone" id="phone" class="form-control tableRow" value="<?php echo $phone; ?>">
                             </div>
                             <div class="form-group">                                    
-                                <label style="font-weight:bold; width:200px">Email-Adresse :</label>
+                                <label class="fontBold">Email-Adresse :</label>
                                 <input type="text" name="email" id="email" class="form-control tableRow" value="<?php echo $email; ?>">
                             </div>
                             <p class="para">* Geben Sie die PLZ ein und das Ort wird automatisch geändert.</p>
@@ -481,23 +485,23 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                             </div>
                         </form>
                     </div>
-                    <div class="card col-sm-12 col-md-4 m-1">
+                    <div class="card col-sm-12 col-md-12 col-lg-3 m-2">
                         <h4 class="mb-5">Passwort:</h4>
                         <form method="POST" action="<?php echo $_SERVER['PHP_SELF'];?>">
                             <div class="form-group">                                    
-                                <label style="font-weight:bold; width:300px">bisheriges Passwort:</label>
+                                <label class="fontBold">bisheriges Passwort:</label>
                                 <input type="password" name="current_password" id="current_password" class="form-control tableRow" value="<?php echo $current_password; ?>">
                                 <div class="form-text mb-3 error"><?php echo $errors['currentPassError'] ?></div>
                             </div>
                             <div class="form-group">                                    
-                                <label style="font-weight:bold; width:300px">Neues Passwort:</label>
+                                <label class="fontBold">Neues Passwort:</label>
                                 <input type="password" name="new_password" id="new_password" class="form-control tableRow" value="<?php echo $new_password; ?>">
                                 <div class="form-text mb-3 error"><?php echo $errors['newPassError'] ?></div>
                                 <div class="form-text mb-3 error"><?php echo $errors['passRegexError'] ?></div>
                                 
                             </div>
                             <div class="form-group">                                    
-                                <label style="font-weight:bold; width:300px">Neues Passwort bestätigen:</label>
+                                <label class="fontBold">Neues Passwort bestätigen:</label>
                                 <input type="password" name="confirm_password" id="confirm_password" class="form-control tableRow" value="<?php echo $confirm_password; ?>">
                                 <div class="form-text mb-3 error"><?php echo $errors['confirmPassError'] ?></div>
                                 <div class="form-text mb-3 error"><?php echo $errors['otherError'] ?></div>
@@ -513,20 +517,20 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
             </div>
         </div>
         <div id="kontoZustand" class="tabcontent">
-            <h3 style="text-decoration:underline">Banktransaktionen und Kontostand:</h3>
+            <h3 class="textDeco">Banktransaktionen und Kontostand:</h3>
             <div class="container">                        
                 <h2 class="text-center">Ihr Kontostand ist: 
                     <?php
                         if ($kontostand < 40 && $kontostand > 18){
-                            echo '<span style="color:orange; font-weight:bold">';
+                            echo '<span class="colorOrange fontBold">';
                                 echo number_format($kontostand, 2); 
                             echo '€</span>';
                         }elseif($kontostand < 18){
-                            echo '<span style="color:red; font-weight:bold">';
+                            echo '<span class="colorRed fontBold">';
                                 echo number_format($kontostand, 2); 
                             echo '€</span>';
                         }else{
-                            echo '<span style="color:green; font-weight:bold">';
+                            echo '<span class="colorGreen fontBold">';
                                 echo number_format($kontostand, 2); 
                             echo '€</span>';
                         }
@@ -540,7 +544,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                 <div id="einzahlungen" class="subtabcontent">
                     <h3 class="mt-3">
                         <?php
-                            echo "Die Gesamte Einzahlungen sind: ". $sumEinzahlung. "€";
+                            echo "Die Gesamte Einzahlungen sind: "."<span class='colorBlue'>". $sumEinzahlung. "€</span>";
                         ?>
                     </h3>
                     <table>
@@ -565,10 +569,10 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                         </tbody>
                     </table>
                 </div>
-                <div id="auszahlungen" class="subtabcontent" style="display:none">
+                <div id="auszahlungen" class="subtabcontent disNone">
                     <h3 class="mt-3">
                         <?php
-                            echo "Die Gesamte Auszahlungen sind: ". $sumAuszahlung. "€";
+                            echo "Die Gesamte Auszahlungen sind: ". "<span class='colorRed'>" . $sumAuszahlung. "€</span>";
                         ?>
                     </h3>
                     <table>
@@ -586,7 +590,6 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                             echo '<td>'.$auszahl['auszahlung'].'€</td>';
                                             echo '<td>'.$auszahl['auszahlung_date'].'</td>';
                                         echo '</tr>';
-                                        // mysqli_close($conn);
                                     }
                                 }
                             ?>
@@ -598,7 +601,6 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
         
         <div id="bestellendeEssen" class="tabcontent">
             <div class="container">
-                <button onclick="printContent()">Seite drucken</button>
                 <div class="tab">
                     <button class="subtablinks active" onclick="openSubTab(event, 'lastWeek')">Nächste Woche</button>
                     <button class="subtablinks" onclick="openSubTab(event, 'alleBestellungen')">Alle Bestellungen</button>
@@ -606,8 +608,8 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
             
                 <div id="lastWeek" class="subtabcontent">
                     <div> 
-                        <h3 class="m-3" style="float:left">Bestellende Essen für nächste Woche:</h3>
-                        <h3 class="m-3" style="float:right">Benutzer-ID: <span style="color:red;"><?php echo "[". $user_id."]"?></span></h3>
+                        <h3 class="floatLeft">Bestellende Essen für nächste Woche:</h3>
+                        <h3 class="floatRight">Benutzer-ID: <span class="colorRed"><?php echo "[". $user_id."]"?></span></h3>
                     </div>
                     
                     <table>
@@ -638,7 +640,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                     }
                                 }else {
                                     echo '<tr>';
-                                        echo '<td><h5 style="color:red; text-align:center;">Keine Bestellungen für diese Woche gefunden.</h5></td>';
+                                        echo '<td><h5 class="colorRed text-center">Keine Bestellungen für diese Woche gefunden.</h5></td>';
                                     echo '</tr>';
                                 }
                             ?>
@@ -646,15 +648,15 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                     </table>
                     <h3 class="mt-3">
                         <?php
-                            echo "Der Gesamtbetrag ist: ". $gesamtPreis. "€";
+                            echo "Der Gesamtbetrag ist: ". "<span class='colorBlue'>" . $gesamtPreis. "€</span>";
                         ?>
                     </h3>
                 </div>
             
-                <div id="alleBestellungen" class="subtabcontent" style="display:none">
+                <div id="alleBestellungen" class="subtabcontent disNone">
                     <div>
-                        <h3 class="m-3" style="float:left">Alle Bestellende Essen:</h3>
-                        <h3 class="m-3" style="float:right">Benutzer-ID: <span style="color:red;"><?php echo "[". $user_id."]"?></span></h3>
+                        <h3 class="floatLeft">Alle Bestellende Essen:</h3>
+                        <h3 class="floatRight">Benutzer-ID: <span class="colorRed"><?php echo "[". $user_id."]"?></span></h3>
                     </div>
                     <table>
                         <thead>
@@ -683,7 +685,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                         echo '</tr>';
                                     }
                                 }else {
-                                    echo '<h4 style="color:red; text-align:center;">Keine Bestellungen gefunden.</h4>';
+                                    echo '<h4 class="colorRed text-center">Keine Bestellungen gefunden.</h4>';
                                 }
                                 mysqli_close($conn);
                             ?>
@@ -693,7 +695,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
             </div>
         </div>  
         
-        <div style="margin-bottom: 80px">
+        <div class="spaceFooter">
             
         </div>
         <footer class="fixed-bottom footer">
@@ -701,20 +703,6 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
         </footer>
             
         <script>
-            function printContent() {
-                var content = document.getElementById("lastWeek");
-                var pri = document.createElement("iframe");
-                pri.style.visibility = "hidden";
-                pri.style.position = "absolute";
-                pri.style.top = "0";
-                pri.style.left = "0";
-                document.body.appendChild(pri);
-                pri.contentWindow.document.open();
-                pri.contentWindow.document.write(content.innerHTML);
-                pri.contentWindow.document.close();
-                pri.contentWindow.focus();
-                pri.contentWindow.print();
-            }
             
             var btnMontag = document.getElementById('Montag');
             var btnDienstag = document.getElementById('Dienstag');
