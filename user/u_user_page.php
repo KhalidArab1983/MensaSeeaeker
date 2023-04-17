@@ -22,7 +22,6 @@ $formatierte_zeit = gmdate("H:i:s", $vergangene_zeit * 60);
 
 
 
-
 // Meine Daten Seite
 $errors = [
     'currentPassError' => '',
@@ -275,11 +274,6 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
     // Kontostand zu berechnen
     $kontostand = $sumEinzahlung - $sumAuszahlung;
 
-
-
-
-
-
 ?>
 
 
@@ -298,8 +292,9 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                 <h4 class="mt-3 ms-3">Herzlich Willkommen: </h4>
                 <h4 class="mt-3 ms-3 colorRed"><?php echo $_SESSION['userName'];?></h4>
             </div>
-            <a class="nav-link m-2 btn btn-warning" href="./u_logout.php"><h5>Abmelden</h5></a>
-            <div>
+            
+            <div class="disFlex">
+                <a class="nav-link m-2 btn btn-warning" href="./u_logout.php"><h5>Abmelden</h5></a>
                 <h3 class="m-3">
                     <input class="text-center watchDate" id="system-time" name="system-time" value="<?php echo date('H:i:s'); ?>" readonly>
                 </h3>
@@ -325,13 +320,13 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
         <div id="essenBestellung" class="tabcontent disBlock">
             <h3 class="textDeco">Essen bestellen:</h3>
             
-            <div class="col-ms-12 col-lg-8 mt-4 floatLeft">
+            <div class="col-ms-12 col-md-12 col-lg-8 mt-4 floatLeft">
                 <div>
                     <div class="mb-3 text-center disFlex">
                         <h2>Gesamt Preis: </h2>
                         <div class="ms-4 font30 fontBold colorBlue" name="totalPrice" id="totalPrice">0.00€</div>
                     </div>
-                    <form id="bestellForm" action="u_user_page.php" method="POST">
+                    <form action="u_user_page.php" method="POST">
                         <?php foreach($days as $day): ?>
                                 <div class="mb-1 form_height">
                                     <div class="disGrid floatLeft">
@@ -371,10 +366,8 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                                     $price = $row['price'];
                                                     $option_id = $row['id'];
                                                     echo '<option value="' . $option_id. '">'. $option_id ."-". $option_name . "-" . $price . '€</option>';
-                                                    
                                                 }
                                             }
-                                            
                                         ?>
                                     </select>
                                     <button type="submit" class="btn btn-warning h-50 mb-2" name="button" id="<?php echo $day;?>" value="<?php echo $day;?>"
@@ -400,9 +393,9 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                     </form>
                 </div>
             </div>
-            <div class="col-ms-12 col-lg-4 imageContainer">
+            <div class="col-ms-12 col-md-12 col-lg-4 imageContainer">
                 <div id="imageContainerMontag">
-                    
+
                 </div>
                 <div id="imageContainerDienstag">
 
