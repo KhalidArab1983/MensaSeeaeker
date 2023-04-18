@@ -537,7 +537,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                 <div id="einzahlungen" class="subtabcontent">
                     <h3 class="mt-3">
                         <?php
-                            echo "Die Gesamte Einzahlungen sind: "."<span class='colorBlue'>". $sumEinzahlung. "€</span>";
+                            echo "Die Gesamte Einzahlungen sind: "."<span class='colorBlue fontBold'>". $sumEinzahlung. "€</span>";
                         ?>
                     </h3>
                     <table>
@@ -565,7 +565,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                 <div id="auszahlungen" class="subtabcontent disNone">
                     <h3 class="mt-3">
                         <?php
-                            echo "Die Gesamte Auszahlungen sind: ". "<span class='colorRed'>" . $sumAuszahlung. "€</span>";
+                            echo "Die Gesamte Auszahlungen sind: ". "<span class='colorRed fontBold'>" . $sumAuszahlung. "€</span>";
                         ?>
                     </h3>
                     <table>
@@ -641,7 +641,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                     </table>
                     <h3 class="mt-3">
                         <?php
-                            echo "Der Gesamtbetrag ist: ". "<span class='colorBlue'>" . $gesamtPreis. "€</span>";
+                            echo "Der Gesamtbetrag ist: ". "<span class='colorBlue fontBold'>" . $gesamtPreis. "€</span>";
                         ?>
                     </h3>
                 </div>
