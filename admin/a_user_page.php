@@ -433,13 +433,13 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                 </div>
                 <div id="einzahlungenFiltern" class="subtabcontent" style="display:none">
                     <div class="container">
-                        <h3>Einzahlungen für einzelnen Benutzer</h3>
                         <form method="get">
                             <div class="col-4" style="display:flex">
                                 <input type="text" class="form-control m-1" name="userNameEinzahl" id="user_id" placeholder="nach einem Benutzer suchen..."> 
                                 <button type="submit" name="button" class="btn btn-warning m-1" value="einzahlungSuchen">Suchen</button>
                             </div>
                         </form>
+                        <h3>Einzahlungen für einzelnen Benutzer</h3>
                         <table>
                             <thead>
                                 <tr>
@@ -481,13 +481,13 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                 </div>
                 <div id="auszahlungenFiltern" class="subtabcontent" style="display:none">
                     <div class="container">
-                        <h3>Auszahlungen für einzelnen Benutzer</h3>
                         <form method="get">
                             <div class="col-4" style="display:flex">
                                 <input type="text" class="form-control m-1" name="userNameAuszahl" id="user_id" placeholder="nach einem Benutzer suchen..."> 
                                 <button type="submit" name="button" class="btn btn-warning m-1" value="auszahlungSuchen">Suchen</button>
                             </div>
                         </form>
+                        <h3>Auszahlungen für einzelnen Benutzer</h3>
                         <table>
                             <thead>
                                 <tr>
