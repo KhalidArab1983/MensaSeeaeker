@@ -146,7 +146,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                                         // Abrufen der Bestellungen für den angegebenen Benutzer
                                         $sql = "SELECT u.userName, b.id, b.user_id, b.option_name, b.option_id, b.day, b.day_datum, b.bestelldatum 
                                                 FROM tbl_bestellung AS b LEFT JOIN tbl_user AS u ON u.id = b.user_id WHERE u.userName = '$userNameBestell' 
-                                                ORDER BY b.id;";
+                                                ORDER BY b.bestelldatum DESC;";
                                         $result = mysqli_query($conn, $sql);
                                         if($result->num_rows > 0){
                                             // Ausgabe der Bestellungen in einer Tabelle
@@ -298,7 +298,6 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                                             echo '<td>' . $row['bestelldatum'] . '</td>';
                                         echo '</tr>';
                                     }
-                                    // mysqli_close($conn);
                                 ?>
                             </tbody>
                         </table>
@@ -312,7 +311,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                             <form method="POST">
                                 <thead>
                                     <tr>
-                                        <th>Option ID</th>
+                                        <!-- <th>Option ID</th> -->
                                         <th>Gerichtsname</th>
                                         <th>Anzahl</th>
                                     </tr>
@@ -327,18 +326,17 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                                     //             SELECT option_id, user_id, option_name, ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY bestelldatum DESC) AS row_num
                                     //             FROM tbl_bestellung) AS b WHERE b.row_num <= 5 GROUP BY b.option_name ORDER BY `b`.`option_name` ASC;";
 
-                                    $sql = "SELECT option_id, option_name, COUNT(*) AS anzahl
+                                    $sql = "SELECT option_name, COUNT(*) AS anzahl
                                             FROM tbl_bestellung WHERE week_count = $woche_count GROUP BY option_name ORDER BY option_name ASC";
                                     $result = mysqli_query($conn, $sql);
                                     // Ausgabe der Bestellungen in einer Tabelle
                                     while ($row = mysqli_fetch_assoc($result)) {
                                         echo '<tr class="tableRow">';
-                                            echo '<td>' . $row['option_id'] . '</td>';
+                                            // echo '<td>' . $row['option_id'] . '</td>';
                                             echo '<td>' . $row['option_name'] . '</td>';
                                             echo '<td>' . $row['anzahl'] . '</td>';
                                         echo '</tr>';
                                     }
-                                    // mysqli_close($conn);
                                 ?>
                             </tbody>
                         </table>
@@ -399,7 +397,6 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                                         echo '<td>' . $row['einzahlung_date'] . '</td>';
                                     echo '</tr>';
                                 }
-                                // mysqli_close($conn);
                             ?>
                         </tbody>
                     </table>
@@ -430,7 +427,6 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                                         echo '<td>' . $row['auszahlung_date'] . '</td>';
                                     echo '</tr>';
                                 }
-                                // mysqli_close($conn);
                             ?>
                         </tbody>
                     </table>

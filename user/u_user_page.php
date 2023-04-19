@@ -543,19 +543,18 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                     <table>
                         <thead>
                             <tr>
-                            <th>Einzahlungen</th>
-                            <th>Datum</th>
+                                <th>Einzahlungen</th>
+                                <th>Datum</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php 
+                            <?php
                                 if(count($einzahlungen) > 0){
                                     foreach($einzahlungen as $einzahl){
                                         echo '<tr class="tableRow">';
                                             echo '<td>'.$einzahl['einzahlung'].'€</td>';
                                             echo '<td>'.$einzahl['einzahlung_date'].'</td>';
                                         echo '</tr>';
-                                        // mysqli_close($conn);
                                     }
                                 }
                             ?>
