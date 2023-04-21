@@ -26,11 +26,11 @@ if (isset($_POST['submit'])){
         $errors['passwordError'] = '* Bitte geben Sie das Passwort ein';
     }
     if(!array_filter($errors)){
-        $adminName = mysqli_real_escape_string($conn, $_POST['adminName']);
-        $password =  mysqli_real_escape_string($conn, $_POST['password']);
+
+        $hashed_password = hash('sha256', $password);
 
         //Check if the email and password are valid
-        $sql = "SELECT * FROM tbl_admin WHERE adminName = '$adminName' AND password = '$password'";
+        $sql = "SELECT * FROM tbl_admin WHERE adminName = '$adminName' AND password = '$hashed_password'";
         $result = mysqli_query($conn, $sql);
         if(mysqli_num_rows($result) == 1){
             $row = mysqli_fetch_assoc($result);
@@ -112,6 +112,7 @@ if (isset($_POST['submit'])){
                 </div>
             </form>
         </div>
+        <h6 class="text-center mt-4 pass_vergessen"><a href="a_forget_password.php">Passwort vergessen?</a></h6>
     </div>
 
     <script src="../js/popper.min.js"></script>
