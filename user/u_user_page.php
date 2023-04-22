@@ -336,8 +336,13 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                                 $sql = "SELECT date FROM tbl_option WHERE day = '". $day."'";
                                                 $result = mysqli_query($conn, $sql);
                                                 $row = mysqli_fetch_assoc($result);
-                                                $day_datum = $row['date'];
-                                                echo $day_datum;
+                                                if($result->num_rows > 0 ){
+                                                    $day_datum = $row['date'];
+                                                    echo $day_datum;
+                                                }else{
+                                                    echo '0000-00-00';
+                                                }
+                                                
                                             ?>
                                         </label>
                                     </div>
@@ -677,7 +682,9 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                         echo '</tr>';
                                     }
                                 }else {
-                                    echo '<h4 class="colorRed text-center">Keine Bestellungen gefunden.</h4>';
+                                    echo '<tr>';
+                                        echo '<td><h5 class="colorRed text-center">Keine Bestellungen gefunden.</h5></td>';
+                                    echo '</tr>';
                                 }
                                 mysqli_close($conn);
                             ?>
