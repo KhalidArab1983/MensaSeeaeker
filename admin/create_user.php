@@ -122,7 +122,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
                 // $mail->addAttachment('../images/logo.jpg');
                 $mail->isHTML(true);
                 $mail->CharSet = 'UTF-8';
-                $mail->Subject = 'Anmeldedaten';  // Betreff der E-Mail
+                $mail->Subject = 'Zugangsdaten';  // Betreff der E-Mail
                 $mail->Body = "<h3>Ihre Zugangsdaten für die Essensbestellplattform der Seeäckerschule lauten wie folgt:</h3><br>
                                 klasse: <h3 style='color:blue'> $klasse</h3><br>
                                 Benutzername: <h3 style='color:blue'> $userName</h3><br>

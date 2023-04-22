@@ -12,7 +12,6 @@ if (isset($_SESSION['admin_id'])) {
 }
 date_default_timezone_set("Europe/Berlin");
 
-// include('./admin/insertUpdateMeals.php');
 
 
 

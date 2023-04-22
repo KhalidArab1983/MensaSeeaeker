@@ -41,17 +41,27 @@ if (isset($_POST['submit'])){
     }
     if(!array_filter($errors)){
 
+
         $adminName =     mysqli_real_escape_string($conn, $_POST['adminName']);
         $email =        mysqli_real_escape_string($conn, $_POST['email']);
         $password =        mysqli_real_escape_string($conn, $_POST['password']);
         $confirm =        mysqli_real_escape_string($conn, $_POST['confirm']);
 
-        $sql = "INSERT INTO tbl_admin (adminName, email, password) VALUES ('$adminName', '$email', '$password')";
-        if(mysqli_query($conn, $sql)){
-            header("Location: a_login.php");
-        }else{
-            echo "Error: " . "<br>" . mysqli_error($conn);
+        $hashed_password = hash('sha256', $password);
+
+        // Füge den neuen Eintrag in die Tabelle tbl_admin ein und rufe die zugehörige ID ab
+        $sqlAdmin = "INSERT INTO tbl_admin (adminName, email, password) VALUES ('$adminName', '$email', '$hashed_password')";
+        if(mysqli_query($conn, $sqlAdmin)){
+            $admin_id = mysqli_insert_id($conn);
+            // Füge den neuen Eintrag in die Tabelle tbl_adminupdate ein und verknüpfe ihn mit dem neuen Eintrag in der Tabelle tbl_admin
+            $sqlAdminUpdate = "INSERT INTO tbl_adminupdate (admin_id_update, adminName) SELECT tbl_admin.id, '$adminName' FROM tbl_admin WHERE tbl_admin.id = $admin_id";
+            if(mysqli_query($conn, $sqlAdminUpdate)){
+                header("Location: a_login.php");
+            }else{
+                echo "Error: " . "<br>" . mysqli_error($conn);
+            }
         }
+        
         mysqli_close($conn);
     }
     
