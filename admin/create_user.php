@@ -24,8 +24,8 @@ require '../vendor/autoload.php';
 
 
 $aktiv_ab = date('d.m.Y');
-
 $error = "";
+
 
 if ($_SERVER["REQUEST_METHOD"]=="POST"){
     if (isset($_POST['userName1'])) {
@@ -79,6 +79,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
     if (isset($_POST['admin_id'])) {
         $admin_id = $_POST['admin_id'];
     }
+
 
     if(isset($_POST['klasse_submitted'])){
         $sql= "INSERT INTO tbl_klasse (schule, klasse, admin_id) VALUES ('$schule', '$klasse','{$admin_id}')";
@@ -209,6 +210,32 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
                 $password = $row['password'];
             }
             
+
+            // Speichern der ursprünglichen Benutzerdaten in einer Variable
+            $query = "SELECT * FROM tbl_user WHERE id = $user_id";
+            $result = mysqli_query($conn, $query);
+            $original_data = mysqli_fetch_assoc($result);
+
+            // Überprüfen, welche Felder geändert wurden und sie in der Tabelle tbl_user_changes speichern
+            foreach ($_POST as $key => $value) {
+                if ($key != "user_id" && $key != "submit") {
+                    if ($value != $original_data[$key]) {
+                        $field_name = mysqli_real_escape_string($conn, $key);
+                        $old_value = mysqli_real_escape_string($conn, $original_data[$key]);
+                        $new_value = mysqli_real_escape_string($conn, $value);
+                        $change_date = date("Y-m-d H:i:s");
+
+                        var_dump("field Name: ".$field_name, "Old Value: ".$old_value, "New Value: ".$new_value);
+
+
+                        if(!empty($key)){
+                            $query = "INSERT INTO tbl_user_changes (admin_id, user_id, field_name, old_value, new_value, change_date) VALUES ($admin_id, $user_id, '$field_name', '$old_value', '$new_value', '$change_date')";
+                            mysqli_query($conn, $query);
+                        }
+                    }
+                }
+            }
+
             $sql = "UPDATE tbl_user SET klasse = ?, plz = ?, firstName = ?, lastName = ?, email = ?, phone = ?, adresse = ?, ortsteil = ?, admin_id_update = ? WHERE id = ?";
             $stmt = mysqli_prepare($conn, $sql);
             mysqli_stmt_bind_param($stmt, "ssssssssss", $klasse, $plz, $firstName, $lastName, $email, $phone, $adresse, $ortsteil, $admin_id, $user_id);
@@ -218,39 +245,39 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
                 echo "Error: " . "<br>" . mysqli_error($conn);
             }
 
-            // Speichern der ursprünglichen Benutzerdaten in einer Variable
-            $query = "SELECT * FROM tbl_user WHERE id = $user_id";
-            $result = mysqli_query($conn, $query);
-            $original_data = mysqli_fetch_assoc($result);
 
+            // // Speichern der ursprünglichen Benutzerdaten in einer Variable
+            // $query = "SELECT * FROM tbl_user WHERE id = $user_id";
+            // $result = mysqli_query($connection, $query);
+            // $original_data = mysqli_fetch_assoc($result);
+        
+            // // Überprüfen, welche Felder geändert wurden und sie in der Tabelle tbl_user_changes speichern
+            // global $fields_to_update;
+            // $fields_to_update = array();
+            // foreach ($_POST as $key => $value) {
+            //     if ($key != "user_id" && $key != "submit") {
+            //         if ($value != $original_data[$key]) {
+            //             $fields_to_update[$key] = array(
+            //                 "old_value" => mysqli_real_escape_string($conn, $original_data[$key]),
+            //                 "new_value" => mysqli_real_escape_string($conn, $value),
+            //                 "field_name" => mysqli_real_escape_string($conn, $key)
+            //             );
 
-            // Überprüfen, welche Felder geändert wurden und sie in der Tabelle tbl_user_changes speichern
-            global $fields_to_update;
-            $fields_to_update = array();
-            foreach ($_POST as $key => $value) {
-                if ($key != "user_id" && $key != "submit") {
-                    if ($value != $original_data[$key]) {
-                        $fields_to_update[$key] = array(
-                            "old_value" => mysqli_real_escape_string($conn, $original_data[$key]),
-                            "new_value" => mysqli_real_escape_string($conn, $value),
-                            "field_name" => mysqli_real_escape_string($conn, $key)
-                        );
+            //             // Überprüfen, welche Felder geändert wurden und sie in der Tabelle tbl_user_changes speichern
+            //             if (!empty($fields_to_update)) {
+            //                 // Es gibt geänderte Felder, diese in der Tabelle tbl_user_changes speichern
+            //                 $field_name = $fields_to_update[$key]["field_name"];
+            //                 $old_value = $fields_to_update[$key]["old_value"];
+            //                 $new_value = $fields_to_update[$key]["new_value"];
+            //                 $change_date = date("Y-m-d H:i:s");
 
-                        // Überprüfen, welche Felder geändert wurden und sie in der Tabelle tbl_user_changes speichern
-                        if (!empty($fields_to_update)) {
-                            // Es gibt geänderte Felder, diese in der Tabelle tbl_user_changes speichern
-                            $field_name = $fields_to_update[$key]["field_name"];
-                            $old_value = $fields_to_update[$key]["old_value"];
-                            $new_value = $fields_to_update[$key]["new_value"];
-                            $change_date = date("Y-m-d H:i:s");
-
-                            $query = "INSERT INTO tbl_user_changes (admin_id, user_id, field_name, old_value, new_value, change_date) VALUES ($admin_id, $user_id, '$field_name', '$old_value', '$new_value', '$change_date')";
-                            mysqli_query($conn, $query);
+            //                 $query = "INSERT INTO tbl_user_changes (admin_id, user_id, field_name, old_value, new_value, change_date) VALUES ($admin_id, $user_id, '$field_name', '$old_value', '$new_value', '$change_date')";
+            //                 mysqli_query($conn, $query);
                             
-                        }
-                    }
-                }
-            }
+            //             }
+            //         }
+            //     }
+            // }
 
 
 
@@ -282,6 +309,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
         }
     }
 }
+
 
 ?>
 
