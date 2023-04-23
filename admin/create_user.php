@@ -217,6 +217,55 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
             }else{
                 echo "Error: " . "<br>" . mysqli_error($conn);
             }
+
+            // Speichern der ursprünglichen Benutzerdaten in einer Variable
+            $query = "SELECT * FROM tbl_user WHERE id = $user_id";
+            $result = mysqli_query($conn, $query);
+            $original_data = mysqli_fetch_assoc($result);
+
+
+            // Überprüfen, welche Felder geändert wurden und sie in der Tabelle tbl_user_changes speichern
+            global $fields_to_update;
+            $fields_to_update = array();
+            foreach ($_POST as $key => $value) {
+                if ($key != "user_id" && $key != "submit") {
+                    if ($value != $original_data[$key]) {
+                        $fields_to_update[$key] = array(
+                            "old_value" => mysqli_real_escape_string($conn, $original_data[$key]),
+                            "new_value" => mysqli_real_escape_string($conn, $value),
+                            "field_name" => mysqli_real_escape_string($conn, $key)
+                        );
+
+                        // Überprüfen, welche Felder geändert wurden und sie in der Tabelle tbl_user_changes speichern
+                        if (!empty($fields_to_update)) {
+                            // Es gibt geänderte Felder, diese in der Tabelle tbl_user_changes speichern
+                            $field_name = $fields_to_update[$key]["field_name"];
+                            $old_value = $fields_to_update[$key]["old_value"];
+                            $new_value = $fields_to_update[$key]["new_value"];
+                            $change_date = date("Y-m-d H:i:s");
+
+                            $query = "INSERT INTO tbl_user_changes (admin_id, user_id, field_name, old_value, new_value, change_date) VALUES ($admin_id, $user_id, '$field_name', '$old_value', '$new_value', '$change_date')";
+                            mysqli_query($conn, $query);
+                            
+                        }
+                    }
+                }
+            }
+
+
+
+            // // Überprüfen, welche Felder geändert wurden und sie in der Tabelle tbl_user_changes speichern
+            // if (!empty($fields_to_update)) {
+            //     // Es gibt geänderte Felder, diese in der Tabelle tbl_user_changes speichern
+            //     foreach ($fields_to_update as $field_name => $values) {
+            //         $old_value = $values["old_value"];
+            //         $new_value = $values["new_value"];
+            //         $change_date = date("Y-m-d H:i:s");
+
+            //         $query = "INSERT INTO tbl_user_changes (admin_id, user_id, field_name, old_value, new_value, change_date) VALUES ($admin_id, $user_id, '$field_name', '$old_value', '$new_value', '$change_date')";
+            //         mysqli_query($conn, $query);
+            //     }
+            // }
         }
     }
     if($button == "delete"){
