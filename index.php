@@ -13,22 +13,26 @@ if (isset($_SESSION['admin_id'])) {
 date_default_timezone_set("Europe/Berlin");
 
 
-$adminUpdateSql = "SELECT a.adminName, u.userName, u.klasse, u.plz, u.email, u.phone, u.adresse, u.ortsteil,
-IF(u.userName = old.userName, 'Old', '') AS userName_status,
-IF(u.klasse = old.klasse, 'Old', '') AS klasse_status,
-IF(u.plz = old.plz, 'Old', '') AS plz_status,
-IF(u.email <> old.email, 'Old', '') AS email_status,
-IF(u.phone <> old.phone, 'Old', '') AS phone_status,
-IF(u.adresse = old.adresse, 'Old', '') AS adresse_status,
-IF(u.ortsteil = old.ortsteil, 'Old', '') AS ortsteil_status
-FROM tbl_user u
-INNER JOIN tbl_admin a ON u.admin_id_update = a.id
-LEFT JOIN tbl_user AS old ON u.id = old.id;";
-$result = mysqli_query($conn, $adminUpdateSql);
-$aenderungen = array();
-while($row = $result->fetch_assoc()){
-    $aenderungen[] = $row;
-}
+// $query = "SELECT * FROM tbl_user_changes";
+// $result = mysqli_query($conn, $query);
+// $user_id = mysqli_fetch_assoc($result);
+
+// $adminUpdateSql = "SELECT a.adminName, u.userName, u.klasse, u.plz, u.email, u.phone, u.adresse, u.ortsteil,
+// IF(u.userName = old.userName, 'Old', '') AS userName_status,
+// IF(u.klasse = old.klasse, 'Old', '') AS klasse_status,
+// IF(u.plz = old.plz, 'Old', '') AS plz_status,
+// IF(u.email <> old.email, 'Old', '') AS email_status,
+// IF(u.phone <> old.phone, 'Old', '') AS phone_status,
+// IF(u.adresse = old.adresse, 'Old', '') AS adresse_status,
+// IF(u.ortsteil = old.ortsteil, 'Old', '') AS ortsteil_status
+// FROM tbl_user u
+// INNER JOIN tbl_admin a ON u.admin_id_update = a.id
+// LEFT JOIN tbl_user AS old ON u.id = old.id;";
+// $result = mysqli_query($conn, $adminUpdateSql);
+// $aenderungen = array();
+// while($row = $result->fetch_assoc()){
+//     $aenderungen[] = $row;
+// }
 
 ?>
 <!DOCTYPE html>
@@ -80,60 +84,33 @@ while($row = $result->fetch_assoc()){
 
         <hr style="height: 5px">
         <div class="container-fluid">
-            <div style="overflow: auto; height: 400px;">
-            <table>
-                <thead>
-                    <tr>
-                    <th>Admin Name</th>
-                    <th>User Name</th>
-                    <th>User Name Status</th>
-                    <th>Klasse</th>
-                    <th>Klasse Status</th>
-                    <th>PLZ</th>
-                    <th>PLZ Status</th>
-                    <th>email</th>
-                    <th>email Status</th>
-                    <th>Phone</th>
-                    <th>Phone Status</th>
-                    <th>Adresse</th>
-                    <th>Adresse Status</th>
-                    <th>Ortsteil</th>
-                    <th>Ortsteil Status</th>
-                    <!-- <th>Update By Admin</th> -->
-                    </tr>
-                </thead>
-                <tbody>
-                    
-                    <?php 
-                        if(count($aenderungen) > 0){
-                            foreach($aenderungen as $update){
-                                echo "<tr>";                        
-                                    echo '<td>' . $update["adminName"] . '</td>';
-                                    echo '<td>' . $update["userName"] . '</td>';
-                                    echo '<td>' . $update["userName_status"] . '</td>';
-                                    echo '<td>' . $update["klasse"] . '</td>';
-                                    echo '<td>' . $update["klasse_status"] . '</td>';
-                                    echo '<td>' . $update["plz"] . '</td>';
-                                    echo '<td>' . $update["plz_status"] . '</td>';
-                                    echo '<td>' . $update["email"] . '</td>';
-                                    echo '<td>' . $update["email_status"] . '</td>';
-                                    echo '<td>' . $update["phone"] . '</td>';
-                                    echo '<td>' . $update["phone_status"] . '</td>';
-                                    echo '<td>' . $update["adresse"] . '</td>';
-                                    echo '<td>' . $update["adresse_status"] . '</td>';
-                                    echo '<td>' . $update["ortsteil"] . '</td>';
-                                    echo '<td>' . $update["ortsteil_status"] . '</td>';
-                                    // echo '<td>' . $update["admin_id_update"] . '</td>';
-                                echo "</tr>";
-                            }
-                        }else {
+            <div style="overflow: auto; height: 400px; border:1px solid black">
+                <?php            
+                    // SELECT-Abfrage auf tbl_user_changes ausführen
+                    $query = "SELECT a.adminName, u.userName, c.field_name, c.old_value, c.new_value, c.change_date
+                                FROM tbl_user_changes c
+                                INNER JOIN tbl_admin a ON a.id = c.admin_id
+                                INNER JOIN tbl_user u ON u.id = c.user_id
+                                ORDER BY change_date DESC";
+                    $result = mysqli_query($conn, $query);
+
+                    // Eine Tabelle ausgeben, um die Änderungen anzuzeigen
+                    echo '<table>';
+                        echo '<tr><th>Geändert durch Admin</th><th>Geändert für Benutzer</th><th>Feld Name</th><th>Alte Wert</th><th>Neue Wert</th><th>Änderung Zeit</th></tr>';
+                        while ($row = mysqli_fetch_assoc($result)) {
                             echo '<tr>';
-                                echo '<td><h5 class="colorRed text-center">Keine Änderungen gefunden.</h5></td>';
+                                echo '<td>' . $row['adminName'] . '</td>';
+                                echo '<td>' . $row['userName'] . '</td>';
+                                echo '<td>' . $row['field_name'] . '</td>';
+                                echo '<td>' . $row['old_value'] . '</td>';
+                                echo '<td class="colorGreen">' . $row['new_value'] . '</td>';
+                                echo '<td>' . $row['change_date'] . '</td>';
                             echo '</tr>';
                         }
-                    ?>
-                </tbody>
-            </table>
+                    echo '</table>';
+                    // Schließen der Datenbankverbindung
+                    mysqli_close($conn);
+                ?>
             </div>
         </div>
 
@@ -150,59 +127,3 @@ while($row = $result->fetch_assoc()){
     <script src="./js/bootstrap.min.js"></script>
 </body>
 </html>
-
-
-<!-- // Speichern der ursprünglichen Benutzerdaten in einer Variable
-$query = "SELECT * FROM tbl_user WHERE id = $user_id";
-$result = mysqli_query($connection, $query);
-$original_data = mysqli_fetch_assoc($result);
-
-// Überprüfen, welche Felder geändert wurden und sie in der Tabelle tbl_user_changes speichern
-foreach ($_POST as $key => $value) {
-    if ($key != "user_id" && $key != "submit") {
-        if ($value != $original_data[$key]) {
-        $field_name = mysqli_real_escape_string($connection, $key);
-        $old_value = mysqli_real_escape_string($connection, $original_data[$key]);
-        $new_value = mysqli_real_escape_string($connection, $value);
-        $admin_id = $_SESSION["admin_id"];
-        $change_date = date("Y-m-d H:i:s");
-
-        $query = "INSERT INTO tbl_user_changes (user_id, field_name, old_value, new_value, admin_id, change_date) VALUES ($user_id, '$field_name', '$old_value', '$new_value', $admin_id, '$change_date')";
-        mysqli_query($connection, $query);
-        }
-    }
-} -->
-
-
-
-
-
-<!-- // Verbinden mit der Datenbank
-$connection = mysqli_connect("localhost", "username", "passwort", "datenbankname");
-
-// Überprüfen, ob eine Verbindung hergestellt wurde
-if (mysqli_connect_errno()) {
-    echo "Failed to connect to MySQL: " . mysqli_connect_error();
-    exit();
-}
-
-// SELECT-Abfrage auf tbl_user_changes ausführen
-$query = "SELECT * FROM tbl_user_changes WHERE user_id = $user_id ORDER BY change_date DESC";
-$result = mysqli_query($connection, $query);
-
-// Eine Tabelle ausgeben, um die Änderungen anzuzeigen
-echo '<table>';
-echo '<tr><th>Field</th><th>Old Value</th><th>New Value</th><th>Changed By</th><th>Change Date</th></tr>';
-while ($row = mysqli_fetch_assoc($result)) {
-    echo '<tr>';
-    echo '<td>' . $row['field_name'] . '</td>';
-    echo '<td>' . $row['old_value'] . '</td>';
-    echo '<td>' . $row['new_value'] . '</td>';
-    echo '<td>' . $row['admin_id'] . '</td>';
-    echo '<td>' . $row['change_date'] . '</td>';
-    echo '</tr>';
-}
-echo '</table>';
-
-// Schließen der Datenbankverbindung
-mysqli_close($connection); -->
