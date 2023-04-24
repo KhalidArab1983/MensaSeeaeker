@@ -215,22 +215,25 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
             $query = "SELECT * FROM tbl_user WHERE id = $user_id";
             $result = mysqli_query($conn, $query);
             $original_data = mysqli_fetch_assoc($result);
-
+            
             // Überprüfen, welche Felder geändert wurden und sie in der Tabelle tbl_user_changes speichern
             foreach ($_POST as $key => $value) {
-                if ($key != "user_id" && $key != "submit") {
+                if ($key != "user_id" && $key != "button") {
+                    // if(array_key_exists($key, $original_data)){
+                    //     continue;
+                    // }
                     if ($value != $original_data[$key]) {
                         $field_name = mysqli_real_escape_string($conn, $key);
                         $old_value = mysqli_real_escape_string($conn, $original_data[$key]);
                         $new_value = mysqli_real_escape_string($conn, $value);
                         $change_date = date("Y-m-d H:i:s");
 
-                        var_dump("field Name: ".$field_name, "Old Value: ".$old_value, "New Value: ".$new_value);
+                        // var_dump("field Name: ".$field_name, "Old Value: ".$old_value, "New Value: ".$new_value);
 
 
-                        if(!empty($key)){
-                            $query = "INSERT INTO tbl_user_changes (admin_id, user_id, field_name, old_value, new_value, change_date) VALUES ($admin_id, $user_id, '$field_name', '$old_value', '$new_value', '$change_date')";
-                            mysqli_query($conn, $query);
+                        if(!empty($new_value)){
+                            $queryChange = "INSERT INTO tbl_user_changes (admin_id, user_id, field_name, old_value, new_value, change_date) VALUES ($admin_id, $user_id, '$field_name', '$old_value', '$new_value', '$change_date')";
+                            mysqli_query($conn, $queryChange);
                         }
                     }
                 }

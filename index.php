@@ -14,13 +14,13 @@ date_default_timezone_set("Europe/Berlin");
 
 
 $adminUpdateSql = "SELECT a.adminName, u.userName, u.klasse, u.plz, u.email, u.phone, u.adresse, u.ortsteil,
-IF(u.userName = old.userName, '', 'New') AS userName_status,
-IF(u.klasse = old.klasse, '', 'New') AS klasse_status,
-IF(u.plz = old.plz, '', 'New') AS plz_status,
-IF(u.email <> old.email, 'Old', 'New') AS email_status,
+IF(u.userName = old.userName, 'Old', '') AS userName_status,
+IF(u.klasse = old.klasse, 'Old', '') AS klasse_status,
+IF(u.plz = old.plz, 'Old', '') AS plz_status,
+IF(u.email <> old.email, 'Old', '') AS email_status,
 IF(u.phone <> old.phone, 'Old', '') AS phone_status,
-IF(u.adresse = old.adresse, '', 'New') AS adresse_status,
-IF(u.ortsteil = old.ortsteil, '', 'New') AS ortsteil_status
+IF(u.adresse = old.adresse, 'Old', '') AS adresse_status,
+IF(u.ortsteil = old.ortsteil, 'Old', '') AS ortsteil_status
 FROM tbl_user u
 INNER JOIN tbl_admin a ON u.admin_id_update = a.id
 LEFT JOIN tbl_user AS old ON u.id = old.id;";
@@ -151,13 +151,39 @@ while($row = $result->fetch_assoc()){
 </body>
 </html>
 
+
+<!-- // Speichern der ursprünglichen Benutzerdaten in einer Variable
+$query = "SELECT * FROM tbl_user WHERE id = $user_id";
+$result = mysqli_query($connection, $query);
+$original_data = mysqli_fetch_assoc($result);
+
+// Überprüfen, welche Felder geändert wurden und sie in der Tabelle tbl_user_changes speichern
+foreach ($_POST as $key => $value) {
+    if ($key != "user_id" && $key != "submit") {
+        if ($value != $original_data[$key]) {
+        $field_name = mysqli_real_escape_string($connection, $key);
+        $old_value = mysqli_real_escape_string($connection, $original_data[$key]);
+        $new_value = mysqli_real_escape_string($connection, $value);
+        $admin_id = $_SESSION["admin_id"];
+        $change_date = date("Y-m-d H:i:s");
+
+        $query = "INSERT INTO tbl_user_changes (user_id, field_name, old_value, new_value, admin_id, change_date) VALUES ($user_id, '$field_name', '$old_value', '$new_value', $admin_id, '$change_date')";
+        mysqli_query($connection, $query);
+        }
+    }
+} -->
+
+
+
+
+
 <!-- // Verbinden mit der Datenbank
 $connection = mysqli_connect("localhost", "username", "passwort", "datenbankname");
 
 // Überprüfen, ob eine Verbindung hergestellt wurde
 if (mysqli_connect_errno()) {
-  echo "Failed to connect to MySQL: " . mysqli_connect_error();
-  exit();
+    echo "Failed to connect to MySQL: " . mysqli_connect_error();
+    exit();
 }
 
 // SELECT-Abfrage auf tbl_user_changes ausführen
@@ -168,13 +194,13 @@ $result = mysqli_query($connection, $query);
 echo '<table>';
 echo '<tr><th>Field</th><th>Old Value</th><th>New Value</th><th>Changed By</th><th>Change Date</th></tr>';
 while ($row = mysqli_fetch_assoc($result)) {
-  echo '<tr>';
-  echo '<td>' . $row['field_name'] . '</td>';
-  echo '<td>' . $row['old_value'] . '</td>';
-  echo '<td>' . $row['new_value'] . '</td>';
-  echo '<td>' . $row['admin_id'] . '</td>';
-  echo '<td>' . $row['change_date'] . '</td>';
-  echo '</tr>';
+    echo '<tr>';
+    echo '<td>' . $row['field_name'] . '</td>';
+    echo '<td>' . $row['old_value'] . '</td>';
+    echo '<td>' . $row['new_value'] . '</td>';
+    echo '<td>' . $row['admin_id'] . '</td>';
+    echo '<td>' . $row['change_date'] . '</td>';
+    echo '</tr>';
 }
 echo '</table>';
 
