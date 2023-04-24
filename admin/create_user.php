@@ -243,11 +243,12 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
         }
     }
     if($button == "delete"){
-        $sql = "DELETE u, b, s, e, a FROM tbl_user u
+        $sql = "DELETE u, b, s, e, a, c FROM tbl_user u
                 LEFT JOIN tbl_bestellung b ON u.id = b.user_id
                 LEFT JOIN tbl_bestellstatus s ON u.id = s.user_id
                 LEFT JOIN tbl_einzahlung e ON u.id = e.user_id
                 LEFT JOIN tbl_auszahlung a ON u.id = a.user_id
+                LEFT JOIN tbl_user_changes c ON u.id = c.user_id
                 WHERE u.id = '{$user_id}'";
         if(mysqli_query($conn, $sql)){
             header("Location: create_user.php");

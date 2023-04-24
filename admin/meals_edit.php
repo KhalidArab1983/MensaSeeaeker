@@ -114,6 +114,7 @@ include('./insertUpdateMeals.php');
                     </div>
                     <div class="mb-3">
                         <input type="file" class="form-control" name="image">
+                        <label style="font-size:12px">* Es sind nur PNG und JPG-Dateien erlaubt </label>
                     </div>
                     <button type="submit" class="btn btn-warning me-3" name="button" value="insert">Eingeben</button>
                     <button type="submit" class="btn btn-warning" name="button" value="update">Aktualisieren</button>

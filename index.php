@@ -63,7 +63,7 @@ date_default_timezone_set("Europe/Berlin");
 
         <hr style="height: 5px">
         <div class="container">
-            <h3>An Benutzerdaten vorgenommene Aktualisierungen</h3>
+            <h3>An Benutzerdaten vorgenommene Aktualisierungen:</h3>
             <div style="overflow: auto; height: 400px; border:2px solid black">
                 <?php            
                     // SELECT-Abfrage auf tbl_user_changes ausführen

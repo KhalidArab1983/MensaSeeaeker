@@ -15,7 +15,6 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
     $updateStmt->bind_param("ssssss", $user_id, $nullWert, $nullWert, $nullWert, $nullWert, $nullWert);
     $updateStmt->execute();
 
-
     if($current_time >= '22:00:00' && $current_day == 0 || $current_day > 0 && $current_day <= 6){
         // Update Button für Montag deaktivieren
         $sql = "UPDATE tbl_bestellstatus SET montag = ? WHERE user_id = ?";
