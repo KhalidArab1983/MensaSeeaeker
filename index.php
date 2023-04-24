@@ -13,27 +13,6 @@ if (isset($_SESSION['admin_id'])) {
 date_default_timezone_set("Europe/Berlin");
 
 
-// $query = "SELECT * FROM tbl_user_changes";
-// $result = mysqli_query($conn, $query);
-// $user_id = mysqli_fetch_assoc($result);
-
-// $adminUpdateSql = "SELECT a.adminName, u.userName, u.klasse, u.plz, u.email, u.phone, u.adresse, u.ortsteil,
-// IF(u.userName = old.userName, 'Old', '') AS userName_status,
-// IF(u.klasse = old.klasse, 'Old', '') AS klasse_status,
-// IF(u.plz = old.plz, 'Old', '') AS plz_status,
-// IF(u.email <> old.email, 'Old', '') AS email_status,
-// IF(u.phone <> old.phone, 'Old', '') AS phone_status,
-// IF(u.adresse = old.adresse, 'Old', '') AS adresse_status,
-// IF(u.ortsteil = old.ortsteil, 'Old', '') AS ortsteil_status
-// FROM tbl_user u
-// INNER JOIN tbl_admin a ON u.admin_id_update = a.id
-// LEFT JOIN tbl_user AS old ON u.id = old.id;";
-// $result = mysqli_query($conn, $adminUpdateSql);
-// $aenderungen = array();
-// while($row = $result->fetch_assoc()){
-//     $aenderungen[] = $row;
-// }
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -102,7 +81,7 @@ date_default_timezone_set("Europe/Berlin");
                                 echo '<td>' . $row['adminName'] . '</td>';
                                 echo '<td>' . $row['userName'] . '</td>';
                                 echo '<td>' . $row['field_name'] . '</td>';
-                                echo '<td>' . $row['old_value'] . '</td>';
+                                echo '<td class="colorRed">' . $row['old_value'] . '</td>';
                                 echo '<td class="colorGreen">' . $row['new_value'] . '</td>';
                                 echo '<td>' . $row['change_date'] . '</td>';
                             echo '</tr>';
