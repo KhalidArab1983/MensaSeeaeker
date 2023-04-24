@@ -62,11 +62,12 @@ date_default_timezone_set("Europe/Berlin");
         </nav>
 
         <hr style="height: 5px">
-        <div class="container-fluid">
-            <div style="overflow: auto; height: 400px; border:1px solid black">
+        <div class="container">
+            <h3>An Benutzerdaten vorgenommene Aktualisierungen</h3>
+            <div style="overflow: auto; height: 400px; border:2px solid black">
                 <?php            
                     // SELECT-Abfrage auf tbl_user_changes ausführen
-                    $query = "SELECT a.adminName, u.userName, c.field_name, c.old_value, c.new_value, c.change_date
+                    $query = "SELECT a.adminName, u.userName, c.id, c.field_name, c.old_value, c.new_value, c.change_date
                                 FROM tbl_user_changes c
                                 INNER JOIN tbl_admin a ON a.id = c.admin_id
                                 INNER JOIN tbl_user u ON u.id = c.user_id
@@ -75,9 +76,20 @@ date_default_timezone_set("Europe/Berlin");
 
                     // Eine Tabelle ausgeben, um die Änderungen anzuzeigen
                     echo '<table>';
-                        echo '<tr><th>Geändert durch Admin</th><th>Geändert für Benutzer</th><th>Feld Name</th><th>Alte Wert</th><th>Neue Wert</th><th>Änderung Zeit</th></tr>';
+                        echo '<thead style="position: sticky; top: 0; z-index: 1; background-color: white;">
+                                <tr>
+                                    <th>Update ID</th>
+                                    <th>Geändert durch Admin</th>
+                                    <th>Geändert für Benutzer</th>
+                                    <th>Feld Name</th>
+                                    <th>Alte Wert</th>
+                                    <th>Neue Wert</th>
+                                    <th>Änderung Zeit</th>
+                                </tr>
+                            </thead>';
                         while ($row = mysqli_fetch_assoc($result)) {
-                            echo '<tr>';
+                            echo '<tr class="tableRow">';
+                                echo '<td>' . $row['id'] . '</td>';
                                 echo '<td>' . $row['adminName'] . '</td>';
                                 echo '<td>' . $row['userName'] . '</td>';
                                 echo '<td>' . $row['field_name'] . '</td>';

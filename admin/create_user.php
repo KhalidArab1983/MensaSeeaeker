@@ -387,7 +387,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
                         <div class="form-text error"><?php echo $error;?></div>
                     </div>
                     <div class="mb-1">
-                        <!-- <label for="klasse">Klasse:</label> -->
+                        <!-- <label class="floatLeft" for="klasse">Klasse:</label> -->
                         <select class="form-control" name="klasse" id="klasse">
                             <option></option>
                             <?php
@@ -403,7 +403,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
                         </select>
                     </div>
                     <div class="mb-1">
-                        <!-- <label for="plz">PLZ:</label> -->
+                        <!-- <label class="floatLeft" for="plz">PLZ:</label> -->
                         <select class="form-control" name="plz" id="plz">
                             <option></option>
                             <?php 
@@ -420,11 +420,11 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
                         </select>
                     </div>
                     <div class="mb-1">
-                        <!-- <label for="userName">Benutzername:</label> -->
+                        <!-- <label class="floatLeft" for="userName">Benutzername:</label> -->
                         <input type="text" class="form-control" name="userName" id="userName" placeholder="* Benutzername wird automatisch ausgefüllt" readonly>
                     </div>
                     <div class="mb-1">
-                        <!-- <label for="firstName">Vorname:</label> -->
+                        <!-- <label class="floatLeft" for="firstName">Vorname:</label> -->
                         <input type="text" class="form-control" name="firstName" id="firstName" placeholder="* Vorname" onkeyup="updateInputUser()">
                     </div>
                     <div class="mb-1">
