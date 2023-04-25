@@ -5,14 +5,16 @@ session_start();
 // Check if the user is logged in
 if (isset($_SESSION['admin_id'])) {
     $admin_id = $_SESSION['admin_id'];
-    
 }else{
     header("Location: a_login.php");
 	exit;
 }
 date_default_timezone_set("Europe/Berlin");
 
-$color = $_POST['adminColor']
+$sql = "SELECT color_hex FROM tbl_admin WHERE id = '{$admin_id}'";
+$result = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($result);
+$adminColor = $row['color_hex'];
 
 ?>
 <!DOCTYPE html>
@@ -47,15 +49,14 @@ $color = $_POST['adminColor']
                     </li>
 
                     <li class="nav-item item_besonder">
-                        <a class="nav-link" href="./admin/a_logout.php"><h6>Abmelden |</h6></a>
+                        <a class="nav-link" href="./admin/a_setting.php"><h6>Einstellungen |</h6></a>
                     </li>
+
                     <li class="nav-item item_besonder">
-                        
+                        <a class="nav-link" href="./admin/a_logout.php"><h6>Abmelden</h6></a>
                     </li>
+                    
                 </ul>
-            </div>
-            <div>
-                <i class="fa-solid fa-user"></i>
             </div>
         </div>
 
@@ -65,20 +66,17 @@ $color = $_POST['adminColor']
                 <button class="navbar-toggler bg-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <h5 style="margin: 0;">Herzlich Willkommen <span style="color:green"><?php echo $_SESSION['adminName']; ?></span></h5>
+                <h5 style="margin: 0;">Herzlich Willkommen <span style="color:<?php echo $adminColor;?>"><?php echo $_SESSION['adminName']; ?></span></h5>
             </div>
         </nav>
 
         <hr style="height: 5px">
         <div class="container">
-            <form method="post">
-                <input type="color" name="adminColor">
-            </form>
             <h3>An Benutzerdaten vorgenommene Aktualisierungen:</h3>
-            <div style="overflow: auto; height: 400px; border:2px solid black">
+            <div class="scrollView">
                 <?php            
                     // SELECT-Abfrage auf tbl_user_changes ausführen
-                    $query = "SELECT a.adminName, u.userName, c.id, c.field_name, c.old_value, c.new_value, c.change_date
+                    $query = "SELECT a.adminName, a.color_hex, u.userName, c.id, c.field_name, c.old_value, c.new_value, c.change_date
                                 FROM tbl_user_changes c
                                 INNER JOIN tbl_admin a ON a.id = c.admin_id
                                 INNER JOIN tbl_user u ON u.id = c.user_id
@@ -99,9 +97,10 @@ $color = $_POST['adminColor']
                                 </tr>
                             </thead>';
                         while ($row = mysqli_fetch_assoc($result)) {
+                            $adminFarbe = $row['color_hex'];
                             echo '<tr class="tableRow">';
                                 echo '<td>' . $row['id'] . '</td>';
-                                echo '<td>' . $row['adminName'] . '</td>';
+                                echo "<td style='color:{$adminFarbe}'>" . $row['adminName'] . "</td>";
                                 echo '<td>' . $row['userName'] . '</td>';
                                 echo '<td>' . $row['field_name'] . '</td>';
                                 echo '<td class="colorRed">' . $row['old_value'] . '</td>';

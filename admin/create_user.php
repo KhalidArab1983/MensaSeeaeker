@@ -259,6 +259,11 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
 }
 
 
+$sql = "SELECT color_hex FROM tbl_admin WHERE id = '{$admin_id}'";
+$result = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($result);
+$adminColor = $row['color_hex'];
+
 ?>
 
 
@@ -288,6 +293,9 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
                     <a class="nav-link" href="./meals_edit.php"><h6>Gerichte bearbeiten |</h6></a>
                 </li>
                 <li class="nav-item item_besonder">
+                    <a class="nav-link" href="./a_setting.php"><h6>Einstellungen |</h6></a>
+                </li>
+                <li class="nav-item item_besonder">
                     <a class="nav-link" href="./a_logout.php"><h6>Abmelden</h6></a>
                 </li>
             </ul>
@@ -299,7 +307,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST"){
             <button class="navbar-toggler bg-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <h5 style="margin: 0;">Herzlich Willkommen <span style="color:green"><?php echo $_SESSION['adminName']; ?></span></h5>
+            <h5 style="margin: 0;">Herzlich Willkommen <span style="color:<?php echo $adminColor; ?>"><?php echo $_SESSION['adminName']; ?></span></h5>
         </div>
     </nav>
     

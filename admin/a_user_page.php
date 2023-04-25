@@ -25,6 +25,10 @@ $result = mysqli_query($conn, $userSql);
 $userRow = mysqli_fetch_assoc($result);
 $user_id = $userRow['id'];
 
+$sql = "SELECT color_hex FROM tbl_admin WHERE id = '{$admin_id}'";
+$result = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($result);
+$adminColor = $row['color_hex'];
 
 
 if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
@@ -85,6 +89,10 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                     </li>
 
                     <li class="nav-item item_besonder">
+                        <a class="nav-link" href="./a_setting.php"><h6>Einstellungen |</h6></a>
+                    </li>
+
+                    <li class="nav-item item_besonder">
                         <a class="nav-link" href="./a_logout.php"><h6>Abmelden</h6></a>
                     </li>
                 </ul>
@@ -96,7 +104,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                 <button class="navbar-toggler bg-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <h5 style="margin: 0;">Herzlich Willkommen <span style="color:green"><?php echo $_SESSION['adminName']; ?></span></h5>
+                <h5 style="margin: 0;">Herzlich Willkommen <span style="color:<?php echo $adminColor; ?>"><?php echo $_SESSION['adminName']; ?></span></h5>
             </div>
         </nav>
         <hr style="height: 5px">
@@ -119,12 +127,13 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                 <div id="userBestellung" class="subtabcontent" >
                     <div class="container">
                         <form method="get">
-                            <div class="col-4" style="display:flex">
+                            <div style="display:flex">
                                 <input type="text" class="form-control m-1" name="userNameBestell" id="user_id" placeholder="nach einem Benutzer suchen..."> 
                                 <button type="submit" name="button" class="btn btn-warning m-1" value="Suchen">Suchen</button>
                             </div>
                         </form>
-                        <table>
+                        <div class="scrollView">
+                            <table>
                             <thead>
                                 <tr>
                                 <th>Bestell-ID</th>
@@ -171,17 +180,18 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                                 ?>
                             </tbody>
                         </table>
+                        </div>
                     </div>
                 </div>
                 
                 <div id="bestellungen" class="subtabcontent" style="display:none">
                     <div class="container">
-                        <form method="get" class="col-sm-12">
-                            <div class="m-1" style="display:flex">
+                        <form method="get" class=">
+                            <div class="m-1" >
                                 <h3>Von: </h3>
-                                <input type="date" name="start_date" class="col-sm-10 col-md-3 m-2" value="<?php echo $start_date; ?>">
+                                <input type="date" name="start_date" class="form-control" value="<?php echo $start_date; ?>">
                                 <h3>Bis: </h3>
-                                <input type="date" name="end_date" class="col-sm-10 col-md-3 m-2" value="<?php echo $end_date; ?>">
+                                <input type="date" name="end_date" class="form-control" value="<?php echo $end_date; ?>">
                                 <button type="submit" class="btn btn-warning m-1" name="button">Suchen</button>
                                 <button type="submit" class="btn btn-warning m-1" name="alleBestellungen">Alle Bestellungen</button>
                             </div>

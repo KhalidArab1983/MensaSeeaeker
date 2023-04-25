@@ -103,5 +103,5 @@ if (isset($_FILES['image']) && is_uploaded_file($_FILES['image']['tmp_name'])) {
         }
     }
 }
-$conn->close();
+
 ?>
