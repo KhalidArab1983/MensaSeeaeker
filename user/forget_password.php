@@ -16,6 +16,7 @@ $errors = [
     'emailEmptyError' => '',
     'mailerError' => '',
 ];
+
 // Prüfen, ob das Formular gesendet wurde
 if(isset($_POST['send_code'])) {
     // E-Mail-Adresse des Benutzers aus dem Formular erhalten
@@ -39,6 +40,7 @@ if(isset($_POST['send_code'])) {
             $_SESSION['forgot_password_code'] = $code;
             $_SESSION['forgot_password_email'] = $email;
 
+            
             // Senden des Codes per E-Mail
             // E-Mail-Einstellungen konfigurieren
             $mail = new PHPMailer();

@@ -12,6 +12,7 @@ if (isset($_SESSION['admin_id'])) {
 }
 date_default_timezone_set("Europe/Berlin");
 
+$color = $_POST['adminColor']
 
 ?>
 <!DOCTYPE html>
@@ -19,7 +20,8 @@ date_default_timezone_set("Europe/Berlin");
 <head>
 <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="./css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/fontawesome.css">
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/style.css">
 	<title>Mensa</title>
 </head>
@@ -45,9 +47,15 @@ date_default_timezone_set("Europe/Berlin");
                     </li>
 
                     <li class="nav-item item_besonder">
-                        <a class="nav-link" href="./admin/a_logout.php"><h6>Abmelden</h6></a>
+                        <a class="nav-link" href="./admin/a_logout.php"><h6>Abmelden |</h6></a>
+                    </li>
+                    <li class="nav-item item_besonder">
+                        
                     </li>
                 </ul>
+            </div>
+            <div>
+                <i class="fa-solid fa-user"></i>
             </div>
         </div>
 
@@ -63,6 +71,9 @@ date_default_timezone_set("Europe/Berlin");
 
         <hr style="height: 5px">
         <div class="container">
+            <form method="post">
+                <input type="color" name="adminColor">
+            </form>
             <h3>An Benutzerdaten vorgenommene Aktualisierungen:</h3>
             <div style="overflow: auto; height: 400px; border:2px solid black">
                 <?php            

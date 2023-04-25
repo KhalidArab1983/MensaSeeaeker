@@ -16,6 +16,12 @@ $errors = [
     'confirmPassError' => '',
     'otherError' => ''
 ];
+
+// Hier wird der Code einfach aus der Session-Variable gelesen
+session_start();
+$saved_code = $_SESSION['forgot_password_code'];
+$saved_email = $_SESSION['forgot_password_email'];
+
 // Prüfen, ob das Formular gesendet wurde
 if(isset($_POST['confirm_code'])) {
     // Bestätigungscode und neue Passwörter aus dem Formular erhalten
@@ -42,11 +48,6 @@ if(isset($_POST['confirm_code'])) {
 
         // Hash the password
         $hashed_password = hash('sha256', $new_password);
-
-        // Hier wird der Code einfach aus der Session-Variable gelesen
-        session_start();
-        $saved_code = $_SESSION['forgot_password_code'];
-        $saved_email = $_SESSION['forgot_password_email'];
 
         $sql = "SELECT email FROM tbl_user WHERE email = '$saved_email'";
         $result = $conn->query($sql);
@@ -95,6 +96,9 @@ if(isset($_POST['confirm_code'])) {
     <body>
         <div class="text-center container">
             <div class="welcomme">
+                <p>Wir haben eine E-Mail mit dem Code an <span class='not_exist_email'><?php echo $saved_email ?></span> gesendet.<br>
+                    Wenn Sie keine Email erhalten haben, versuchen Sie nochmal. <a class='not_exist_email' href="./forget_password.php">Hier klicken</a>
+                </p>
                 <img src="../images/logo.jpg" width="20%" class="mb-4">
                 <h3>Passwort zurücksetzen</h3>
                 <p>Geben Sie den Code ein, der an Ihre E-Mail gesendet wurde, geben Sie ein neues Passwort ein<br> und bestätigen Sie es dann.</p>

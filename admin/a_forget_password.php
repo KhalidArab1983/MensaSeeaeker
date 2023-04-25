@@ -26,7 +26,7 @@ if(isset($_POST['send_code'])) {
     if(!array_filter($errors)){
         $email =    mysqli_real_escape_string($conn, $_POST['email']);
     
-        $stmt = $conn->prepare("SELECT * FROM tbl_user WHERE email = ?");
+        $stmt = $conn->prepare("SELECT * FROM tbl_admin WHERE email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $user = $stmt->fetch();
