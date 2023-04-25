@@ -54,6 +54,10 @@
 .textDeco{
     text-decoration: underline;
 }
+.width50{
+    width:50px;
+}
+
 .scrollView{
     overflow: auto; 
     height: 700px; 
@@ -63,7 +67,7 @@
 
 .form-control{
     display:block;
-    width:50%;
+    width:100%;
     padding:.300rem .75rem;
     font-size:1rem;
     font-weight:400;
