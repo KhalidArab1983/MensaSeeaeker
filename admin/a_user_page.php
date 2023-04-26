@@ -132,9 +132,9 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                                 <button type="submit" name="button" class="btn btn-warning m-1" value="Suchen">Suchen</button>
                             </div>
                         </form>
-                        <div class="scrollView">
+                        <div class="scrollView700">
                             <table>
-                                <thead>
+                                <thead class="topFix">
                                     <tr>
                                     <th>Bestell-ID</th>
                                     <th>User-ID</th>
@@ -204,9 +204,9 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                                 </div>
                             </div>
                         </form>
-                        <div class="scrollView">
+                        <div class="scrollView700">
                             <table>
-                                <thead>
+                                <thead class="topFix">
                                     <tr>
                                         <th>Bestell-ID</th> 
                                         <th>User ID</th>

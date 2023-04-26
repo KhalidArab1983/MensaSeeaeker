@@ -30,6 +30,9 @@
 .colorOrange{
     color: orange;
 }
+.colorGray{
+    color: gray;
+}
 .disFlex{
     display:flex;
 }
@@ -58,12 +61,22 @@
     width:50px;
 }
 
-.scrollView{
+.scrollView700{
     overflow: auto; 
     height: 700px; 
     border:2px solid black;
 }
-
+.scrollView300{
+    overflow: auto; 
+    height: 300px; 
+    border:2px solid black;
+}
+.topFix{
+    position: sticky; 
+    top: 0; 
+    z-index: 1; 
+    background-color: white;
+}
 
 .form-control{
     display:block;

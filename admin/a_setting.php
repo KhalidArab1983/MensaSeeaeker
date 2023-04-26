@@ -93,7 +93,7 @@ $adminColor = $row['color_hex'];
 
         <hr style="height: 5px">
         <div class="container">
-            <div>
+            <div class="card">
                 <h3>Die Farbe des Adminnamens ändern:</h3>
                 <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
                     <input type="color" class="form-control" name="adminColor" id="adminColor" value="<?php echo $adminColor ?>">

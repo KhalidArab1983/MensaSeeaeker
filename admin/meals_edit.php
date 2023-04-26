@@ -114,9 +114,9 @@ $conn->close();
                             <option>Freitag</option>
                         </select>
                     </div>
-                    <div>
-                        <input class="col-md-8" type="date" name="date">
-                        <button type="submit" class="btn btn-warning m-2" name="button" value="dateUpdate">Datum aktualisieren</button>
+                    <div class="disFlex m-1">
+                        <input class="form-control" type="date" name="date">
+                        
                     </div>
                     <div class="mb-1">
                         <input type="text" class="form-control" name="price" placeholder="price">
@@ -128,8 +128,9 @@ $conn->close();
                         <input type="file" class="form-control" name="image">
                         <label style="font-size:12px">* Es sind nur PNG und JPG-Dateien erlaubt </label>
                     </div>
-                    <button type="submit" class="btn btn-warning me-3" name="button" value="insert">Eingeben</button>
-                    <button type="submit" class="btn btn-warning" name="button" value="update">Aktualisieren</button>
+                    <button type="submit" class="btn btn-warning m-1" name="button" value="insert">Eingeben</button>
+                    <button type="submit" class="btn btn-warning m-1" name="button" value="update">Aktualisieren</button>
+                    <button type="submit" class="btn btn-warning m-1" name="button" value="dateUpdate">Datum aktualisieren</button>
                 </form>
             </div>
             <div class="col-lg-3">

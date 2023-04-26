@@ -73,7 +73,7 @@ $adminColor = $row['color_hex'];
         <hr style="height: 5px">
         <div class="container">
             <h3>An Benutzerdaten vorgenommene Aktualisierungen:</h3>
-            <div class="scrollView">
+            <div class="scrollView300">
                 <?php            
                     // SELECT-Abfrage auf tbl_user_changes ausführen
                     $query = "SELECT a.adminName, a.color_hex, u.userName, c.id, c.field_name, c.old_value, c.new_value, c.change_date
@@ -85,7 +85,7 @@ $adminColor = $row['color_hex'];
 
                     // Eine Tabelle ausgeben, um die Änderungen anzuzeigen
                     echo '<table>';
-                        echo '<thead style="position: sticky; top: 0; z-index: 1; background-color: white;">
+                        echo '<thead class="topFix">
                                 <tr>
                                     <th>Update ID</th>
                                     <th>Geändert durch Admin</th>
@@ -103,7 +103,7 @@ $adminColor = $row['color_hex'];
                                 echo "<td style='color:{$adminFarbe}'>" . $row['adminName'] . "</td>";
                                 echo '<td>' . $row['userName'] . '</td>';
                                 echo '<td>' . $row['field_name'] . '</td>';
-                                echo '<td class="colorRed">' . $row['old_value'] . '</td>';
+                                echo '<td class="colorGray">' . $row['old_value'] . '</td>';
                                 echo '<td class="colorGreen">' . $row['new_value'] . '</td>';
                                 echo '<td>' . $row['change_date'] . '</td>';
                             echo '</tr>';
