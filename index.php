@@ -87,7 +87,7 @@ $adminColor = $row['color_hex'];
                     echo '<table>';
                         echo '<thead class="topFix">
                                 <tr>
-                                    <th>Update ID</th>
+                                    <th>Änderung ID</th>
                                     <th>Geändert durch Admin</th>
                                     <th>Geändert für Benutzer</th>
                                     <th>Feld Name</th>

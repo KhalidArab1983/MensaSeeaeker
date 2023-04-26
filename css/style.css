@@ -279,8 +279,7 @@
     overflow: hidden;
     border: 1px solid #ccc;
     background-color: #f1f1f1;
-    margin-top: 10px;
-}
+    margin-top: 10px;}
 
 .tab button {
     background-color: inherit;
@@ -289,7 +288,7 @@
     outline: none;
     cursor: pointer;
     padding: 14px 16px;
-    transition: 0.3s;
+    transition: 0.5s;
 }
 
 .tab button.active {
@@ -347,32 +346,6 @@
     
 }
 
-.all_cards{
-    display: grid; 
-    grid-template-rows: repeat(5, 1fr); 
-    grid-template-columns: repeat(6, 1fr); 
-    gap: 10px;
-}
-
-.day_card{
-    padding: 20px;
-
-}
-.all_days{
-    display: grid; 
-    grid-template-rows: repeat(1, 1fr);
-    grid-template-columns: repeat(6, 1fr); 
-    gap: 10px;
-    text-align: center;
-}
-
-.mahlzeiten{
-    display: flex;
-    justify-content: center;  
-    align-items: center;
-    font-weight: bold;  
-    font-size: 1.5rem;
-}
 
 
 /***************************************************************  create_user Seite *********************************************************/
