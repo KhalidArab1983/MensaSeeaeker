@@ -78,7 +78,7 @@ $conn->close();
             <div class="col-lg-3">
 
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-6 text-center">
                 <p class="text-center">Sie müssen eine Option aus der ersten Zeile auswählen, und dann können alle Informationen über das Essen geändert werden.</p>
                 <form action="meals_edit.php" method="post" enctype="multipart/form-data">
                     <div class="mb-2">
@@ -105,8 +105,8 @@ $conn->close();
                         <input type="text" class="form-control" name="option_name"  placeholder="option name">
                     </div>
                     <div class="mb-1">
-                        <select  class="form-control" name="day">
-                            <option>Wählen Sie ein Tag aus...</option>
+                        <select  class="form-control" name="day" placeholder="Days">
+                            <option value="" selected>Wählen Sie einen Tag aus...</option>
                             <option>Montag</option>
                             <option>Dienstag</option>
                             <option>Mittwoch</option>

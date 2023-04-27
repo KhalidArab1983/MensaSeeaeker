@@ -100,8 +100,50 @@ $adminColor = $row['color_hex'];
                             $adminFarbe = $row['color_hex'];
                             echo '<tr class="tableRow">';
                                 echo '<td>' . $row['id'] . '</td>';
-                                echo "<td style='color:{$adminFarbe}'>" . $row['adminName'] . "</td>";
+                                echo "<td style='color:{$adminFarbe};'>" . $row['adminName'] . "</td>";
                                 echo '<td>' . $row['userName'] . '</td>';
+                                echo '<td>' . $row['field_name'] . '</td>';
+                                echo '<td class="colorGray">' . $row['old_value'] . '</td>';
+                                echo '<td class="colorGreen">' . $row['new_value'] . '</td>';
+                                echo '<td>' . $row['change_date'] . '</td>';
+                            echo '</tr>';
+                        }
+                    echo '</table>';
+                    
+                ?>
+            </div>
+
+            <hr class="mt-5 mb-4" style="height: 5px">
+            <h3>An Gerichte vorgenommene Aktualisierungen:</h3>
+            <div class="scrollView300">
+                <?php            
+                    // SELECT-Abfrage auf tbl_user_changes ausführen
+                    $query = "SELECT a.adminName, a.color_hex, o.option_name, c.id, c.field_name, c.old_value, c.new_value, c.change_date
+                                FROM tbl_option_changes c
+                                INNER JOIN tbl_admin a ON a.id = c.admin_id
+                                INNER JOIN tbl_option o ON o.id = c.option_id
+                                ORDER BY change_date DESC";
+                    $result = mysqli_query($conn, $query);
+
+                    // Eine Tabelle ausgeben, um die Änderungen anzuzeigen
+                    echo '<table>';
+                        echo '<thead class="topFix">
+                                <tr>
+                                    <th>Änderung ID</th>
+                                    <th>Geändert durch Admin</th>
+                                    <th>Geändert Gericht</th>
+                                    <th>Feld Name</th>
+                                    <th>Alte Wert</th>
+                                    <th>Neue Wert</th>
+                                    <th>Änderung Zeit</th>
+                                </tr>
+                            </thead>';
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            $adminFarbe = $row['color_hex'];
+                            echo '<tr class="tableRow">';
+                                echo '<td>' . $row['id'] . '</td>';
+                                echo "<td style='color:{$adminFarbe};'>" . $row['adminName'] . "</td>";
+                                echo '<td>' . $row['option_name'] . '</td>';
                                 echo '<td>' . $row['field_name'] . '</td>';
                                 echo '<td class="colorGray">' . $row['old_value'] . '</td>';
                                 echo '<td class="colorGreen">' . $row['new_value'] . '</td>';
@@ -113,6 +155,7 @@ $adminColor = $row['color_hex'];
                     mysqli_close($conn);
                 ?>
             </div>
+
         </div>
 
 

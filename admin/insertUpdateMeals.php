@@ -1,4 +1,15 @@
 <?php 
+
+
+// Check if the user is logged in
+if (isset($_SESSION['admin_id'])) {
+    $admin_id = $_SESSION['admin_id'];
+    
+}else{
+    header("Location: a_login.php");
+	exit;
+}
+
 if ($_SERVER["REQUEST_METHOD"]=="POST"){
     $option_name = $_POST['option_name'];
     $day = $_POST['day'];
@@ -35,6 +46,30 @@ if (isset($_FILES['image']) && is_uploaded_file($_FILES['image']['tmp_name'])) {
         $stmt->execute();
     }
     if($btn == "update"){
+
+        // Speichern der ursprünglichen Benutzerdaten in einer Variable
+        $query = "SELECT * FROM tbl_option WHERE id = $option_id";
+        $result = mysqli_query($conn, $query);
+        $original_data = mysqli_fetch_assoc($result);
+        
+        // Überprüfen, welche Felder geändert wurden und sie in der Tabelle tbl_option_changes speichern
+        foreach ($_POST as $key => $value) {
+            if ($key != "option_id" && $key != "button") {
+                if ($value != $original_data[$key]) {
+                    $field_name = mysqli_real_escape_string($conn, $key);
+                    $old_value = mysqli_real_escape_string($conn, $original_data[$key]);
+                    $new_value = mysqli_real_escape_string($conn, $value);
+                    $change_date = date("Y-m-d H:i:s");
+
+                    // Überprüft, ob die Felder leer sind, sodass sie übersprungen werden und die Abfrage nicht ausgeführt wird.
+                    if(!empty($new_value) && !empty($image_filename) && !empty($option_image) && !empty($data)){
+                        $queryChange = "INSERT INTO tbl_option_changes (admin_id, option_id, field_name, old_value, new_value, change_date) VALUES ($admin_id, $option_id, '$field_name', '$old_value', '$new_value', '$change_date')";
+                        mysqli_query($conn, $queryChange);
+                    }
+                }
+            }
+        }
+
         $sql = "UPDATE tbl_option SET option_name = ?, option_image = ?, image_filename = ?, data = ?, day = ?, date = ?, price = ?, admin_id_update = ? WHERE id = ?";
         $stmt = mysqli_prepare($conn, $sql);
         mysqli_stmt_bind_param($stmt, "sssssssss", $option_name, $option_image, $image_filename, $data, $day, $date, $price, $admin_id, $option_id);
@@ -82,6 +117,29 @@ if (isset($_FILES['image']) && is_uploaded_file($_FILES['image']['tmp_name'])) {
             $row = mysqli_fetch_assoc($result);
             $price = $row['price'];
         }
+        
+        // Speichern der ursprünglichen Benutzerdaten in einer Variable
+        $query = "SELECT * FROM tbl_option WHERE id = $option_id";
+        $result = mysqli_query($conn, $query);
+        $original_data = mysqli_fetch_assoc($result);
+        
+        // Überprüfen, welche Felder geändert wurden und sie in der Tabelle tbl_option_changes speichern
+        foreach ($_POST as $key => $value) {
+            if ($key != "option_id" && $key != "button") {
+                if ($value != $original_data[$key]) {
+                    $field_name = mysqli_real_escape_string($conn, $key);
+                    $old_value = mysqli_real_escape_string($conn, $original_data[$key]);
+                    $new_value = mysqli_real_escape_string($conn, $value);
+                    $change_date = date("Y-m-d H:i:s");
+
+                    // Überprüft, ob die Felder leer sind, sodass sie übersprungen werden und die Abfrage nicht ausgeführt wird.
+                    if(!empty($new_value)){
+                        $queryChange = "INSERT INTO tbl_option_changes (admin_id, option_id, field_name, old_value, new_value, change_date) VALUES ($admin_id, $option_id, '$field_name', '$old_value', '$new_value', '$change_date')";
+                        mysqli_query($conn, $queryChange);
+                    }
+                }
+            }
+        }
 
         $sql = "UPDATE tbl_option SET option_name = ?, option_image = ?, image_filename = ?, data = ?, day = ?, date = ?, price = ?, admin_id_update = ? WHERE id = ?";
         $stmt = mysqli_prepare($conn, $sql);
@@ -93,6 +151,30 @@ if (isset($_FILES['image']) && is_uploaded_file($_FILES['image']['tmp_name'])) {
         }
     }
     if($btn == "dateUpdate"){
+
+        // Speichern der ursprünglichen Benutzerdaten in einer Variable
+        $query = "SELECT * FROM tbl_option WHERE id = $option_id";
+        $result = mysqli_query($conn, $query);
+        $original_data = mysqli_fetch_assoc($result);
+        
+        // Überprüfen, welche Felder geändert wurden und sie in der Tabelle tbl_option_changes speichern
+        foreach ($_POST as $key => $value) {
+            if ($key != "option_id" && $key != "button") {
+                if ($value != $original_data[$key]) {
+                    $field_name = mysqli_real_escape_string($conn, $key);
+                    $old_value = mysqli_real_escape_string($conn, $original_data[$key]);
+                    $new_value = mysqli_real_escape_string($conn, $value);
+                    $change_date = date("Y-m-d H:i:s");
+
+                    // Überprüft, ob die Felder leer sind, sodass sie übersprungen werden und die Abfrage nicht ausgeführt wird.
+                    if(!empty($new_value)){
+                        $queryChange = "INSERT INTO tbl_option_changes (admin_id, option_id, field_name, old_value, new_value, change_date) VALUES ($admin_id, $option_id, '$field_name', '$old_value', '$new_value', '$change_date')";
+                        mysqli_query($conn, $queryChange);
+                    }
+                }
+            }
+        }
+
         $sql = "UPDATE tbl_option SET date = ?, admin_id_update = ? WHERE day = ?";
         $stmt = mysqli_prepare($conn, $sql);
         mysqli_stmt_bind_param($stmt, "sss", $date, $admin_id, $day);
