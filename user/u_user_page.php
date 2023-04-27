@@ -315,6 +315,9 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
             <button class="tablinks" onclick="openTab(event, 'userData')">Benutzer Daten</button>
             <button class="tablinks" onclick="openTab(event, 'kontoZustand')">Kontostand</button>
             <button class="tablinks" onclick="openTab(event, 'bestellendeEssen')">Bestellende Essen</button>
+            <div class="text-center">
+                <label class="mt-2 font25 colorGreen">Kalender Woche - <?php echo $week_count; ?></label>
+            </div>
         </div>
 
         <div id="essenBestellung" class="tabcontent disBlock">
@@ -331,7 +334,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                 <div class="mb-1 form_height">
                                     <div class="disGrid floatLeft">
                                         <label class="dayLabel" for="option_name_<?php echo $day; ?>"><?php echo $day;?>:</label>
-                                        <label id="monday" name="<?php echo $day; ?>">
+                                        <label class="colorGreen" id="monday" name="<?php echo $day; ?>">
                                             <?php 
                                                 $sql = "SELECT date FROM tbl_option WHERE day = '". $day."'";
                                                 $result = mysqli_query($conn, $sql);
