@@ -619,7 +619,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                             </div>
                             <div class="form-group">
                                 <label for="klasse" style="font-weight:bold;">Klasse:</label>
-                                <input type="text" name="klasse" id="klasse" class="form-control tableRow" value="<?php echo $klasse; ?>">
+                                <input type="text" name="klasse" id="klasse" class="form-control tableRow" value="<?php echo $klasse; ?>" readonly>
                             </div>
                             <p>* Die Daten in diesen Tabellen dienen nur zur Anzeige und können nicht geändert werden.</p>
                         </div>
@@ -628,27 +628,27 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                             <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST">
                                 <div class="form-group">                                    
                                     <label style="font-weight:bold; width:200px">Adresse :</label>
-                                    <input type="text" name="adresse" id="adresse" class="form-control tableRow" value="<?php echo $adresse; ?>">
+                                    <input type="text" name="adresse" id="adresse" class="form-control tableRow" value="<?php echo $adresse; ?>" readonly>
                                 </div>
                                 <div class="form-group">                                    
                                     <label style="font-weight:bold; width:200px">PLZ :</label>
-                                    <input type="text" name="plz" id="plz" class="form-control tableRow" value="<?php echo $plz; ?>">
+                                    <input type="text" name="plz" id="plz" class="form-control tableRow" value="<?php echo $plz; ?>" readonly>
                                 </div>
                                 <div class="form-group">                                    
                                     <label style="font-weight:bold; width:200px">Ort :</label>
-                                    <input type="text" name="ort" id="ort" class="form-control tableRow" value="<?php echo $ort; ?>">
+                                    <input type="text" name="ort" id="ort" class="form-control tableRow" value="<?php echo $ort; ?>" readonly>
                                 </div>
                                 <div class="form-group">                                    
                                     <label style="font-weight:bold; width:200px">Ortsteil :</label>
-                                    <input type="text" name="ortsteil" id="ortsteil" class="form-control tableRow" value="<?php echo $ortsteil; ?>">
+                                    <input type="text" name="ortsteil" id="ortsteil" class="form-control tableRow" value="<?php echo $ortsteil; ?>" readonly>
                                 </div>
                                 <div class="form-group">                                    
                                     <label style="font-weight:bold; width:200px">Handy :</label>
-                                    <input type="text" name="phone" id="phone" class="form-control tableRow" value="<?php echo $phone; ?>">
+                                    <input type="text" name="phone" id="phone" class="form-control tableRow" value="<?php echo $phone; ?>" readonly>
                                 </div>
                                 <div class="form-group">                                    
                                     <label style="font-weight:bold; width:200px">Email-Adresse :</label>
-                                    <input type="text" name="email" id="email" class="form-control tableRow" value="<?php echo $email; ?>">
+                                    <input type="text" name="email" id="email" class="form-control tableRow" value="<?php echo $email; ?>" readonly>
                                 </div>
                                 <p>Um die Daten des Benutzers zu ändern, wenden Sie sich an "Neu Benutzer" Seite.</p>
                             </form>
