@@ -106,7 +106,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <h5 style="margin: 0;">Herzlich Willkommen <span style="font-weight:bold; color:<?php echo $adminColor;?>"><?php echo $_SESSION['adminName']; ?></span></h5>
-                <a class="font20" href="./a_setting.php"  style="color:<?php echo $adminColor;?>"><i class="fa-solid fa-user-gear fa-beat-fade fa-lg"></i></a>
+                <a class="font25" href="./a_setting.php"  style="color:<?php echo $adminColor;?>"><i class="fa-solid fa-user-gear fa-beat-fade fa-lg"></i></a>
             </div>
         </nav>
         <hr style="height: 5px">
@@ -438,7 +438,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                                     <tr>
                                         <th>Benutzer Name</th>
                                         <th>Auszahlungen</th>
-                                        <th>Bestellungsdatum</th>
+                                        <th>Auszahlungsdatum</th>
                                     </tr>
                                 </thead>
                             </form>
@@ -525,8 +525,8 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                                 <thead class="topFix">
                                     <tr>
                                         <th>Benutzer Name</th>
-                                        <th>Einzahlungen</th>
-                                        <th>Einzahlungsdatum</th>
+                                        <th>Auszahlungen</th>
+                                        <th>Auszahlungsdatum</th>
                                     </tr>
                                 </thead>
                                 <tbody>

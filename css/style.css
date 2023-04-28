@@ -272,7 +272,7 @@
     height: 10vh;
 }
 .dayLabel{
-    width:100px; 
+    width:120px; 
     font-weight:bold;
 }
 
@@ -407,12 +407,21 @@ th {
     color:white; 
 } */
 
-.nav-pills .nav-link.active,.nav-pills .show>.nav-link{color:#fff;background-color:#c2460d; padding: 5px 10px 5px 10px;}
+.nav-pills .nav-link.active,.nav-pills .show>.nav-link{
+    color:#fff;
+    background-color:#c2460d; 
+    padding: 10px;
+}
+.nav-link:hover{
+    background-color: #d6a140;
+    padding: 10px;
+    transform: scale(1.1);
+    transition: 0.5s;
+}
 
 .btn-bestellen.disabled{
     opacity: 0.5;
     pointer-events: none;
-    
 }
 
 .btn{

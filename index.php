@@ -65,14 +65,14 @@ $adminColor = $row['color_hex'];
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <h5 style="margin: 0;">Herzlich Willkommen <span style="font-weight:bold; color:<?php echo $adminColor;?>"><?php echo $_SESSION['adminName']; ?></span></h5>
-                <a class="font20" href="./admin/a_setting.php"  style="color:<?php echo $adminColor;?>"><i class="fa-solid fa-user-gear fa-beat-fade fa-lg"></i></a>
+                <a class="font25" href="./admin/a_setting.php"  style="color:<?php echo $adminColor;?>"><i class="fa-solid fa-user-gear fa-beat-fade fa-lg"></i></a>
             </div>
         </nav>
 
         <hr style="height: 5px">
         <div class="container">
             <h3>An Benutzerdaten vorgenommene Aktualisierungen:</h3>
-            <div class="scrollView300">
+            <div class="scrollView700">
                 <?php            
                     // SELECT-Abfrage auf tbl_user_changes ausführen
                     $query = "SELECT a.adminName, a.color_hex, u.userName, c.id, c.field_name, c.old_value, c.new_value, c.change_date
@@ -114,7 +114,7 @@ $adminColor = $row['color_hex'];
 
             <hr class="mt-5 mb-4" style="height: 5px">
             <h3>An Gerichte vorgenommene Aktualisierungen:</h3>
-            <div class="scrollView300">
+            <div class="scrollView700">
                 <?php            
                     // SELECT-Abfrage auf tbl_user_changes ausführen
                     $query = "SELECT a.adminName, a.color_hex, o.option_name, c.id, c.field_name, c.old_value, c.new_value, c.change_date
@@ -130,7 +130,7 @@ $adminColor = $row['color_hex'];
                                 <tr>
                                     <th>Änderung ID</th>
                                     <th>Geändert durch Admin</th>
-                                    <th>Geändert Gericht</th>
+                                    <th>Geändertes Gericht</th>
                                     <th>Feld Name</th>
                                     <th>Alte Wert</th>
                                     <th>Neue Wert</th>
