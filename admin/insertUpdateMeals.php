@@ -159,7 +159,7 @@ if (isset($_FILES['image']) && is_uploaded_file($_FILES['image']['tmp_name'])) {
         
         // Überprüfen, welche Felder geändert wurden und sie in der Tabelle tbl_option_changes speichern
         foreach ($_POST as $key => $value) {
-            if ($key != "option_id" && $key != "button") {
+            if ($key != "option_id" && $key != "button" && $key != "day") {
                 if ($value != $original_data[$key]) {
                     $field_name = mysqli_real_escape_string($conn, $key);
                     $old_value = mysqli_real_escape_string($conn, $original_data[$key]);
