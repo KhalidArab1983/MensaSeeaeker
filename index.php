@@ -27,8 +27,7 @@ $adminColor = $row['color_hex'];
     <link rel="stylesheet" href="./css/style.css">
 	<title>Mensa</title>
 </head>
-<body>
-    
+    <body>
         <div class="collapse" id="navbarToggleExternalContent">
             <div class="bg-light p-4 w-100" style="display:inline-block;">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 nav-pills nav_besonder">
@@ -53,13 +52,8 @@ $adminColor = $row['color_hex'];
                     </li>
 
                     <li class="nav-item item_besonder">
-                        <a class="nav-link" href="./admin/a_logout.php"><h6>Abmelden |</h6></a>
+                        <a class="nav-link" href="./admin/a_logout.php"><h6>Abmelden</h6></a>
                     </li>
-                    <li class="nav-item item_besonder">
-                    <i class="fa-solid fa-gear nav-link font20"></i>
-                    </li>
-                    
-                    <!-- <i class="fa-brands fa-facebook"></i> -->
                 </ul>
             </div>
         </div>
@@ -70,7 +64,8 @@ $adminColor = $row['color_hex'];
                 <button class="navbar-toggler bg-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <h5 style="margin: 0;">Herzlich Willkommen <span style="color:<?php echo $adminColor;?>"><?php echo $_SESSION['adminName']; ?></span></h5>
+                <h5 style="margin: 0;">Herzlich Willkommen <span style="font-weight:bold; color:<?php echo $adminColor;?>"><?php echo $_SESSION['adminName']; ?></span></h5>
+                <a class="font20" href="./admin/a_setting.php"  style="color:<?php echo $adminColor;?>"><i class="fa-solid fa-user-gear fa-beat-fade fa-lg"></i></a>
             </div>
         </nav>
 
@@ -104,7 +99,7 @@ $adminColor = $row['color_hex'];
                             $adminFarbe = $row['color_hex'];
                             echo '<tr class="tableRow">';
                                 echo '<td>' . $row['id'] . '</td>';
-                                echo "<td style='color:{$adminFarbe};'>" . $row['adminName'] . "</td>";
+                                echo "<td style='color:{$adminFarbe}; font-weight:bold'>" . $row['adminName'] . "</td>";
                                 echo '<td>' . $row['userName'] . '</td>';
                                 echo '<td>' . $row['field_name'] . '</td>';
                                 echo '<td class="colorGray">' . $row['old_value'] . '</td>';
@@ -146,7 +141,7 @@ $adminColor = $row['color_hex'];
                             $adminFarbe = $row['color_hex'];
                             echo '<tr class="tableRow">';
                                 echo '<td>' . $row['id'] . '</td>';
-                                echo "<td style='color:{$adminFarbe};'>" . $row['adminName'] . "</td>";
+                                echo "<td style='color:{$adminFarbe}; font-weight:bold'>" . $row['adminName'] . "</td>";
                                 echo '<td>' . $row['option_name'] . '</td>';
                                 echo '<td>' . $row['field_name'] . '</td>';
                                 echo '<td class="colorGray">' . $row['old_value'] . '</td>';
@@ -165,13 +160,13 @@ $adminColor = $row['color_hex'];
 
 
         
-    <div style="margin-bottom: 80px">
-        
-    </div>
-    <footer class="fixed-bottom footer">
-        <p class="footer_text"><span>&copy; 2023 created by Khalid Arab</span></p>
-    </footer>
-    <script src="./js/popper.min.js"></script>
-    <script src="./js/bootstrap.min.js"></script>
-</body>
+        <div style="margin-bottom: 80px">
+            
+        </div>
+        <footer class="fixed-bottom footer">
+            <p class="footer_text"><span>&copy; 2023 created by Khalid Arab</span></p>
+        </footer>
+        <script src="./js/popper.min.js"></script>
+        <script src="./js/bootstrap.min.js"></script>
+    </body>
 </html>
