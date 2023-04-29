@@ -282,7 +282,7 @@ $adminColor = $row['color_hex'];
         <div class="bg-light p-4 w-100" style="display:inline-block;">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 nav-pills nav_besonder">
                 <li class="nav-item item_besonder">
-                    <a class="nav-link" href="../index.php"><h6>Haupt Seite |</h6></a>
+                    <a class="nav-link" href="./index.php"><h6>Haupt Seite |</h6></a>
                 </li>
                 <li class="nav-item item_besonder">
                     <a class="nav-link active" href="./create_user.php"><h6>Neu Benutzer |</h6></a>

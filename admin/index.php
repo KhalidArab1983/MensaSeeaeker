@@ -1,6 +1,6 @@
 <?php
 
-include('./conn/db_conn.php');
+include('../conn/db_conn.php');
 session_start();
 // Check if the user is logged in
 if (isset($_SESSION['admin_id'])) {
@@ -23,8 +23,8 @@ $adminColor = $row['color_hex'];
 <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="./css/bootstrap.min.css">
-    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/style.css">
 	<title>Mensa</title>
 </head>
     <body>
@@ -36,36 +36,36 @@ $adminColor = $row['color_hex'];
                     </li>
 
                     <li class="nav-item item_besonder">
-                        <a class="nav-link" href="./admin/create_user.php"><h6>Neu Benutzer |</h6></a>
+                        <a class="nav-link" href="./create_user.php"><h6>Neu Benutzer |</h6></a>
                     </li>
 
                     <li class="nav-item item_besonder">
-                        <a class="nav-link" href="./admin/a_user_page.php"><h6>Benutzer Seite |</h6></a>
+                        <a class="nav-link" href="./a_user_page.php"><h6>Benutzer Seite |</h6></a>
                     </li>
 
                     <li class="nav-item item_besonder">
-                        <a class="nav-link" href="./admin/meals_edit.php"><h6>Gerichte bearbeiten |</h6></a>
+                        <a class="nav-link" href="./meals_edit.php"><h6>Gerichte bearbeiten |</h6></a>
                     </li>
 
                     <li class="nav-item item_besonder">
-                        <a class="nav-link" href="./admin/a_setting.php"><h6>Einstellungen |</h6></a>
+                        <a class="nav-link" href="./a_setting.php"><h6>Einstellungen |</h6></a>
                     </li>
 
                     <li class="nav-item item_besonder">
-                        <a class="nav-link" href="./admin/a_logout.php"><h6>Abmelden</h6></a>
+                        <a class="nav-link" href="./a_logout.php"><h6>Abmelden</h6></a>
                     </li>
                 </ul>
             </div>
         </div>
 
-        <img class="logo" src="./images/logo.png" alt="Seeäkerschule Logo" width=10% style="float:right;">
+        <img class="logo" src="../images/logo.png" alt="Seeäkerschule Logo" width=10% style="float:right;">
         <nav class="navbar navbar-dark bg-light">
             <div class="container-fluid">
                 <button class="navbar-toggler bg-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <h5 style="margin: 0;">Herzlich Willkommen <span style="font-weight:bold; color:<?php echo $adminColor;?>"><?php echo $_SESSION['adminName']; ?></span></h5>
-                <a class="font25" href="./admin/a_setting.php"  style="color:<?php echo $adminColor;?>"><i class="fa-solid fa-user-gear fa-beat-fade fa-lg"></i></a>
+                <a class="font25" href="./a_setting.php"  style="color:<?php echo $adminColor;?>"><i class="fa-solid fa-user-gear fa-beat-fade fa-lg"></i></a>
             </div>
         </nav>
 
@@ -166,7 +166,7 @@ $adminColor = $row['color_hex'];
         <footer class="fixed-bottom footer">
             <p class="footer_text"><span>&copy; 2023 created by Khalid Arab</span></p>
         </footer>
-        <script src="./js/popper.min.js"></script>
-        <script src="./js/bootstrap.min.js"></script>
+        <script src="../js/popper.min.js"></script>
+        <script src="../js/bootstrap.min.js"></script>
     </body>
 </html>

@@ -42,7 +42,7 @@ if (isset($_POST['submit'])){
             $_SESSION['admin_id'] = $admin_id;
             $_SESSION['adminName'] = $adminName;
             $_SESSION['loggedin'] = true;
-            header("Location: ../index.php");
+            header("Location: ./index.php");
             exit;
         }else{
             $errors['invalidError'] = 'Überprüfen Sie den Adminnamen oder das Passwort';
