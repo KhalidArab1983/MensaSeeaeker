@@ -73,6 +73,11 @@
     height: 700px; 
     border:2px solid black;
 }
+.scrollView500{
+    overflow: auto; 
+    height: 500px; 
+    border:2px solid black;
+}
 .scrollView300{
     overflow: auto; 
     height: 300px; 
@@ -254,8 +259,8 @@
 .watchDate{
     font-weight: bold; 
     color: green; 
-    width: 280px;
-    
+    width: 240px;
+    font-size: 20px;
 }
 .watchDiv{
     float: right;

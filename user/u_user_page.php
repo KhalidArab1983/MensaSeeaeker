@@ -199,7 +199,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
             FROM 
                 (SELECT b.option_id 
                 FROM tbl_bestellung b 
-                WHERE b.user_id = $user_id 
+                WHERE b.user_id = $user_id AND b.week_count = $woche_count
                 ORDER BY b.bestelldatum 
                 DESC LIMIT 5 ) as b 
             JOIN tbl_option o ON o.id = b.option_id;";
@@ -551,26 +551,28 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                             echo "Die Gesamte Einzahlungen sind: "."<span class='colorBlue fontBold'>". $sumEinzahlung. "€</span>";
                         ?>
                     </h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Einzahlungen</th>
-                                <th>Datum</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                                if(count($einzahlungen) > 0){
-                                    foreach($einzahlungen as $einzahl){
-                                        echo '<tr class="tableRow">';
-                                            echo '<td>'.$einzahl['einzahlung'].'€</td>';
-                                            echo '<td>'.$einzahl['einzahlung_date'].'</td>';
-                                        echo '</tr>';
+                    <div class="scrollView500">
+                        <table>
+                            <thead class="topFix">
+                                <tr>
+                                    <th>Einzahlungen</th>
+                                    <th>Datum</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                    if(count($einzahlungen) > 0){
+                                        foreach($einzahlungen as $einzahl){
+                                            echo '<tr class="tableRow">';
+                                                echo '<td>'.$einzahl['einzahlung'].'€</td>';
+                                                echo '<td>'.$einzahl['einzahlung_date'].'</td>';
+                                            echo '</tr>';
+                                        }
                                     }
-                                }
-                            ?>
-                        </tbody>
-                    </table>
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div id="auszahlungen" class="subtabcontent disNone">
                     <h3 class="mt-3">
@@ -578,26 +580,28 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                             echo "Die Gesamte Auszahlungen sind: ". "<span class='colorRed fontBold'>" . $sumAuszahlung. "€</span>";
                         ?>
                     </h3>
-                    <table>
-                        <thead>
-                            <tr>
-                            <th>Auszahlungen</th>
-                            <th>Datum</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php 
-                                if(count($auszahlungen) > 0){
-                                    foreach($auszahlungen as $auszahl){
-                                        echo '<tr class="tableRow">';
-                                            echo '<td>'.$auszahl['auszahlung'].'€</td>';
-                                            echo '<td>'.$auszahl['auszahlung_date'].'</td>';
-                                        echo '</tr>';
+                    <div class="scrollView500">
+                        <table>
+                            <thead class="topFix">
+                                <tr>
+                                <th>Auszahlungen</th>
+                                <th>Datum</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php 
+                                    if(count($auszahlungen) > 0){
+                                        foreach($auszahlungen as $auszahl){
+                                            echo '<tr class="tableRow">';
+                                                echo '<td>'.$auszahl['auszahlung'].'€</td>';
+                                                echo '<td>'.$auszahl['auszahlung_date'].'</td>';
+                                            echo '</tr>';
+                                        }
                                     }
-                                }
-                            ?>
-                        </tbody>
-                    </table>
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -609,44 +613,45 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                     <button class="subtablinks" onclick="openSubTab(event, 'alleBestellungen')">Alle Bestellungen</button>
                 </div>
             
-                <div id="lastWeek" class="subtabcontent">
+                <div id="lastWeek" class="subtabcontent disBlock">
                     <div> 
                         <h3 class="floatLeft">Bestellende Essen für nächste Woche:</h3>
-                        <h3 class="floatRight">Benutzer-ID: <span class="colorRed"><?php echo "[". $user_id."]"?></span></h3>
+                        <h3 class="text-center">Benutzer-ID: <span class="colorRed"><?php echo "[". $user_id."]"?></span></h3>
                     </div>
-                    
-                    <table>
-                        <thead>
-                            <tr>
-                            <th>Bestell-ID</th>
-                            <th>Gerichtsname</th>
-                            <th>Preis</th>
-                            <th>Der Tag</th>
-                            <th>Datum des Tages</th>
-                            <th>Bestell Datum</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php 
-                                if(count($letzte_bestellungen) > 0){
-                                    foreach($letzte_bestellungen as $letzte_bestellung){
-                                        echo '<tr class="tableRow">';
-                                            echo '<td>'.$letzte_bestellung['id'].'</td>';
-                                            echo '<td>'.$letzte_bestellung['option_name'].'</td>';
-                                            echo '<td>'.$letzte_bestellung['price']. '€</td>';
-                                            echo '<td>'.$letzte_bestellung['day'].'</td>';
-                                            echo '<td>'.$letzte_bestellung['day_datum'].'</td>';
-                                            echo '<td>'.$letzte_bestellung['bestelldatum'].'</td>';
+                    <div class="scrollView300">
+                        <table>
+                            <thead class="topFix">
+                                <tr>
+                                <th>Bestell-ID</th>
+                                <th>Gerichtsname</th>
+                                <th>Preis</th>
+                                <th>Der Tag</th>
+                                <th>Datum des Tages</th>
+                                <th>Bestell Datum</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php 
+                                    if(count($letzte_bestellungen) > 0){
+                                        foreach($letzte_bestellungen as $letzte_bestellung){
+                                            echo '<tr class="tableRow">';
+                                                echo '<td>'.$letzte_bestellung['id'].'</td>';
+                                                echo '<td>'.$letzte_bestellung['option_name'].'</td>';
+                                                echo '<td>'.$letzte_bestellung['price']. '€</td>';
+                                                echo '<td>'.$letzte_bestellung['day'].'</td>';
+                                                echo '<td>'.$letzte_bestellung['day_datum'].'</td>';
+                                                echo '<td>'.$letzte_bestellung['bestelldatum'].'</td>';
+                                            echo '</tr>';
+                                        }
+                                    }else {
+                                        echo '<tr>';
+                                            echo '<td><h5 class="colorRed text-center">Keine Bestellungen für diese Woche gefunden.</h5></td>';
                                         echo '</tr>';
                                     }
-                                }else {
-                                    echo '<tr>';
-                                        echo '<td><h5 class="colorRed text-center">Keine Bestellungen für diese Woche gefunden.</h5></td>';
-                                    echo '</tr>';
-                                }
-                            ?>
-                        </tbody>
-                    </table>
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
                     <h3 class="mt-3">
                         <?php
                             echo "Der Gesamtbetrag ist: ". "<span class='colorBlue fontBold'>" . $gesamtPreis. "€</span>";
@@ -657,41 +662,43 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                 <div id="alleBestellungen" class="subtabcontent disNone">
                     <div>
                         <h3 class="floatLeft">Alle Bestellende Essen:</h3>
-                        <h3 class="floatRight">Benutzer-ID: <span class="colorRed"><?php echo "[". $user_id."]"?></span></h3>
+                        <h3 class="text-center">Benutzer-ID: <span class="colorRed"><?php echo "[". $user_id."]"?></span></h3>
                     </div>
-                    <table>
-                        <thead>
-                            <tr>
-                            <th>Bestell-ID</th>
-                            <th>Gerichtsname</th>
-                            <th>Preis</th>
-                            <th>Der Tag</th>
-                            <th>Datum des Tages</th>
-                            <th>Bestell Datum</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php 
-                                if(count($bestellungen) > 0){
-                                    foreach($bestellungen as $bestellung){
-                                        echo '<tr class="tableRow">';
-                                            echo '<td>'.$bestellung['id']. '</td>';
-                                            echo '<td>'.$bestellung['option_name']. '</td>';
-                                            echo '<td>'.$bestellung['price'].'€</td>';
-                                            echo '<td>'.$bestellung['day'].'</td>';
-                                            echo '<td>'.$bestellung['day_datum'].'</td>';
-                                            echo '<td>'.$bestellung['bestelldatum'].'</td>';
+                    <div class="scrollView700">
+                        <table>
+                            <thead class="topFix">
+                                <tr>
+                                <th>Bestell-ID</th>
+                                <th>Gerichtsname</th>
+                                <th>Preis</th>
+                                <th>Der Tag</th>
+                                <th>Datum des Tages</th>
+                                <th>Bestell Datum</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php 
+                                    if(count($bestellungen) > 0){
+                                        foreach($bestellungen as $bestellung){
+                                            echo '<tr class="tableRow">';
+                                                echo '<td>'.$bestellung['id']. '</td>';
+                                                echo '<td>'.$bestellung['option_name']. '</td>';
+                                                echo '<td>'.$bestellung['price'].'€</td>';
+                                                echo '<td>'.$bestellung['day'].'</td>';
+                                                echo '<td>'.$bestellung['day_datum'].'</td>';
+                                                echo '<td>'.$bestellung['bestelldatum'].'</td>';
+                                            echo '</tr>';
+                                        }
+                                    }else {
+                                        echo '<tr>';
+                                            echo '<td><h5 class="colorRed text-center">Keine Bestellungen gefunden.</h5></td>';
                                         echo '</tr>';
                                     }
-                                }else {
-                                    echo '<tr>';
-                                        echo '<td><h5 class="colorRed text-center">Keine Bestellungen gefunden.</h5></td>';
-                                    echo '</tr>';
-                                }
-                                mysqli_close($conn);
-                            ?>
-                        </tbody>
-                    </table>
+                                    mysqli_close($conn);
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>  
