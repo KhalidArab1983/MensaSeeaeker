@@ -141,7 +141,6 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                                     <th>User-ID</th>
                                     <th>User Name</th>
                                     <th>Gerichtsname</th>
-                                    <th>GerichtID</th>
                                     <th>Der Tag</th>
                                     <th>Datum des Tages</th>
                                     <th>Bestell Datum</th>
@@ -166,7 +165,6 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                                                         echo '<td>' . $row['user_id'] . '</td>';
                                                         echo '<td>' . $row['userName'] . '</td>';
                                                         echo '<td>' . $row['option_name'] . '</td>';
-                                                        echo '<td>' . $row['option_id'] . '</td>';
                                                         echo '<td>' . $row['day'] . '</td>';
                                                         echo '<td>' . $row['day_datum'] . '</td>';
                                                         echo '<td>' . $row['bestelldatum'] . '</td>';
@@ -213,7 +211,6 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                                         <th>User ID</th>
                                         <th>UserName</th>
                                         <th>Gerichtsname</th>
-                                        <th>GerichtID</th>
                                         <th>Der Tag</th>
                                         <th>Datum des Tages</th>
                                         <th>Bestell Datum</th>
@@ -238,7 +235,6 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                                                     echo '<td>' . $row['user_id'] . '</td>';
                                                     echo '<td>' . $row['userName'] . '</td>';
                                                     echo '<td>' . $row['option_name'] . '</td>';
-                                                    echo '<td>' . $row['option_id'] . '</td>';
                                                     echo '<td>' . $row['day'] . '</td>';
                                                     echo '<td>' . $row['day_datum'] . '</td>';
                                                     echo '<td>' . $row['bestelldatum'] . '</td>';
@@ -255,17 +251,22 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                                                     WHERE b.bestelldatum >= '{$start_date}' AND b.bestelldatum <= '{$end_date}' + INTERVAL 1 DAY
                                                     ORDER BY b.bestelldatum";
                                             $result = mysqli_query($conn, $sql);
-                                            // Ausgabe der Bestellungen in einer Tabelle
-                                            while ($row = mysqli_fetch_assoc($result)) {
-                                                echo '<tr class="tableRow">';
-                                                    echo '<td>' . $row['id'] . '</td>';
-                                                    echo '<td>' . $row['user_id'] . '</td>';
-                                                    echo '<td>' . $row['userName'] . '</td>';
-                                                    echo '<td>' . $row['option_name'] . '</td>';
-                                                    echo '<td>' . $row['option_id'] . '</td>';
-                                                    echo '<td>' . $row['day'] . '</td>';
-                                                    echo '<td>' . $row['day_datum'] . '</td>';
-                                                    echo '<td>' . $row['bestelldatum'] . '</td>';
+                                            if($result->num_rows > 0){
+                                                // Ausgabe der Bestellungen in einer Tabelle
+                                                while ($row = mysqli_fetch_assoc($result)) {
+                                                    echo '<tr class="tableRow">';
+                                                        echo '<td>' . $row['id'] . '</td>';
+                                                        echo '<td>' . $row['user_id'] . '</td>';
+                                                        echo '<td>' . $row['userName'] . '</td>';
+                                                        echo '<td>' . $row['option_name'] . '</td>';
+                                                        echo '<td>' . $row['day'] . '</td>';
+                                                        echo '<td>' . $row['day_datum'] . '</td>';
+                                                        echo '<td>' . $row['bestelldatum'] . '</td>';
+                                                    echo '</tr>';
+                                                }
+                                            }else{
+                                                echo '<tr>';
+                                                    echo '<td>Keine Bestellungen für ausgewählte Datum gefunden.</td>';
                                                 echo '</tr>';
                                             }
                                         }
@@ -288,7 +289,6 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                                             <!-- <th>User ID</th> -->
                                             <th>UserName</th>
                                             <th>Gerichtsname</th>
-                                            <th>GerichtID</th>
                                             <th>Der Tag</th>
                                             <th>Datum des Tages</th>
                                             <th>Bestell Datum</th>
@@ -314,7 +314,6 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                                                 // echo '<td>' . $row['user_id'] . '</td>';
                                                 echo '<td>' . $row['userName'] . '</td>';
                                                 echo '<td>' . $row['option_name'] . '</td>';
-                                                echo '<td>' . $row['option_id'] . '</td>';
                                                 echo '<td>' . $row['day'] . '</td>';
                                                 echo '<td>' . $row['day_datum'] . '</td>';
                                                 echo '<td>' . $row['bestelldatum'] . '</td>';

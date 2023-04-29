@@ -118,7 +118,6 @@ $conn->close();
                     </div>
                     <div class="disFlex m-1">
                         <input class="form-control" type="date" name="date">
-                        
                     </div>
                     <div class="mb-1">
                         <input type="text" class="form-control" name="price" placeholder="price">

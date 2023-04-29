@@ -19,7 +19,9 @@ if(!isset($_SESSION['startzeit'])){
 }
 $vergangene_zeit = (time() - $_SESSION['startzeit']) / 60;
 $formatierte_zeit = gmdate("H:i:s", $vergangene_zeit * 60);
-
+if($formatierte_zeit > '00:30:00'){
+    session_destroy();
+}
 
 
 // Meine Daten Seite
@@ -619,7 +621,6 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                             <th>Bestell-ID</th>
                             <th>Gerichtsname</th>
                             <th>Preis</th>
-                            <th>Gericht-ID</th>
                             <th>Der Tag</th>
                             <th>Datum des Tages</th>
                             <th>Bestell Datum</th>
@@ -633,7 +634,6 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                             echo '<td>'.$letzte_bestellung['id'].'</td>';
                                             echo '<td>'.$letzte_bestellung['option_name'].'</td>';
                                             echo '<td>'.$letzte_bestellung['price']. '€</td>';
-                                            echo '<td>'.$letzte_bestellung['option_id']. '</td>';
                                             echo '<td>'.$letzte_bestellung['day'].'</td>';
                                             echo '<td>'.$letzte_bestellung['day_datum'].'</td>';
                                             echo '<td>'.$letzte_bestellung['bestelldatum'].'</td>';
@@ -665,7 +665,6 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                             <th>Bestell-ID</th>
                             <th>Gerichtsname</th>
                             <th>Preis</th>
-                            <th>Gericht-ID</th>
                             <th>Der Tag</th>
                             <th>Datum des Tages</th>
                             <th>Bestell Datum</th>
@@ -679,7 +678,6 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                             echo '<td>'.$bestellung['id']. '</td>';
                                             echo '<td>'.$bestellung['option_name']. '</td>';
                                             echo '<td>'.$bestellung['price'].'€</td>';
-                                            echo '<td>'.$bestellung['option_id']. '</td>';
                                             echo '<td>'.$bestellung['day'].'</td>';
                                             echo '<td>'.$bestellung['day_datum'].'</td>';
                                             echo '<td>'.$bestellung['bestelldatum'].'</td>';
