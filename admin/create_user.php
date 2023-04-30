@@ -461,7 +461,7 @@ $adminColor = $row['color_hex'];
                     </div>
                     <div class="mb-1">
                         <!-- <label for="birthday">Geburtsdatum:</label> -->
-                        <input type="text" class="form-control" name="birthday" id="birthday"  placeholder="* 01.01.1999" onkeyup="updateInputUser()">
+                        <input type="text" class="form-control" name="birthday" id="birthday"  placeholder="* 01.01.1900" onkeyup="updateInputUser()">
                     </div>
                     <div class="mb-1">
                         <!-- <label for="password">Kennwort:</label> -->

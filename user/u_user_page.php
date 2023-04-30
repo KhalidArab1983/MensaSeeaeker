@@ -354,6 +354,22 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                     </div>
                                     <select class="w-50 h-50 tableRow" name="option_name_<?php echo $day; ?>" id="option_name_<?php echo $day; ?>" onChange="chImage<?php echo $day;?>(); calculateTotalPrice(this);">
                                         <?php 
+                                            $sqlHoliday = "SELECT * FROM tbl_option ";
+                                            $resultHoliday = mysqli_query($conn, $sqlHoliday);
+                                            $rowHoliday = mysqli_fetch_assoc($resultHoliday);
+                                            $holiday = $rowHoliday['day'];
+                                            if($holiday == "Feiertag"){
+                                                // Send query to database to get School Classes
+                                                $sql = "SELECT id, option_name, image_filename, data, day, price FROM tbl_option WHERE day = 'Feiertag'";
+                                                $result = mysqli_query($conn, $sql);
+                                                // Include each result as an option tag in the drop-down list
+                                                $row = mysqli_fetch_assoc($result);
+                                                $option_name = $row['option_name'];
+                                                $data = $row['data'];
+                                                $price = $row['price'];
+                                                $option_id = $row['id'];
+                                                echo '<option value="' . $option_id . '">'. $option_id ."-". $option_name . "-" . $price . '€</option>';  
+                                            }
                                             if($$day == 1){
                                                 // Send query to database to get School Classes
                                                 $sql = "SELECT id, option_name, image_filename, data, day, price FROM tbl_option WHERE price = 0.00 AND  day = '" .$day."'";

@@ -184,6 +184,42 @@ if (isset($_FILES['image']) && is_uploaded_file($_FILES['image']['tmp_name'])) {
             echo "Error: " . "<br>" . mysqli_error($conn);
         }
     }
+
+
+    if($btn == "holiday"){
+
+        // Speichern der ursprünglichen Benutzerdaten in einer Variable
+        $query = "SELECT * FROM tbl_option WHERE id = $option_id";
+        $result = mysqli_query($conn, $query);
+        $original_data = mysqli_fetch_assoc($result);
+        
+        // Überprüfen, welche Felder geändert wurden und sie in der Tabelle tbl_option_changes speichern
+        foreach ($_POST as $key => $value) {
+            if ($key != "option_id" && $key != "button" && $key != "date") {
+                if ($value != $original_data[$key]) {
+                    $field_name = mysqli_real_escape_string($conn, $key);
+                    $old_value = mysqli_real_escape_string($conn, $original_data[$key]);
+                    $new_value = mysqli_real_escape_string($conn, $value);
+                    $change_date = date("Y-m-d H:i:s");
+
+                    // Überprüft, ob die Felder leer sind, sodass sie übersprungen werden und die Abfrage nicht ausgeführt wird.
+                    if(!empty($new_value)){
+                        $queryChange = "INSERT INTO tbl_option_changes (admin_id, option_id, field_name, old_value, new_value, change_date) VALUES ($admin_id, $option_id, '$field_name', '$old_value', '$new_value', '$change_date')";
+                        mysqli_query($conn, $queryChange);
+                    }
+                }
+            }
+        }
+
+        $sql = "UPDATE tbl_option SET day = ?, admin_id_update = ? WHERE date = ?";
+        $stmt = mysqli_prepare($conn, $sql);
+        mysqli_stmt_bind_param($stmt, "sss", $day, $admin_id, $date);
+        if(mysqli_stmt_execute($stmt)){
+            header("Location: meals_edit.php");
+        }else{
+            echo "Error: " . "<br>" . mysqli_error($conn);
+        }
+    }
 }
 
 ?>

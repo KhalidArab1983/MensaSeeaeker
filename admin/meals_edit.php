@@ -109,6 +109,7 @@ $conn->close();
                     <div class="mb-1">
                         <select  class="form-control" name="day" placeholder="Days">
                             <option value="" selected>Wählen Sie einen Tag aus...</option>
+                            <option>Feiertag</option>
                             <option>Montag</option>
                             <option>Dienstag</option>
                             <option>Mittwoch</option>
@@ -132,6 +133,7 @@ $conn->close();
                     <button type="submit" class="btn btn-warning m-1" name="button" value="insert">Eingeben</button>
                     <button type="submit" class="btn btn-warning m-1" name="button" value="update">Aktualisieren</button>
                     <button type="submit" class="btn btn-warning m-1" name="button" value="dateUpdate">Datum aktualisieren</button>
+                    <button type="submit" class="btn btn-warning m-1" name="button" value="holiday">Feiertag einstellen</button>
                 </form>
             </div>
             <div class="col-lg-3">
