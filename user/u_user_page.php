@@ -408,12 +408,8 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                         <?php endforeach; ?>
                         
                         <div class="text-center">
-                            <button type="submit" class="btn btn-warning btn-bestellen" id="bestellen" name="button" value="bestellen"
-                                    <?php 
-                                        // if($bestell_status == 1){echo "disabled";}
-                                    ?>>
+                            <button type="submit" class="btn btn-warning btn-bestellen" id="bestellen" name="button" value="bestellen">
                                     <h6>Essen bestellen</h6>
-                                    
                             </button>
                             <div name="guthaben" id="guthaben" class="error" ></div>
                         </div>
@@ -810,31 +806,12 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                     }
                     
 
-                    
-
                     var statusMontag = "<?php echo $Montag; ?>";
                     var statusDienstag = "<?php echo $Dienstag; ?>";
                     var statusMittwoch = "<?php echo $Mittwoch; ?>";
                     var statusDonnerstag = "<?php echo $Donnerstag; ?>";
                     var statusFreitag = "<?php echo $Freitag; ?>";
 
-                    // var days = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag"];
-                    // var tage = [statusMontag, statusDienstag, statusMittwoch, statusDonnerstag, statusFreitag];
-                    // for(var i = 0; i < days.length; i++){
-                    //     for(var j = 0; j < tage.length; j++){
-                    //         var btnUpdate = document.getElementById(days[i]);
-                    //         var statusUpdate = tage[j];
-                    //         if(statusUpdate == 1 || totalPrice > kontostand){
-                    //             btnUpdate.disabled = true;
-                    //         }
-                    //         else{
-                    //             if(statusUpdate == 0){
-                    //                 btnUpdate.disabled = false;
-                    //                 guthabenError.innerHTML = "";
-                    //             }
-                    //         }
-                    //     }
-                    // }
                         if(statusMontag == 1){
                             btnMontag.disabled = true;
                         }
@@ -898,22 +875,6 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                                 guthabenError.innerHTML = "";
                             }
                         }
-
-
-                        // const days = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag"];
-
-                        // days.forEach(day => {
-                        // const btn = document.getElementById(day);
-                        // const status = "<?php echo "$ + day + "; ?>";
-
-                        // if (status == 1 || totalPrice > kontostand) {
-                        //     btn.disabled = true;
-                        // } else if (status == 0) {
-                        //     btn.disabled = false;
-                        //     guthabenError.innerHTML = "";
-                        // }
-                        // });
-
                 });
             }
 
