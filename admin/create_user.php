@@ -301,7 +301,7 @@ $adminColor = $row['color_hex'];
                         </div>
                         <div>
                             <input type="hidden" name="klasse_submitted" value="1">
-                            <input type="submit" class="btn btn-warning" value="Kalsse Erstellen">
+                            <input type="submit" class="btn btn-warning" value="Klasse Erstellen">
                         </div>
                     </form>
                 </div>

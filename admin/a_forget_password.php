@@ -1,6 +1,6 @@
 <?php
 include('../conn/db_conn.php');
-include('./pass_change_include/a_forget_pass_inc.php');
+include('./pass_change_includes/a_forget_pass_inc.php');
 ?>
 
 <!doctype html>
