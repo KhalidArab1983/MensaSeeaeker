@@ -246,3 +246,40 @@ window.onload = function() {
         }
     }
 };
+
+
+// Von create_user.php Seite
+function filterOptions() {
+    var input = document.getElementById("searchInput");
+    var filter = input.value.toUpperCase();
+    var select = document.getElementById("optionList");
+    var options = select.getElementsByTagName("option");
+    for (var i = 0; i < options.length; i++) {
+        var optionText = options[i].text.toUpperCase();
+        if (optionText.indexOf(filter) > -1) {
+        options[i].style.display = "";
+        } else {
+        options[i].style.display = "none";
+        }
+    }
+}
+
+
+function showHint() {
+    var tooltip = document.getElementsByClassName("tooltips")[0];
+    var hint = document.getElementById("hint");
+    if (hint.style.display === "block") {
+        hint.style.display = "none";
+    } else {
+        hint.style.display = "block";
+        hint.style.top = tooltip.offsetTop + "px";
+        hint.style.left = (tooltip.offsetLeft + tooltip.offsetWidth) + "px";
+    }
+}
+
+
+function deleteRecord(id) {
+    if (confirm("Möchten Sie diesen Benutzer wirklich löschen?")) {
+        window.location.href = "delete.php?id=" + id;
+    }
+}
