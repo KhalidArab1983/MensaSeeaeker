@@ -342,7 +342,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                     <form method="post" class="col-12">
                         <div class="m-1" style="display:flex">
                             <input type="number" class="form-control m-1" style="float:left" step="0.01" name="einzahlungsbetrag" id="einzahlungsbetrag" placeholder="Der zu zahlende Betrag">
-                            <input type="text" name="userName" class="form-control m-1" id="searchInput" onkeyup="filterOptions()" placeholder="nach einem Benutzer suchen...">
+                            <input type="text" name="userName" class="form-control m-1" id="userSearch" onkeyup="filterOptionsEinzahlung()" placeholder="nach einem Benutzer suchen...">
                             <select class="form-control m-1" name="userEinzahlung" id="userEinzahlung">
                                 <option>Benutzer Name auswählen...</option>
                                 <?php 
@@ -636,8 +636,8 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
 
 
         <script>
-            function filterOptions() {
-                var input = document.getElementById("searchInput");
+            function filterOptionsEinzahlung() {
+                var input = document.getElementById("userSearch");
                 var filter = input.value.toUpperCase();
                 var select = document.getElementById("userEinzahlung");
                 var options = select.getElementsByTagName("option");
