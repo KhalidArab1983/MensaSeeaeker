@@ -20,7 +20,7 @@ if(!isset($_SESSION['startzeit'])){
 $vergangene_zeit = (time() - $_SESSION['startzeit']) / 60;
 $formatierte_zeit = gmdate("H:i:s", $vergangene_zeit * 60);
 if($formatierte_zeit > '00:30:00'){
-    session_destroy();
+    header('Location: u_logout.php');
 }
 
 

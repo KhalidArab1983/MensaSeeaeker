@@ -10,7 +10,6 @@ setInterval(updateTime, 1000);
 function sucheStadt() {
     var plz = document.getElementById("plz").value;
     var ort = document.getElementById("ort");
-
     if (plz.length == 5 && /^\d+$/.test(plz)) {
         $.ajax({
             url: "../admin/sucheStadt.php",
@@ -39,18 +38,16 @@ function sucheStadt() {
 // $(document).ready(function(){
 //     // Standardmäßig wird der erste Tab geöffnet
 //     $(".tabcontent:first").show();
-    
 //     // Beim Klicken auf den Tab-Button wird der entsprechende Inhalt geöffnet
 //     $(".tab button").click(function(){
 //         var tab_id = $(this).attr("data-tab");
-        
 //         $(".tab button").removeClass("active");
 //         $(".tabcontent").hide();
-        
 //         $(this).addClass("active");
 //         $("#" + tab_id).show();
 //     });
 // });
+
 
 
 
