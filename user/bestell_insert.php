@@ -111,8 +111,5 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
     // header("Location: danke.php");
 
 }
-
-// echo "Gesamtpreis ist: $". number_format($GLOBALS['totalPreis'], 2)
-
 ?>
 
