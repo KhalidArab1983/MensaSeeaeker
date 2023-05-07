@@ -410,21 +410,25 @@ th {
 
 
 /****************************** Buttons **********************************/
-/* .btn-warning{
-    background-color: #c2460d;
-    color:white; 
-} */
 
 .nav-pills .nav-link.active,.nav-pills .show>.nav-link{
     color:#fff;
     background-color:#c2460d; 
     padding: 10px;
+
 }
+
+.nav-link{
+    color:#02238f;
+    background-color:#c2460d; 
+    padding: 10px;
+    transition: 0.3s ease;
+}
+
 .nav-link:hover{
     background-color: #d6a140;
     padding: 10px;
-    transform: scale(1.1);
-    transition: 0.3s;
+    border-width: 100%;
 }
 
 .btn-bestellen.disabled{
