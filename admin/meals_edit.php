@@ -10,7 +10,7 @@ if (isset($_SESSION['admin_id'])) {
 	exit;
 }
 
-include('./insertUpdateMeals.php');
+include('./meals_includes/insertUpdateMeals.php');
 
 
 $sql = "SELECT color_hex FROM tbl_admin WHERE id = '{$admin_id}'";
