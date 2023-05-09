@@ -524,7 +524,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                             </div>
                             <div class="form-group">                                    
                                 <button type="submit" class="btn btn-warning m-2" name="passwordForm" value="passSave">Speichern</button>
-                                <button type="reset" class="btn btn-warning m-2" name="button" value="passCancel">Abrechen</button>
+                                <button type="reset" class="btn btn-warning m-2" name="button" value="passCancel" onClick="location.href='<?php echo $_SERVER["PHP_SELF"] ?>'">Abrechen</button>
                             </div>
                             <div class="form-text m-5 success"><?php echo $success ?></div>
                         </form>
