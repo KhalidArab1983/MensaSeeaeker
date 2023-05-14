@@ -1,6 +1,6 @@
 <div class="container">
     <form method="get">
-        <div style="display:flex">
+        <div class="disFlex">
             <input type="text" class="form-control m-1" name="userNameBestell" id="user_id" placeholder="nach einem Benutzer suchen..."> 
             <button type="submit" name="button" class="btn btn-warning m-1" value="Suchen">Suchen</button>
         </div>

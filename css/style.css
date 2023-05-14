@@ -70,6 +70,9 @@
 .width50{
     width:50px;
 }
+.width200{
+    width: 200px;
+}
 
 .scrollView700{
     overflow: auto; 

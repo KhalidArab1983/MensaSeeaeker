@@ -1,6 +1,6 @@
 <div class="container">
     <form method="get">
-        <div class="col-4" style="display:flex">
+        <div class="col-4 disFlex">
             <input type="text" class="form-control m-1" name="userNameAuszahl" id="user_id" placeholder="nach einem Benutzer suchen..."> 
             <button type="submit" name="button" class="btn btn-warning m-1" value="auszahlungSuchen">Suchen</button>
         </div>

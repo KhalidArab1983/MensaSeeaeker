@@ -78,7 +78,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
             <button class="tablinks" onclick="openTab(event, 'kontoStand')">Kontostand</button>
             <button class="tablinks" onclick="openTab(event, 'userData')">Benutzer Daten</button>
         </div>
-        <div id="bestellung" class="tabcontent" style="display:block">
+        <div id="bestellung" class="tabcontent disBlock">
             <div class="container">
                 <div class="tab">
                     <button class="subtablinks active" onclick="openSubTab(event, 'userBestellung')">Bestellung des Benutzers</button>
@@ -91,15 +91,15 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                     <?php include ('./a_user_page_includes/user_bestellung_inc.php'); ?>
                 </div>
                 
-                <div id="bestellungen" class="subtabcontent" style="display:none">
+                <div id="bestellungen" class="subtabcontent disNone">
                     <?php include ('./a_user_page_includes/bestellungen_inc.php'); ?>
                 </div>
 
-                <div id="lastWeekAllUser" class="subtabcontent" style="display:none">
+                <div id="lastWeekAllUser" class="subtabcontent disNone">
                     <?php include ('./a_user_page_includes/lastweekalluser_inc.php'); ?>
                 </div>
                 
-                <div id="anzahlGerichte" class="subtabcontent" style="display:none">
+                <div id="anzahlGerichte" class="subtabcontent disNone">
                     <?php include ('./a_user_page_includes/anzahlgerichte_inc.php'); ?>
                 </div>
             </div>
@@ -115,13 +115,13 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                 <div id="einzahlungen" class="subtabcontent" > 
                     <?php include ('./a_user_page_includes/a_kontostand_einzahlungen_inc.php'); ?>
                 </div>
-                <div id="auszahlungen" class="subtabcontent" style="display:none">            
+                <div id="auszahlungen" class="subtabcontent disNone">            
                     <?php include ('./a_user_page_includes/a_kontostand_auszahlungen_inc.php'); ?>
                 </div>
-                <div id="einzahlungenFiltern" class="subtabcontent" style="display:none">
+                <div id="einzahlungenFiltern" class="subtabcontent disNone">
                     <?php include ('./a_user_page_includes/a_kontostand_einzahlungfilter_inc.php'); ?>
                 </div>
-                <div id="auszahlungenFiltern" class="subtabcontent" style="display:none">
+                <div id="auszahlungenFiltern" class="subtabcontent disNone">
                     <?php include ('./a_user_page_includes/a_kontostand_auszahlungfilter_inc.php'); ?>
                 </div>
             </div>
@@ -129,7 +129,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
         <div id="userData" class="tabcontent">
             <h3 style="text-decoration:underline">Benutzer Daten:</h3>
             <form method="get">
-                <div class="col-4" style="display:flex">
+                <div class="col-4 disFlex">
                     <input type="text" class="form-control m-1" name="userNameTable" id="user_id" placeholder="nach einem Benutzer suchen..."> 
                     <button type="submit" name="button" class="btn btn-warning m-1" value="userTableSuchen">Suchen</button>
                 </div>
@@ -163,27 +163,27 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                         <div class="card col-sm-12 col-md-4 m-1">
                             <h4 class="mb-5">Allgemeine Daten:</h4>
                             <div class="form-group">
-                                <label for="userName" style="font-weight:bold;">Benutzername:</label>
+                                <label for="userName" class="fontBold">Benutzername:</label>
                                 <input type="text" name="userName" id="userName" class="form-control tableRow" value="<?php echo $userName; ?>" readonly>
                             </div>
                             <div class="form-group">
-                                <label for="lastName" style="font-weight:bold;">Nachname:</label>
+                                <label for="lastName" class="fontBold">Nachname:</label>
                                 <input type="text" name="lastName" id="lastName" class="form-control tableRow" value="<?php echo $lastName; ?>" readonly>
                             </div>
                             <div class="form-group">
-                                <label for="firstName" style="font-weight:bold;">Vorname:</label>
+                                <label for="firstName" class="fontBold">Vorname:</label>
                                 <input type="text" name="firstName" id="firstName" class="form-control tableRow" value="<?php echo $firstName; ?>" readonly>
                             </div>
                             <div class="form-group">
-                                <label for="birthday" style="font-weight:bold;">Geburtsdatum:</label>
+                                <label for="birthday" class="fontBold">Geburtsdatum:</label>
                                 <input type="text" name="birthday" id="birthday" class="form-control tableRow" value="<?php echo $birthday; ?>" readonly>
                             </div>
                             <div class="form-group">
-                                <label for="aktiv_ab" style="font-weight:bold;">Aktiv ab:</label>
+                                <label for="aktiv_ab" class="fontBold">Aktiv ab:</label>
                                 <input type="text" name="aktiv_ab" id="aktiv_ab" class="form-control tableRow" value="<?php echo $aktiv_ab; ?>" readonly>
                             </div>
                             <div class="form-group">
-                                <label for="klasse" style="font-weight:bold;">Klasse:</label>
+                                <label for="klasse" class="fontBold">Klasse:</label>
                                 <input type="text" name="klasse" id="klasse" class="form-control tableRow" value="<?php echo $klasse; ?>" readonly>
                             </div>
                             <p>* Die Daten in diesen Tabellen dienen nur zur Anzeige und können nicht geändert werden.</p>
@@ -192,27 +192,27 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                             <h4 class="mb-5">Adresse:</h4>
                             <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST">
                                 <div class="form-group">                                    
-                                    <label style="font-weight:bold; width:200px">Adresse :</label>
+                                    <label class="fontBold width200">Adresse :</label>
                                     <input type="text" name="adresse" id="adresse" class="form-control tableRow" value="<?php echo $adresse; ?>" readonly>
                                 </div>
                                 <div class="form-group">                                    
-                                    <label style="font-weight:bold; width:200px">PLZ :</label>
+                                    <label class="fontBold width200">PLZ :</label>
                                     <input type="text" name="plz" id="plz" class="form-control tableRow" value="<?php echo $plz; ?>" readonly>
                                 </div>
                                 <div class="form-group">                                    
-                                    <label style="font-weight:bold; width:200px">Ort :</label>
+                                    <label class="fontBold width200">Ort :</label>
                                     <input type="text" name="ort" id="ort" class="form-control tableRow" value="<?php echo $ort; ?>" readonly>
                                 </div>
                                 <div class="form-group">                                    
-                                    <label style="font-weight:bold; width:200px">Ortsteil :</label>
+                                    <label class="fontBold width200">Ortsteil :</label>
                                     <input type="text" name="ortsteil" id="ortsteil" class="form-control tableRow" value="<?php echo $ortsteil; ?>" readonly>
                                 </div>
                                 <div class="form-group">                                    
-                                    <label style="font-weight:bold; width:200px">Handy :</label>
+                                    <label class="fontBold width200">Handy :</label>
                                     <input type="text" name="phone" id="phone" class="form-control tableRow" value="<?php echo $phone; ?>" readonly>
                                 </div>
                                 <div class="form-group">                                    
-                                    <label style="font-weight:bold; width:200px">Email-Adresse :</label>
+                                    <label class="fontBold width200">Email-Adresse :</label>
                                     <input type="text" name="email" id="email" class="form-control tableRow" value="<?php echo $email; ?>" readonly>
                                 </div>
                                 <p>Um die Daten des Benutzers zu ändern, wenden Sie sich an "Neu Benutzer" Seite.</p>
@@ -221,7 +221,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                     </div>
                 <?php 
                     }else{
-                        echo "<h4>Die Benutzername <span style='font-weight:bold; color:blue'>{$userNameTable}</span> nicht gefunden.</h4>";
+                        echo '<h4>Die Benutzername <span class="fontBold colorBlue">{$userNameTable}</span> nicht gefunden.</h4>';
                     }
                 }
                 ?>
