@@ -71,7 +71,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
     </head>
     <body>
         <?php include ('./nav_includes/navbar.php') ?>
-        <hr style="height: 5px">
+        <hr class="height5">
 
         <div class="tab">
             <button class="tablinks active" onclick="openTab(event, 'bestellung')">Bestellungen</button>
@@ -230,7 +230,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
         </div>
 
 
-        <div style="margin-bottom: 80px">
+        <div class="marginBottom80">
             
         </div>
         <footer class="fixed-bottom footer">

@@ -45,7 +45,7 @@ $adminColor = $row['color_hex'];
             </div>
                 
             <div>
-                <hr class="m-2" style="height: 5px; color:blue">
+                <hr class="m-2 height5 colorBlue">
             </div>
             <div class="card m-2">
                 <h4 class="mb-5">Passwort ändern:</h4>
@@ -78,7 +78,7 @@ $adminColor = $row['color_hex'];
         </div>
 
 
-        <div style="margin-bottom: 80px">
+        <div class="marginBottom80">
         
         </div>
         <footer class="fixed-bottom footer">
