@@ -37,9 +37,9 @@ $conn->close();
     <body>
         <?php include ('./nav_includes/navbar.php') ?>
 
-        <hr class="mb-5" style="height: 5px">
+        <hr class="mb-5 height5">
 
-        <div class="container" style="display:flex">
+        <div class="container disFlex">
             <div class="col-lg-3">
 
             </div>
@@ -87,11 +87,11 @@ $conn->close();
                         <input type="text" class="form-control" name="price" placeholder="price">
                     </div>
                     <div class="mb-1">
-                        <label style="font-size:12px">Wenn das Bild ausgewählt ist, müssen andere Felder ausgefüllt werden. Aber die anderen Felder können einzeln aktualisiert werden.</label>
+                        <label class="font12">Wenn das Bild ausgewählt ist, müssen andere Felder ausgefüllt werden. Aber die anderen Felder können einzeln aktualisiert werden.</label>
                     </div>
                     <div class="mb-3">
                         <input type="file" class="form-control" name="image">
-                        <label style="font-size:12px">* Es sind nur PNG und JPG-Dateien erlaubt </label>
+                        <label class="font12">* Es sind nur PNG und JPG-Dateien erlaubt </label>
                     </div>
                     <button type="submit" class="btn btn-warning m-1" name="button" value="insert">Eingeben</button>
                     <button type="submit" class="btn btn-warning m-1" name="button" value="update">Aktualisieren</button>
@@ -110,7 +110,7 @@ $conn->close();
             </div>
         </div>
 
-        <div style="margin-bottom: 80px">
+        <div class="marginBottom80">
             
         </div>
         <footer class="fixed-bottom footer">

@@ -30,7 +30,7 @@ $adminColor = $row['color_hex'];
     <body>
         <?php include ('./nav_includes/navbar.php') ?>
 
-        <hr style="height: 5px">
+        <hr class="height5">
         <div class="container">
             <h3>An Benutzerdaten vorgenommene Aktualisierungen:</h3>
             <div class="scrollView700">
@@ -45,7 +45,7 @@ $adminColor = $row['color_hex'];
             </div>
         </div>
 
-        <div style="margin-bottom: 80px">
+        <div class="marginBottom80">
             
         </div>
         <footer class="fixed-bottom footer">
