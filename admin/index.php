@@ -37,7 +37,7 @@ $adminColor = $row['color_hex'];
                 <?php include ('./index_includes/update_user_inc.php') ?>
             </div>
 
-            <hr class="mt-5 mb-4" style="height: 5px">
+            <hr class="mt-5 mb-4 height5">
             
             <h3>An Gerichte vorgenommene Aktualisierungen:</h3>
             <div class="scrollView700">
