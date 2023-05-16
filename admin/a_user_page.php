@@ -127,7 +127,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
             </div>
         </div>
         <div id="userData" class="tabcontent">
-            <h3 style="text-decoration:underline">Benutzer Daten:</h3>
+            <h3 class="headerDeco">Benutzer Daten:</h3>
             <form method="get">
                 <div class="col-4 disFlex">
                     <input type="text" class="form-control m-1" name="userNameTable" id="user_id" placeholder="nach einem Benutzer suchen..."> 
@@ -225,10 +225,8 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
                     }
                 }
                 ?>
-
             </div>
         </div>
-
 
         <div class="marginBottom80">
             

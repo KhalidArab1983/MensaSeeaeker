@@ -79,6 +79,10 @@
 .marginBottom80{
     margin-bottom: 80px;
 }
+
+.headerDeco{
+    text-decoration: underline;
+}
 .scrollView700{
     overflow: auto; 
     height: 700px; 
