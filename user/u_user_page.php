@@ -724,8 +724,13 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
             
         <script>
             //um die Variablen global zu machen und dann in pric_validation.js Datei zu verwenden
-            window.kontostand ="<?php echo $kontostand; ?>"
-            window.bestellStatus = "<?php echo $bestell_status; ?>"
+            window.kontostand ="<?php echo $kontostand; ?>";
+            window.bestellStatus = "<?php echo $bestell_status; ?>";
+            window.statusMontag = "<?php echo $Montag; ?>";
+            window.statusDienstag = "<?php echo $Dienstag; ?>";
+            window.statusMittwoch = "<?php echo $Mittwoch; ?>";
+            window.statusDonnerstag = "<?php echo $Donnerstag; ?>";
+            window.statusFreitag = "<?php echo $Freitag; ?>";
         </script>
         <script src="../js/price_validation.js"></script>
         <script src="../js/popper.min.js"></script>

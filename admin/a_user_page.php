@@ -1,7 +1,6 @@
 <?php
 include ('../conn/db_conn.php');
 
-
 session_start();
 // Check if the user is logged in
 if (isset($_SESSION['admin_id'])) {
@@ -11,7 +10,6 @@ if (isset($_SESSION['admin_id'])) {
     header("Location: a_login.php");
 	exit;
 }
-
 date_default_timezone_set("Europe/Berlin");
 
 $sonntag = 'Sunday';
@@ -52,12 +50,7 @@ if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "GET"){
     $start_date = "";
     $end_date = "";
 }
-
-
-    
-
 ?>
-
 
 <!doctype html>
 <html lang="de">

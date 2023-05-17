@@ -80,11 +80,11 @@ for (var i = 0; i < selectLists.length; i++) {
         }
         
 
-        var statusMontag = "<?php echo $Montag; ?>";
-        var statusDienstag = "<?php echo $Dienstag; ?>";
-        var statusMittwoch = "<?php echo $Mittwoch; ?>";
-        var statusDonnerstag = "<?php echo $Donnerstag; ?>";
-        var statusFreitag = "<?php echo $Freitag; ?>";
+        var statusMontag = window.statusMontag;
+        var statusDienstag = window.statusDienstag;
+        var statusMittwoch = window.statusMittwoch;
+        var statusDonnerstag = window.statusDonnerstag;
+        var statusFreitag = window.statusFreitag;
         if(statusMontag == 1){
             btnMontag.disabled = true;
         }
