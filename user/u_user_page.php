@@ -362,6 +362,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                 <?php include ('./u_user_page_includes/u_user_data_inc.php');?>
             </div>
         </div>
+        
         <div id="kontoZustand" class="tabcontent">
             <h3 class="textDeco">Banktransaktionen und Kontostand:</h3>
             <div class="container">                        
@@ -388,62 +389,10 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                     <button class="subtablinks" onclick="openSubTab(event, 'auszahlungen')">Auszahlungen</button>
                 </div>  
                 <div id="einzahlungen" class="subtabcontent">
-                    <h3 class="mt-3">
-                        <?php
-                            echo "Die Gesamte Einzahlungen sind: "."<span class='colorBlue fontBold'>". $sumEinzahlung. "€</span>";
-                        ?>
-                    </h3>
-                    <div class="scrollView500">
-                        <table>
-                            <thead class="topFix">
-                                <tr>
-                                    <th>Einzahlungen</th>
-                                    <th>Datum</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                    if(count($einzahlungen) > 0){
-                                        foreach($einzahlungen as $einzahl){
-                                            echo '<tr class="tableRow">';
-                                                echo '<td>'.$einzahl['einzahlung'].'€</td>';
-                                                echo '<td>'.$einzahl['einzahlung_date'].'</td>';
-                                            echo '</tr>';
-                                        }
-                                    }
-                                ?>
-                            </tbody>
-                        </table>
-                    </div>
+                    <?php include ('./u_user_page_includes/u_kontostand_einzahlungen_inc.php'); ?>
                 </div>
                 <div id="auszahlungen" class="subtabcontent disNone">
-                    <h3 class="mt-3">
-                        <?php
-                            echo "Die Gesamte Auszahlungen sind: ". "<span class='colorRed fontBold'>" . $sumAuszahlung. "€</span>";
-                        ?>
-                    </h3>
-                    <div class="scrollView500">
-                        <table>
-                            <thead class="topFix">
-                                <tr>
-                                <th>Auszahlungen</th>
-                                <th>Datum</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php 
-                                    if(count($auszahlungen) > 0){
-                                        foreach($auszahlungen as $auszahl){
-                                            echo '<tr class="tableRow">';
-                                                echo '<td>'.$auszahl['auszahlung'].'€</td>';
-                                                echo '<td>'.$auszahl['auszahlung_date'].'</td>';
-                                            echo '</tr>';
-                                        }
-                                    }
-                                ?>
-                            </tbody>
-                        </table>
-                    </div>
+                    <?php include ('./u_user_page_includes/u_kontostand_auszahlungen_inc.php'); ?>
                 </div>
             </div>
         </div>
