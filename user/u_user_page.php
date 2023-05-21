@@ -405,91 +405,11 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
                 </div>
             
                 <div id="lastWeek" class="subtabcontent disBlock">
-                    <div> 
-                        <h3 class="floatLeft">Bestellende Essen für nächste Woche:</h3>
-                        <h3 class="text-center">Benutzer-ID: <span class="colorRed"><?php echo "[". $user_id."]"?></span></h3>
-                    </div>
-                    <div class="scrollView300">
-                        <table>
-                            <thead class="topFix">
-                                <tr>
-                                <th>Bestell-ID</th>
-                                <th>Gerichtsname</th>
-                                <th>Preis</th>
-                                <th>Der Tag</th>
-                                <th>Datum des Tages</th>
-                                <th>Bestell Datum</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php 
-                                    if(count($letzte_bestellungen) > 0){
-                                        foreach($letzte_bestellungen as $letzte_bestellung){
-                                            echo '<tr class="tableRow">';
-                                                echo '<td>'.$letzte_bestellung['id'].'</td>';
-                                                echo '<td>'.$letzte_bestellung['option_name'].'</td>';
-                                                echo '<td>'.$letzte_bestellung['price']. '€</td>';
-                                                echo '<td>'.$letzte_bestellung['day'].'</td>';
-                                                echo '<td>'.$letzte_bestellung['day_datum'].'</td>';
-                                                echo '<td>'.$letzte_bestellung['bestelldatum'].'</td>';
-                                            echo '</tr>';
-                                        }
-                                    }else {
-                                        echo '<tr>';
-                                            echo '<td><h5 class="colorRed text-center">Keine Bestellungen für diese Woche gefunden.</h5></td>';
-                                        echo '</tr>';
-                                    }
-                                ?>
-                            </tbody>
-                        </table>
-                    </div>
-                    <h3 class="mt-3">
-                        <?php
-                            echo "Der Gesamtbetrag ist: ". "<span class='colorBlue fontBold'>" . $gesamtPreis. "€</span>";
-                        ?>
-                    </h3>
+                    <?php include ('./u_user_page_includes/u_lastweek_inc.php'); ?>
                 </div>
             
                 <div id="alleBestellungen" class="subtabcontent disNone">
-                    <div>
-                        <h3 class="floatLeft">Alle Bestellende Essen:</h3>
-                        <h3 class="text-center">Benutzer-ID: <span class="colorRed"><?php echo "[". $user_id."]"?></span></h3>
-                    </div>
-                    <div class="scrollView700">
-                        <table>
-                            <thead class="topFix">
-                                <tr>
-                                <th>Bestell-ID</th>
-                                <th>Gerichtsname</th>
-                                <th>Preis</th>
-                                <th>Der Tag</th>
-                                <th>Datum des Tages</th>
-                                <th>Bestell Datum</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php 
-                                    if(count($bestellungen) > 0){
-                                        foreach($bestellungen as $bestellung){
-                                            echo '<tr class="tableRow">';
-                                                echo '<td>'.$bestellung['id']. '</td>';
-                                                echo '<td>'.$bestellung['option_name']. '</td>';
-                                                echo '<td>'.$bestellung['price'].'€</td>';
-                                                echo '<td>'.$bestellung['day'].'</td>';
-                                                echo '<td>'.$bestellung['day_datum'].'</td>';
-                                                echo '<td>'.$bestellung['bestelldatum'].'</td>';
-                                            echo '</tr>';
-                                        }
-                                    }else {
-                                        echo '<tr>';
-                                            echo '<td><h5 class="colorRed text-center">Keine Bestellungen gefunden.</h5></td>';
-                                        echo '</tr>';
-                                    }
-                                    mysqli_close($conn);
-                                ?>
-                            </tbody>
-                        </table>
-                    </div>
+                    <?php include ('./u_user_page_includes/u_allebestellungen_inc.php'); ?>
                 </div>
             </div>
         </div>  
@@ -502,7 +422,7 @@ $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
         </footer>
             
         <script>
-            //um die Variablen global zu machen und dann in pric_validation.js Datei zu verwenden
+            //um die Variablen global zu machen und dann in price_validation.js Datei zu verwenden
             window.kontostand ="<?php echo $kontostand; ?>";
             window.bestellStatus = "<?php echo $bestell_status; ?>";
             window.statusMontag = "<?php echo $Montag; ?>";

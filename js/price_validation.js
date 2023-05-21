@@ -58,7 +58,7 @@ var selectLists = document.querySelectorAll("select");
 for (var i = 0; i < selectLists.length; i++) {
     selectLists[i].addEventListener("change", function() {
         totalPrice = calculateTotalPrice();
-        price = calculateTotalPrice();
+        // price = calculateTotalPrice();
         // document.cookie = 'totalPrice='+totalPrice;
 
         if(bestellStatus == 1){
