@@ -24,257 +24,81 @@ if($formatierte_zeit > '00:30:00'){
 }
 
 
-// Meine Daten Seite
-$errors = [
-    'currentPassError' => '',
-    'newPassError' => '',
-    'confirmPassError' => '',
-    'otherError' => '',
-    'passRegexError' => ''
-];
-$success = '';
-
-$current_password = "";
-$new_password = "";
-$confirm_password = "";
-
-if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER["REQUEST_METHOD"] == "POST"){
-
-    if (isset($_POST['adresse'])) {
-        $adresseP = $_POST['adresse'];
-    }
-    if (isset($_POST['plz'])) {
-        $plzP = $_POST['plz'];
-    }
-    if (isset($_POST['ort'])) {
-        $ortP = $_POST['ort'];
-    }
-    if (isset($_POST['ortsteil'])) {
-        $ortsteilP = $_POST['ortsteil'];
-    }
-    if (isset($_POST['phone'])) {
-        $phoneP = $_POST['phone'];
-    }
-    if (isset($_POST['email'])) {
-        $emailP = $_POST['email'];
-    }
-    if (isset($_POST['current_password'])) {
-        $current_password = $_POST['current_password'];
-    }
-    if (isset($_POST['new_password'])) {
-        $new_password = $_POST['new_password'];
-    }
-    if (isset($_POST['confirm_password'])) {
-        $confirm_password = $_POST['confirm_password'];
-    }
-
-    if(isset($_POST['passwordForm'])){
-        if(empty($current_password)){
-            $errors['currentPassError'] = "* Bitte geben Sie das aktuelles Passwort ein.";
-        }
-        if(empty($new_password)){
-            $errors['newPassError'] = '* Bitte geben Sie das neues Passwort ein.';
-        }
-        // Add password validation
-        $password_pattern = '/^(?=.*\d)(?=.*[@#\-_$%^&+=§!\?])(?=.*[a-z])(?=.*[A-Z])[0-9A-Za-z@#\-_$%^&+=§!\?]{8,20}$/';
-        if(!preg_match($password_pattern, $new_password)){
-            $errors['passRegexError'] = '* Das Passwort muss mindestens 8 Zeichen lang sein und mindestens einen Kleinbuchstaben, einen Großbuchstaben, eine Zahl und ein Sonderzeichen enthalten.';
-        }
-        if(empty($confirm_password)){
-            $errors['confirmPassError'] = '* Bitte bestätigen Sie das neues Passwort.';
-        }
-        if(!array_filter($errors)){
-            $current_password =  mysqli_real_escape_string($conn, $_POST['current_password']);
-            $new_password =      mysqli_real_escape_string($conn, $_POST['new_password']);
-            $confirm_password =  mysqli_real_escape_string($conn, $_POST['confirm_password']);
-
-            $currentPassHashed = hash('sha256', $current_password);
-            $newPassHashed = hash('sha256', $new_password);
-
-            $sql = "SELECT password FROM tbl_user WHERE id = $user_id";
-            $result = mysqli_query($conn, $sql);
-            $row = mysqli_fetch_assoc($result);
-            $db_password = $row['password'];
-
-            if($currentPassHashed == $db_password){
-                if($new_password == $confirm_password){
-                    $sql ="UPDATE tbl_user SET password = ? WHERE id = ?";
-                    $stmt = mysqli_prepare($conn, $sql);
-                    mysqli_stmt_bind_param($stmt, "ss", $newPassHashed, $user_id);
-                    if(mysqli_stmt_execute($stmt)){
-                        $success = "Das Passwort wurde erfolgreich geändert.";
-                        header("Location: u_user_page.php");
-                    }else{
-                        echo "Error: " . "<br>" . mysqli_error($conn);
-                    }
-                    
-                }else{
-                    $errors['otherError'] = "* Die Passwörter stimmen nicht überein!";
-                }
-            }else{
-                $errors['otherError'] = "* Das aktuelles Passwort ist falsch";
-            }
-        }
-    }
-    if(isset($_POST['adresseForm'])){
-        $sql = "UPDATE tbl_user SET plz = ?, email = ?, phone = ?, adresse = ?, ortsteil = ? WHERE id = ?";
-        $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "ssssss", $plzP, $emailP, $phoneP, $adresseP, $ortsteilP, $user_id);
-        if(mysqli_stmt_execute($stmt)){
-            header("Location: u_user_page.php");
-        }else{
-            echo "Error: " . "<br>" . mysqli_error($conn);
-        }
-        // mysqli_close($conn);
-    }
-}
-
-// Um Benutzerdaten abzurufen und in den Eingabefeldern anzuzeigen
-$sql = "SELECT * FROM tbl_user u  
-        INNER JOIN tbl_ort o ON u.plz = o.plz
-        WHERE id = $user_id";
-$result = mysqli_query($conn, $sql);
-$row = mysqli_fetch_assoc($result);
-$userName = $row['userName'];
-$lastName = $row['lastName'];
-$firstName = $row['firstName'];
-$birthday = $row['birthday'];
-$aktiv_ab = $row['aktiv_ab'];
-$klasse = $row['klasse'];
-$adresse = $row['adresse'];
-$plz = $row['plz'];
-$ort = $row['ort'];
-$ortsteil = $row['ortsteil'];
-$phone = $row['phone'];
-$email = $row['email'];
-// Ende Meine Daten Seite
-
-
-
-
-
-
-// include ('./u_kontoZustand.php');
-
+include ('./function_includes/u_userdata_function_inc.php');
 include ('./bestell_insert.php');
 include ('./bestell_update.php');
 
-
 $days = array('Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag');
 
-
-
-    //um die ganze Bestellungen für den Benutzer abzurufen
-    $bestellSql = "SELECT b.id, b.user_id, b.option_name, b.option_id, b.day, b.day_datum, b.bestelldatum, o.price
-                    FROM tbl_bestellung b INNER JOIN tbl_option o ON o.id = b.option_id
-                    WHERE user_id = ?";
-    $bestell_stmt = mysqli_prepare($conn, $bestellSql);
-    mysqli_stmt_bind_param($bestell_stmt, "s", $user_id);
-    mysqli_stmt_execute($bestell_stmt);
-    $result = mysqli_stmt_get_result($bestell_stmt);
-    $bestellungen = array();
-    while ($row = $result->fetch_assoc()){
-        $bestellungen[] = $row;
-    }
-
-    //um die letzte Woche Bestellung abzurufen
-    $sonntag = 'Sunday';
-    $current_day_text = date('l');
-    $woche_count = ($current_day_text == $sonntag)?$week_count = date('W') + 1 : $week_count = date('W'); 
-    $letzteBestell = "(SELECT b.id, b.user_id, b.option_name, b.option_id, b.day, b.day_datum, b.week_count, b.bestelldatum, o.price
-                        FROM tbl_bestellung b INNER JOIN tbl_option o ON o.id = b.option_id
-                        WHERE b.user_id = ? AND b.week_count = ? ORDER BY id DESC LIMIT 5) ORDER BY id ASC";
-    $letzte_bestell_stmt = mysqli_prepare($conn, $letzteBestell);
-    mysqli_stmt_bind_param($letzte_bestell_stmt, "ii", $user_id, $woche_count);
-    mysqli_stmt_execute($letzte_bestell_stmt);
-    $result = mysqli_stmt_get_result($letzte_bestell_stmt);
-    $letzte_bestellungen = array();
-    while ($row = $result->fetch_assoc()){
-        $letzte_bestellungen[] = $row;
-        
-    }
-
-    //SQL-Abfrage ausführen, um die Preise aus Datenbank in der Spalte zu summieren
-    $query = "SELECT SUM(o.price) as total 
-            FROM 
-                (SELECT b.option_id 
-                FROM tbl_bestellung b 
-                WHERE b.user_id = $user_id AND b.week_count = $woche_count
-                ORDER BY b.bestelldatum 
-                DESC LIMIT 5 ) as b 
-            JOIN tbl_option o ON o.id = b.option_id;";
-    $result = mysqli_query($conn, $query);
-    $row = mysqli_fetch_assoc($result);
-    $gesamtPreis = $row['total'];
+include ('./function_includes/u_bestellungen_function_inc.php');
+include ('./function_includes/u_lastweek_function_inc.php');
+include ('./function_includes/totalprice_sum_inc.php');
+include ('./function_includes/totalprice_insert_inc.php');
 
 
 
-    // um der gesamte Betrag von Bestellungen in die Tabelle tbl_auszahlung hinzufügen
-    if(isset($_POST['button']) && $_POST['button'] == 'bestellen'){
-        $sql = "INSERT INTO tbl_auszahlung (auszahlung, user_id) VALUES (?, ?)";
+
+
+
+
+// um der gesamte Betrag von Bestellungen aktualisieren, wenn der Benutzer während der Woche die Bestellungen ändert
+foreach ($days as $day) {
+    if(isset($_POST['button']) && $_POST["button"] == $day){
+        $sql = "UPDATE tbl_auszahlung SET auszahlung = ? WHERE user_id = ? ORDER BY id DESC LIMIT 1";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ss", $gesamtPreis, $user_id);
         $stmt->execute();
     }
+}
+// um die Bestell Status abzurufen und es im Button zu benutzen ob 1 ist, dann deaktiviert der Button
+$bestellStatusSql = "SELECT bestell_status FROM tbl_user WHERE id = $user_id";
+$statusBestell = mysqli_query($conn, $bestellStatusSql);
+$statusRow = mysqli_fetch_assoc($statusBestell);
+$bestell_status = $statusRow['bestell_status'];
 
-    // um der gesamte Betrag von Bestellungen aktualisieren, wenn der Benutzer während der Woche die Bestellungen ändert
-    foreach ($days as $day) {
-        if(isset($_POST['button']) && $_POST["button"] == $day){
-            $sql = "UPDATE tbl_auszahlung SET auszahlung = ? WHERE user_id = ? ORDER BY id DESC LIMIT 1";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ss", $gesamtPreis, $user_id);
-            $stmt->execute();
-        }
-    }
-    // um die Bestell Status abzurufen und es im Button zu benutzen ob 1 ist, dann deaktiviert der Button
-    $bestellStatusSql = "SELECT bestell_status FROM tbl_user WHERE id = $user_id";
-    $statusBestell = mysqli_query($conn, $bestellStatusSql);
-    $statusRow = mysqli_fetch_assoc($statusBestell);
-    $bestell_status = $statusRow['bestell_status'];
-    
 
-    // um die Update Status für jeden Tag aus der Tabelle tbl_bestellstatus abzurufen und es im Button zu benutzen ob 1 ist, dann deaktiviert der Button
-    $updateSql = "SELECT montag, dienstag, mittwoch, donnerstag, freitag FROM tbl_bestellstatus WHERE user_id = $user_id";
-    $updateResult = mysqli_query($conn, $updateSql);
-    $updateRow = mysqli_fetch_assoc($updateResult);
-    $Montag = $updateRow['montag'];
-    $Dienstag = $updateRow['dienstag'];
-    $Mittwoch = $updateRow['mittwoch'];
-    $Donnerstag = $updateRow['donnerstag'];
-    $Freitag = $updateRow['freitag'];
+// um die Update Status für jeden Tag aus der Tabelle tbl_bestellstatus abzurufen und es im Button zu benutzen ob 1 ist, dann deaktiviert der Button
+$updateSql = "SELECT montag, dienstag, mittwoch, donnerstag, freitag FROM tbl_bestellstatus WHERE user_id = $user_id";
+$updateResult = mysqli_query($conn, $updateSql);
+$updateRow = mysqli_fetch_assoc($updateResult);
+$Montag = $updateRow['montag'];
+$Dienstag = $updateRow['dienstag'];
+$Mittwoch = $updateRow['mittwoch'];
+$Donnerstag = $updateRow['donnerstag'];
+$Freitag = $updateRow['freitag'];
 
-    
-    // Um die Einzahlungen mit Datums in der Tabelle anzeigen
-    $einzahlungSql = "SELECT einzahlung, einzahlung_date FROM tbl_einzahlung WHERE user_id = $user_id ORDER BY einzahlung_date DESC";
-    $result = mysqli_query($conn, $einzahlungSql);
-    $einzahlungen = array();
-    while($einzahlungRow = mysqli_fetch_assoc($result)){
-        $einzahlungen[] = $einzahlungRow;
-    }
-    
 
-    // Um die Auszahlungen mit Datums in der Tabelle anzeigen
-    $auszahlungSql = "SELECT auszahlung, auszahlung_date FROM tbl_auszahlung WHERE user_id = $user_id ORDER BY auszahlung_date DESC";
-    $result = mysqli_query($conn, $auszahlungSql);
-    $auszahlungen = array();
-    while($auszahlungRow = mysqli_fetch_assoc($result)){
-        $auszahlungen[] = $auszahlungRow;
-    }
+// Um die Einzahlungen mit Datums in der Tabelle anzeigen
+$einzahlungSql = "SELECT einzahlung, einzahlung_date FROM tbl_einzahlung WHERE user_id = $user_id ORDER BY einzahlung_date DESC";
+$result = mysqli_query($conn, $einzahlungSql);
+$einzahlungen = array();
+while($einzahlungRow = mysqli_fetch_assoc($result)){
+    $einzahlungen[] = $einzahlungRow;
+}
 
-    // Abfrage, um die Gesamte Einzahlungen anzugeben
-    $kontoEinzahlSql = "SELECT SUM(einzahlung) AS einzahlung FROM tbl_einzahlung WHERE user_id = $user_id";
-    $kontoEinzahlRes = mysqli_query($conn, $kontoEinzahlSql);
-    $kontoEinzahlRow = mysqli_fetch_assoc($kontoEinzahlRes);
-    $sumEinzahlung = $kontoEinzahlRow['einzahlung'];
 
-    // // Abfrage, um die Gesamte Auszahlungen anzugeben
-    $kontoAuszahlSql = "SELECT SUM(auszahlung) AS auszahlung FROM tbl_auszahlung WHERE user_id = $user_id";
-    $kontoAuszahlRes = mysqli_query($conn, $kontoAuszahlSql);
-    $kontoAuszahlRow = mysqli_fetch_assoc($kontoAuszahlRes);
-    $sumAuszahlung = $kontoAuszahlRow['auszahlung'];
+// Um die Auszahlungen mit Datums in der Tabelle anzeigen
+$auszahlungSql = "SELECT auszahlung, auszahlung_date FROM tbl_auszahlung WHERE user_id = $user_id ORDER BY auszahlung_date DESC";
+$result = mysqli_query($conn, $auszahlungSql);
+$auszahlungen = array();
+while($auszahlungRow = mysqli_fetch_assoc($result)){
+    $auszahlungen[] = $auszahlungRow;
+}
 
-    // Kontostand zu berechnen
-    $kontostand = $sumEinzahlung - $sumAuszahlung;
+// Abfrage, um die Gesamte Einzahlungen anzugeben
+$kontoEinzahlSql = "SELECT SUM(einzahlung) AS einzahlung FROM tbl_einzahlung WHERE user_id = $user_id";
+$kontoEinzahlRes = mysqli_query($conn, $kontoEinzahlSql);
+$kontoEinzahlRow = mysqli_fetch_assoc($kontoEinzahlRes);
+$sumEinzahlung = $kontoEinzahlRow['einzahlung'];
+
+// // Abfrage, um die Gesamte Auszahlungen anzugeben
+$kontoAuszahlSql = "SELECT SUM(auszahlung) AS auszahlung FROM tbl_auszahlung WHERE user_id = $user_id";
+$kontoAuszahlRes = mysqli_query($conn, $kontoAuszahlSql);
+$kontoAuszahlRow = mysqli_fetch_assoc($kontoAuszahlRes);
+$sumAuszahlung = $kontoAuszahlRow['auszahlung'];
+
+// Kontostand zu berechnen
+$kontostand = $sumEinzahlung - $sumAuszahlung;
 
 ?>
 
