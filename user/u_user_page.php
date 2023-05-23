@@ -34,6 +34,7 @@ include ('./function_includes/u_bestellungen_function_inc.php');
 include ('./function_includes/u_lastweek_function_inc.php');
 include ('./function_includes/totalprice_sum_inc.php');
 include ('./function_includes/totalprice_insert_inc.php');
+include ('./function_includes/totalprice_update_inc.php');
 
 
 
@@ -41,15 +42,6 @@ include ('./function_includes/totalprice_insert_inc.php');
 
 
 
-// um der gesamte Betrag von Bestellungen aktualisieren, wenn der Benutzer während der Woche die Bestellungen ändert
-foreach ($days as $day) {
-    if(isset($_POST['button']) && $_POST["button"] == $day){
-        $sql = "UPDATE tbl_auszahlung SET auszahlung = ? WHERE user_id = ? ORDER BY id DESC LIMIT 1";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ss", $gesamtPreis, $user_id);
-        $stmt->execute();
-    }
-}
 // um die Bestell Status abzurufen und es im Button zu benutzen ob 1 ist, dann deaktiviert der Button
 $bestellStatusSql = "SELECT bestell_status FROM tbl_user WHERE id = $user_id";
 $statusBestell = mysqli_query($conn, $bestellStatusSql);
