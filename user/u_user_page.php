@@ -36,25 +36,12 @@ include ('./function_includes/totalprice_sum_inc.php');
 include ('./function_includes/totalprice_insert_inc.php');
 include ('./function_includes/totalprice_update_inc.php');
 include ('./function_includes/button_status_inc.php');
+include ('./function_includes/einzahlungen_inc.php');
+include ('./function_includes/auszahlungen_inc.php');
 
 
 
-// Um die Einzahlungen mit Datums in der Tabelle anzeigen
-$einzahlungSql = "SELECT einzahlung, einzahlung_date FROM tbl_einzahlung WHERE user_id = $user_id ORDER BY einzahlung_date DESC";
-$result = mysqli_query($conn, $einzahlungSql);
-$einzahlungen = array();
-while($einzahlungRow = mysqli_fetch_assoc($result)){
-    $einzahlungen[] = $einzahlungRow;
-}
 
-
-// Um die Auszahlungen mit Datums in der Tabelle anzeigen
-$auszahlungSql = "SELECT auszahlung, auszahlung_date FROM tbl_auszahlung WHERE user_id = $user_id ORDER BY auszahlung_date DESC";
-$result = mysqli_query($conn, $auszahlungSql);
-$auszahlungen = array();
-while($auszahlungRow = mysqli_fetch_assoc($result)){
-    $auszahlungen[] = $auszahlungRow;
-}
 
 // Abfrage, um die Gesamte Einzahlungen anzugeben
 $kontoEinzahlSql = "SELECT SUM(einzahlung) AS einzahlung FROM tbl_einzahlung WHERE user_id = $user_id";
