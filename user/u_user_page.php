@@ -23,7 +23,6 @@ if($formatierte_zeit > '00:30:00'){
     header('Location: u_logout.php');
 }
 
-
 include ('./function_includes/u_userdata_function_inc.php');
 include ('./bestell_insert.php');
 include ('./bestell_update.php');
@@ -38,26 +37,7 @@ include ('./function_includes/totalprice_update_inc.php');
 include ('./function_includes/button_status_inc.php');
 include ('./function_includes/einzahlungen_inc.php');
 include ('./function_includes/auszahlungen_inc.php');
-
-
-
-
-
-// Abfrage, um die Gesamte Einzahlungen anzugeben
-$kontoEinzahlSql = "SELECT SUM(einzahlung) AS einzahlung FROM tbl_einzahlung WHERE user_id = $user_id";
-$kontoEinzahlRes = mysqli_query($conn, $kontoEinzahlSql);
-$kontoEinzahlRow = mysqli_fetch_assoc($kontoEinzahlRes);
-$sumEinzahlung = $kontoEinzahlRow['einzahlung'];
-
-// // Abfrage, um die Gesamte Auszahlungen anzugeben
-$kontoAuszahlSql = "SELECT SUM(auszahlung) AS auszahlung FROM tbl_auszahlung WHERE user_id = $user_id";
-$kontoAuszahlRes = mysqli_query($conn, $kontoAuszahlSql);
-$kontoAuszahlRow = mysqli_fetch_assoc($kontoAuszahlRes);
-$sumAuszahlung = $kontoAuszahlRow['auszahlung'];
-
-// Kontostand zu berechnen
-$kontostand = $sumEinzahlung - $sumAuszahlung;
-
+include ('./function_includes/kontostand_inc.php');
 ?>
 
 
@@ -199,6 +179,7 @@ $kontostand = $sumEinzahlung - $sumAuszahlung;
         <div class="spaceFooter">
             
         </div>
+        
         <footer class="fixed-bottom footer">
             <p class="footer_text"><span>&copy; 2023 created by Khalid Arab</span></p>
         </footer>
